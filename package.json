@@ -1,8 +1,8 @@
 {
   "name": "Feptos",
-  "description": "File handler - File handler - Rename, Organize, or Delete files easiliy",
+  "description": "File handler - File handler - Rename, Organize, or Delete files easily",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

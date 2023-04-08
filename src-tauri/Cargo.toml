@@ -1,7 +1,7 @@
 [package]
 name = "feptos"
-version = "0.0.1"
-description = "File handler - File handler - Rename, Organize, or Delete files easiliy"
+version = "0.0.2"
+description = "File handler - File handler - Rename, Organize, or Delete files easily"
 authors = ["you"]
 license = ""
 repository = ""

@@ -9,9 +9,9 @@ function Home() {
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="mx-auto max-w-6xl text-center">
-        <Heading size="xl">Easy File handler</Heading>
+        <Heading size="xl">Febtos</Heading>
         <Text className="mt-2">
-          Rename and classify your files easily.
+          File handler - File handler - Rename, Organize, or Delete files easily
         </Text>
         <div className="flex mb-4">
           <div className="mx-auto" />
@@ -44,7 +44,6 @@ function Home() {
               </CardBody>
             </Card>
           </Link>
-
           {isDev &&
             <Link className="w-full" to="/playgrounds">
               <Card className="text-base-content card-bg-effect p-4">

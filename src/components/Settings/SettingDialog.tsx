@@ -142,8 +142,11 @@ function SettingDialog({ children }: Props) {
       <Modal isOpen={isOpen} onClose={toggleOpen} isCentered>
         <ModalOverlay />
         <ModalContent height="80%" className="max-w-3xl">
-          <Flex>
-            <Box className="w-52 shrink py-4">
+          <Flex height="100%">
+            <Box
+              bgColor="gray.800"
+              className="w-52 shrink py-4"
+            >
               <Text className="px-4 mb-2 opacity-70">
                 Menus
               </Text>
@@ -167,11 +170,11 @@ function SettingDialog({ children }: Props) {
                 Setting
               </ModalHeader>
               <ModalCloseButton />
-              <ModalBody>
-                {(() => {
-                  if (currMenu === 0) {
-                    return (
-                      <form onSubmit={handleSubmit(onSubmit)} className="text-left">
+              {(() => {
+                if (currMenu === 0) {
+                  return (
+                    <form onSubmit={handleSubmit(onSubmit)} className="text-left">
+                      <ModalBody>
                         <div className="space-y-4">
                           <FormControl isInvalid={!!errors.dateFormat?.message}>
                             <FormLabel>Date format</FormLabel>
@@ -226,28 +229,29 @@ function SettingDialog({ children }: Props) {
                               </FormControl>
                           }
                         </div>
-                        <ModalFooter>
-                          <Spacer />
-                          <Button
-                            color="white"
-                            colorScheme="primary"
-                            type="submit"
-                            isLoading={isLoading}
-                            loadingText='Submitting'
-                          >
-                            Save
-                          </Button>
-                        </ModalFooter>
-                      </form>
-                    )
-                  } else if(currMenu === 1) {
-                    return (
+                      </ModalBody>
+                      <ModalFooter>
+                        <Spacer />
+                        <Button
+                          color="white"
+                          colorScheme="primary"
+                          type="submit"
+                          isLoading={isLoading}
+                          loadingText='Submitting'
+                        >
+                        Save
+                        </Button>
+                      </ModalFooter>
+                    </form>
+                  )
+                } else if(currMenu === 1) {
+                  return (
+                    <ModalBody>
                       <SettingDialogVersion />
-                    )
-                  }
-                })()}
-              </ModalBody>
-
+                    </ModalBody>
+                  )
+                }
+              })()}
             </div>
           </Flex>
         </ModalContent>
