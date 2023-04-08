@@ -1,6 +1,8 @@
 # Feptos
 File handler - File handler - Rename, Organize, or Delete files easiliy
 
+[Go to download](https://github.com/kkan0615/Febtos/releases)
+
 # Supports
 ## Contributors
 Thank you for making program better.
