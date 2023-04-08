@@ -5,9 +5,6 @@ on:
       - release
 jobs:
   publish-tauri:
-    if: startsWith(github.event.head_commit.message, 'v0.0.')
-    permissions:
-      contents: write
     strategy:
       fail-fast: false
       matrix:
