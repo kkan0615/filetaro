@@ -1,0 +1,6 @@
+.label-required {
+  &:before {
+    content: '*';
+    @apply text-red-500 mr-2;
+  }
+}

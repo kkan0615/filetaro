@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./styles/card";
+@import "./styles/typography";
+
+body {
+  margin: 0;
+}
