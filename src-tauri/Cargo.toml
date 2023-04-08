@@ -1,5 +1,5 @@
 [package]
-name = "Feptos"
+name = "feptos"
 version = "0.0.1"
 description = "File handler - File handler - Rename, Organize, or Delete files easiliy"
 authors = ["you"]
