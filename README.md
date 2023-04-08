@@ -48,6 +48,12 @@ yarn tauri build
 Output is in
 `./src-tarui/target/release/bundle/msi`
 
+### Generate icons
+[Doc]()
+```bash
+yarn tauri icon -o ./src-tauri/icons ./app-icon.png
+```
+
 ## Recommended IDE Setup
 - [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
