@@ -9,7 +9,7 @@ function Home() {
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="mx-auto max-w-6xl text-center">
-        <Heading size="xl">Febtos</Heading>
+        <Heading size="xl">Filetaro</Heading>
         <Text className="mt-2">
           File handler - File handler - Rename, Organize, or Delete files easily
         </Text>
