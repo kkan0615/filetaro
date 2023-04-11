@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { AiOutlineDelete, AiOutlineFolderAdd, AiOutlineFolderOpen, AiOutlineHome } from 'react-icons/ai'
-import { open } from '@tauri-apps/api/dialog'
+import { AiOutlineDelete, AiOutlineHome } from 'react-icons/ai'
 import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
