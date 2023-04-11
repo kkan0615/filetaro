@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
+import { Card, CardBody, Flex, IconButton, Tooltip } from '@chakra-ui/react'
 import {
   addRenameTargetFile,
   removeRenameTargetFileByPath,
@@ -17,7 +18,6 @@ import CTable from '@renderer/components/commons/libs/Table'
 import { MdDeleteForever } from 'react-icons/all'
 import { deleteTargetFiles } from '@renderer/utils/file'
 import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
-import { Card, CardBody, Flex, IconButton, Tooltip } from '@chakra-ui/react'
 import AddFileBtn from '@renderer/components/buttons/AddFile'
 
 function RenamesLeft() {

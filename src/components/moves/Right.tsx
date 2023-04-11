@@ -7,7 +7,6 @@ import { MoveDirectory } from '@renderer/types/models/moveDirectory'
 import MovesDirectorySettingModal from '@renderer/components/moves/DirectorySettingDialog'
 import MovesDirectoryCard from '@renderer/components/moves/DirectoryCard'
 import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading } from '@chakra-ui/react'
-import { AiOutlineHome } from 'react-icons/all'
 
 function MovesRight() {
   const directories = useSelector((state: RootState) => state.moves.moveDirectories)

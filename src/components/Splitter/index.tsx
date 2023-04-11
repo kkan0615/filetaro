@@ -1,6 +1,6 @@
 import { ReactElement, useRef, useState } from 'react'
-import './index.css'
 import { Flex } from '@chakra-ui/react'
+import './index.css'
 
 interface Props {
   left: ReactElement

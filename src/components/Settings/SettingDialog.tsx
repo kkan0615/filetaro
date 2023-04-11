@@ -1,32 +1,9 @@
-import { AiOutlineClose, AiOutlineFolderOpen } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
-import {
-  ApplicationSetting,
-  DateFormatOptions,
-  DateFormatType,
-  DefaultTimeFormat,
-  TimeFormatOptions,
-  TimeFormatType
-} from '@renderer/types/models/setting'
-import { AiOutlineQuestionCircle } from 'react-icons/all'
-import { getVersion } from '@tauri-apps/api/app'
-import {
-  checkUpdate,
-  installUpdate,
-  onUpdaterEvent,
-} from '@tauri-apps/api/updater'
-import { relaunch } from '@tauri-apps/api/process'
-import { ask } from '@tauri-apps/api/dialog'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@renderer/stores'
-import { setApplicationSetting } from '@renderer/stores/slices/application'
-import { settingStore } from '@renderer/stores/tauriStore'
-import { SettingStoreKey } from '@renderer/types/store'
-import SettingDialogVersion from '@renderer/components/Settings/Version'
 import {
   Modal,
   ModalOverlay,
@@ -42,12 +19,23 @@ import {
   Text,
   FormControl,
   FormLabel,
-  InputGroup,
-  Input,
-  InputRightElement,
-  Tooltip,
-  IconButton, FormErrorMessage, Select, Checkbox
+  FormErrorMessage,
+  Select,
+  Checkbox
 } from '@chakra-ui/react'
+import {
+  ApplicationSetting,
+  DateFormatOptions,
+  DateFormatType,
+  DefaultTimeFormat,
+  TimeFormatOptions,
+  TimeFormatType
+} from '@renderer/types/models/setting'
+import { RootState } from '@renderer/stores'
+import { setApplicationSetting } from '@renderer/stores/slices/application'
+import { settingStore } from '@renderer/stores/tauriStore'
+import { SettingStoreKey } from '@renderer/types/store'
+import SettingDialogVersion from '@renderer/components/Settings/Version'
 
 const validationSchema = z.object({
   dateFormat: z.string({
