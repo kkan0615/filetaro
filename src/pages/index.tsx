@@ -8,7 +8,7 @@ function Home() {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <div className="mx-auto max-w-6xl text-center">
+      <div className="mx-auto max-w-4xl text-center">
         <Heading size="xl">Filetaro</Heading>
         <Text className="mt-2">
           File handler - File handler - Rename, Organize, or Delete files easily
@@ -44,6 +44,17 @@ function Home() {
               </CardBody>
             </Card>
           </Link>
+          {isDev &&
+            <Link className="w-full" to="/organizes">
+              <Card className="text-base-content card-bg-effect p-4">
+                <CardBody className="flex flex-col items-center">
+                  <ImLab className="text-4xl mb-2" />
+                  <Heading size='md' className="mb-0.5">Organizes</Heading>
+                  <Text>Organize files to directories by your preferences</Text>
+                </CardBody>
+              </Card>
+            </Link>
+          }
           {isDev &&
             <Link className="w-full" to="/playgrounds">
               <Card className="text-base-content card-bg-effect p-4">
