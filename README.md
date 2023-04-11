@@ -1,4 +1,4 @@
-# Feptos
+# Filetaro
 File handler - File handler - Rename, Organize, or Delete files easiliy
 
 [Go to download](https://github.com/kkan0615/filetaro/releases)
