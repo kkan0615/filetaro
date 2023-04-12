@@ -5,7 +5,7 @@
 - Updated README.md
 - Changed program name
 - Changed splitter component name
-- Removed unused codes
+- Refactored codes
 
 ## 0.0.1 (2023-04-08)
 - Moved to new repository
