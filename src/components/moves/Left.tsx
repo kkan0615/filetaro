@@ -4,12 +4,11 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { HTMLProps, useEffect, useMemo, useState } from 'react'
-import { ask, open } from '@tauri-apps/api/dialog'
 import { path } from '@tauri-apps/api'
 import { AiOutlineFile, AiOutlineHome, BiSlideshow, MdDeleteForever } from 'react-icons/all'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
-import { AiOutlineDelete, AiOutlineFolderAdd, AiOutlineFolderOpen } from 'react-icons/ai'
+import { AiOutlineDelete } from 'react-icons/ai'
 import { listen, UnlistenFn } from '@tauri-apps/api/event'
 import { Link } from 'react-router-dom'
 import { getTargetFileTypeByExt, TargetFiles, TargetFileType } from '@renderer/types/models/targetFiles'

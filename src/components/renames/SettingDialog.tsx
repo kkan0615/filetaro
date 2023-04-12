@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'

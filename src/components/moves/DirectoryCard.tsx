@@ -1,5 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai'
-import { MoveDirectory } from '../../types/models/moveDirectory'
+import { MoveDirectory } from '@renderer/types/models/moveDirectory'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { copyFile, exists, renameFile } from '@tauri-apps/api/fs'
