@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { AiOutlineSetting, BiRename, ImLab, MdDriveFileMoveOutline } from 'react-icons/all'
+import { AiOutlineSetting, BiRename, ImLab, MdDriveFileMoveOutline, VscFileSubmodule } from 'react-icons/all'
 import SettingDialog from '@renderer/components/Settings/SettingDialog'
 import { Card, CardBody, Heading, IconButton, Text, Tooltip } from '@chakra-ui/react'
 
@@ -48,7 +48,7 @@ function Home() {
             <Link className="w-full" to="/organizes">
               <Card className="text-base-content card-bg-effect p-4">
                 <CardBody className="flex flex-col items-center">
-                  <ImLab className="text-4xl mb-2" />
+                  <VscFileSubmodule className="text-4xl mb-2" />
                   <Heading size='md' className="mb-0.5">Organizes</Heading>
                   <Text>Organize files to directories by your preferences</Text>
                 </CardBody>

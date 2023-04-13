@@ -5,12 +5,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import applicationReducer from './slices/application'
 import movesReducer from './slices/moves'
 import renamesReducer from './slices/renames'
+import organizesReducer from './slices/organizes'
 
 const store = configureStore({
   reducer: {
     applications: applicationReducer,
     moves: movesReducer,
     renames: renamesReducer,
+    organizes: organizesReducer,
   },
   devTools: true,
 })
