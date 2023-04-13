@@ -1,5 +1,5 @@
 import { AiOutlineSetting } from 'react-icons/ai'
-import { Card, CardBody, Flex, IconButton, Spacer, Tooltip, Heading, List } from '@chakra-ui/react'
+import { Card, CardBody, Flex, IconButton, Spacer, Tooltip, Heading, List, Box } from '@chakra-ui/react'
 import RenamesPrefixCard from '@renderer/components/renames/PrefixCard'
 import RenamesReplaceCard from '@renderer/components/renames/ReplaceCard'
 import RenamesSettingModal from '@renderer/components/renames/SettingDialog'
@@ -29,13 +29,13 @@ function RenamesRight() {
           </CardBody>
         </Card>
       </div>
-      <div className="grow h-1 overflow-y-auto px-4 py-2">
+      <Box className="grow h-1 overflow-y-auto px-4 py-2">
         <List spacing={4}>
           <RenamesPrefixCard />
           <RenamesReplaceCard />
           <RenamesSuffixCard />
         </List>
-      </div>
+      </Box>
     </div>
   )
 }

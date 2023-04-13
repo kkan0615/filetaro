@@ -72,8 +72,6 @@ function RenamesPrefixCard() {
       setIsLoading(true)
 
       await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        let dateTimeFormat = applicationSetting.dateFormat
-        if (applicationSetting.timeFormat) dateTimeFormat += ` ${applicationSetting.timeFormat}`
         const { newFileNameWithPath, newFileName } = await renameTargetFile({
           file: checkedTargetFileEl,
           newFileName: `${data.text}${checkedTargetFileEl.name}`,
