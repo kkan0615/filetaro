@@ -37,7 +37,6 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>
 
 function RenamesPrefixCard() {
-  const targetFiles = useSelector((state: RootState) => state.renames.targetFiles)
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
   const applicationSetting = useSelector((state: RootState) => state.applications.setting)
