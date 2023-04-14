@@ -3,23 +3,27 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
+  CardHeader, Collapse, Flex,
   FormControl, FormErrorMessage,
   FormLabel,
   Heading, IconButton, Input,
-  InputGroup, InputRightElement,
+  InputGroup, InputRightElement, Spacer,
   Text, Tooltip
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@renderer/stores'
 import { toast } from 'react-toastify'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { AiOutlineFolderOpen } from 'react-icons/ai'
 import { open } from '@tauri-apps/api/dialog'
+import { RootState } from '@renderer/stores'
 import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
+import { createDir } from '@tauri-apps/api/fs'
+import { moveOrCopyFile } from '@renderer/utils/file'
+import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 
 const validationSchema = z.object({
   directoryPath: z.string({
@@ -49,6 +53,10 @@ function ByTypeCard() {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  const toggleOpen = () => {
+    setIsOpen((prev) => !prev)
+  }
+
   const selectDirectory = async () => {
     const directoryPath = await open({
       title: 'Select Directory',
@@ -74,15 +82,28 @@ function ByTypeCard() {
         fileTypeMap[checkedTargetFileEl.type].push(checkedTargetFileEl)
       })
 
-      console.log(fileTypeMap)
-
-      // @TODO: Add logic to create folder
-      // @TODO: Add logic to move files to folder
-
+      // Loop file types
+      await Promise.all(Object.keys(fileTypeMap).map(async (keyEl) => {
+        // new directory path
+        const directoryPath = data.directoryPath + '\\' + keyEl
+        await createDir(directoryPath)
+        // Move or Copy files
+        await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
+          await moveOrCopyFile({
+            file: fileEl,
+            directoryPath,
+            isAutoDuplicatedName: setting.isAutoDuplicatedName,
+            isCopy: setting.isKeepOriginal
+          })
+          // Remove from slice
+          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+        }))
+      }))
 
       toast('Success to rename files', {
         type: 'success'
       })
+      reset()
     } catch (e) {
       console.error(e)
       toast('Error to rename files', {
@@ -95,51 +116,59 @@ function ByTypeCard() {
 
   return (
     <Card>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardHeader className="py-3">
-          <Heading size='md'>By File type</Heading>
-        </CardHeader>
-        <CardBody className="py-0">
-          <div className="space-y-4">
-            <FormControl isInvalid={!!errors.directoryPath?.message}>
-              <FormLabel>Select or type directory path</FormLabel>
-              <InputGroup>
-                <Input
-                  placeholder="Type here"
-                  {...register('directoryPath')}
-                />
-                <InputRightElement>
-                  <Tooltip placement="auto" label="select directory">
-                    <IconButton
-                      variant="ghost"
-                      onClick={selectDirectory}
-                      aria-label="select directory"
-                      icon={<AiOutlineFolderOpen className="text-2xl" />}
-                    >
-                    </IconButton>
-                  </Tooltip>
-                </InputRightElement>
-              </InputGroup>
-              {errors.directoryPath?.message ?
-                <FormErrorMessage>{errors.directoryPath.message}</FormErrorMessage>
-                : null
-              }
-            </FormControl>
-          </div>
-        </CardBody>
-        <CardFooter className="p-3">
-          <Button
-            width='100%'
-            color="white"
-            type="submit"
-            colorScheme="primary"
-            isLoading={isLoading}
-            loadingText='Organizing...'
-          >
-          Organize
-          </Button>
-        </CardFooter>
-      </form>
+      <CardHeader onClick={toggleOpen} className="p-3">
+        <Flex alignItems="center">
+          <Heading size="md">By File type</Heading>
+          <Spacer />
+          <Text fontSize="2xl">
+            {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+          </Text>
+        </Flex>
+      </CardHeader>
+      <Collapse in={isOpen} animateOpacity>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardBody className="p-3">
+            <div className="space-y-4">
+              <FormControl isInvalid={!!errors.directoryPath?.message}>
+                <FormLabel>Select or type directory path</FormLabel>
+                <InputGroup>
+                  <Input
+                    placeholder="Type here"
+                    {...register('directoryPath')}
+                  />
+                  <InputRightElement>
+                    <Tooltip placement="auto" label="select directory">
+                      <IconButton
+                        variant="ghost"
+                        onClick={selectDirectory}
+                        aria-label="select directory"
+                        icon={<AiOutlineFolderOpen className="text-2xl" />}
+                      >
+                      </IconButton>
+                    </Tooltip>
+                  </InputRightElement>
+                </InputGroup>
+                {errors.directoryPath?.message ?
+                  <FormErrorMessage>{errors.directoryPath.message}</FormErrorMessage>
+                  : null
+                }
+              </FormControl>
+            </div>
+          </CardBody>
+          <CardFooter className="p-3">
+            <Button
+              width='100%'
+              color="white"
+              type="submit"
+              colorScheme="primary"
+              isLoading={isLoading}
+              loadingText='Organizing...'
+            >
+            Organize
+            </Button>
+          </CardFooter>
+        </form>
+      </Collapse>
     </Card>
   )
 }
