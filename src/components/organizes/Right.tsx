@@ -1,8 +1,11 @@
 import { Box, Card, CardBody, Flex, Heading, IconButton, List, Spacer, Tooltip } from '@chakra-ui/react'
-import KeywordPopover from '@renderer/components/popovers/Keyword'
-import RenamesSettingModal from '@renderer/components/renames/SettingDialog'
 import { AiOutlineSetting } from 'react-icons/ai'
+import KeywordPopover from '@renderer/components/popovers/Keyword'
+import OrganizesSettingModal from '@renderer/components/organizes/SettingDialog'
 import ByTypeCard from '@renderer/components/organizes/ByTypeCard'
+import DirectoryPathCard from '@renderer/components/organizes/DirectoryPathCard'
+import ByExtCard from '@renderer/components/organizes/ByExtCard'
+import ByIncludingTextCard from '@renderer/components/organizes/ByIncludingTextCard'
 
 function OrganizesRight() {
   return (
@@ -14,7 +17,7 @@ function OrganizesRight() {
               <Heading size="md">Functions</Heading>
               <Spacer />
               <KeywordPopover />
-              <RenamesSettingModal>
+              <OrganizesSettingModal>
                 <Tooltip label="Open setting" placement='auto'>
                   <IconButton
                     variant="ghost"
@@ -22,14 +25,17 @@ function OrganizesRight() {
                     icon={<AiOutlineSetting className="text-2xl" />}
                   />
                 </Tooltip>
-              </RenamesSettingModal>
+              </OrganizesSettingModal>
             </Flex>
           </CardBody>
         </Card>
       </div>
       <Box className="grow h-1 overflow-y-auto px-4 py-2">
         <List spacing={4}>
+          <DirectoryPathCard />
           <ByTypeCard />
+          <ByExtCard />
+          <ByIncludingTextCard />
         </List>
       </Box>
     </div>

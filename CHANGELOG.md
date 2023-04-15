@@ -1,6 +1,7 @@
 ## 0.0.2 (2023-04-09)
 - Added organize page
 - Added more keywords
+- Added more file types
 - Updated Home text
 - Updated sidebar color in SettingDialog
 - Updated README.md

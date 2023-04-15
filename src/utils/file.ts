@@ -1,11 +1,62 @@
-import { exists, removeFile, renameFile } from '@tauri-apps/api/fs'
+import { copyFile, createDir, exists, removeFile, renameFile } from '@tauri-apps/api/fs'
 import { ask } from '@tauri-apps/api/dialog'
 import { toast } from 'react-toastify'
 import dayjs from '@renderer/utils/libs/dayjs'
 import store, { RootState } from '@renderer/stores'
 import { TargetFiles } from '@renderer/types/models/targetFiles'
 import { DefaultDateFormat } from '@renderer/types/models/setting'
-import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
+
+/**
+ * If directory in the path exists, create directory or Override based on isOverride parameter.
+ * @param directoryPath
+ * @param isOverride - Use existed directory
+ * @param isAutoDuplicatedName - true, no prompt
+ * @return {string} - new directory path
+ */
+export const overrideOrCreateDirectory = async ({ directoryPath, isOverride, isAutoDuplicatedName }: {
+  directoryPath: string
+  isOverride: boolean
+  isAutoDuplicatedName: boolean
+}) => {
+  try {
+    const dirExists = await exists(directoryPath)
+    if (dirExists) {
+      if (!isOverride) {
+        let newDirectoryPath = directoryPath
+        let i = 1
+        while (await exists(newDirectoryPath)) {
+          // remove (number) name
+          newDirectoryPath = newDirectoryPath.replace(` (${i - 1})`, '')
+          // Automatically set the file name
+          if (isAutoDuplicatedName) {
+            newDirectoryPath = `${directoryPath} (${i++})`
+          } else {
+            newDirectoryPath = prompt(`${newDirectoryPath} is already exists, type new name of it`,
+              `${newDirectoryPath} (${i++})`) || ''
+          }
+
+          // If user cancel to prompt
+          if (!newDirectoryPath) {
+            toast('Cancel to create directory name', {
+              type: 'warning'
+            })
+            return ''
+          }
+        }
+        await createDir(newDirectoryPath)
+        return newDirectoryPath
+      }
+
+      return directoryPath
+    }
+
+    await createDir(directoryPath)
+    return directoryPath
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
 
 /**
  * Check the file name. If the file name is existed, prompt file name.
@@ -31,7 +82,8 @@ export const checkAndPromptFileName = async ({ file, directoryPath, isAutoDuplic
     let newFileName = ''
     // Automatically set the file name
     if (isAutoDuplicatedName) {
-      newFileName = `${splitName.join('')} (${i++}).${file.ext}`
+      // remove (number) name
+      newFileName = `${splitName.join('').replace(` (${i - 1})`, '')} (${i++}).${file.ext}`
     } else {
       newFileName = prompt(`${file.name} name is already exists, type new name of it`,
         `${splitName.join('')} (${i++}).${file.ext}`) || ''
@@ -50,6 +102,13 @@ export const checkAndPromptFileName = async ({ file, directoryPath, isAutoDuplic
   return newPath
 }
 
+/**
+ * Move or Copy file
+ * @param file
+ * @param directoryPath
+ * @param isCopy - True, copy file. False, just move file
+ * @param isAutoDuplicatedName
+ */
 export const moveOrCopyFile = async ({ file, directoryPath, isCopy = false, isAutoDuplicatedName = false }: {
   file: TargetFiles
   directoryPath: string
@@ -62,8 +121,13 @@ export const moveOrCopyFile = async ({ file, directoryPath, isCopy = false, isAu
       directoryPath,
       isAutoDuplicatedName,
     })
-    // Move file to new path
-    await renameFile(file.path, newPath)
+    if (isCopy) {
+      // Copy file to new path
+      await copyFile(file.path, newPath)
+    } else {
+      // Move file to new path
+      await renameFile(file.path, newPath)
+    }
   }
   catch (e) {
     console.error(e)

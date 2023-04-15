@@ -12,22 +12,12 @@ function OrganizeLayout() {
 
   // Load Move Page Setting
   useEffect(() => {
-    const fn = async () => {
-      const settingVal = await settingStore.get<Partial<OrganizeSetting>>(SettingStoreKey.OrganizeSetting)
-      dispatch(setOrganizeSetting({
-        ...settingVal,
-      }))
-    }
-    fn()
-
-    return () => {
-      dispatch(setOrganizeSetting({
-        isAutoDuplicatedName: false,
-        isKeepOriginal: false,
-        isDefaultOpenCard: false,
-        isDefaultCheckedOnLoad: false,
-      }))
-    }
+    settingStore.get<Partial<OrganizeSetting>>(SettingStoreKey.OrganizeSetting)
+      .then(value => {
+        dispatch(setOrganizeSetting({
+          ...value,
+        }))
+      })
   }, [])
 
   /**

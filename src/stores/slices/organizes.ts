@@ -7,6 +7,7 @@ const name = 'organizes'
 export interface OrganizeState {
   setting: OrganizeSetting
   targetFiles: TargetFiles[]
+  directoryPath: string
 }
 
 const initialState: OrganizeState = {
@@ -15,8 +16,10 @@ const initialState: OrganizeState = {
     isKeepOriginal: false,
     isDefaultOpenCard: false,
     isDefaultCheckedOnLoad: false,
+    isOverrideDirectory: false,
   },
   targetFiles: [],
+  directoryPath: '',
 }
 
 export const moveSlice = createSlice({
@@ -58,14 +61,19 @@ export const moveSlice = createSlice({
         (targetFileEl) => targetFileEl.path !== action.payload
       )
     },
+    setOrganizeDirectoryPath: (state, action: PayloadAction<string>) => {
+      state.directoryPath = action.payload
+    },
     clearOrganizeSlice: (state) => {
       state.setting = {
         isAutoDuplicatedName: false,
         isKeepOriginal: false,
         isDefaultOpenCard: false,
         isDefaultCheckedOnLoad: false,
+        isOverrideDirectory: false,
       }
       state.targetFiles = []
+      state.directoryPath = ''
     }
   },
 })
@@ -77,6 +85,7 @@ export const {
   updateOrganizeTargetFile,
   updateOrganizeTargetFileCheckByIndex,
   removeOrganizeTargetFileByPath,
+  setOrganizeDirectoryPath,
   clearOrganizeSlice,
 } = moveSlice.actions
 

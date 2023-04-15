@@ -3,6 +3,7 @@ export interface OrganizeSetting {
   isKeepOriginal: boolean
   isDefaultOpenCard: boolean
   isDefaultCheckedOnLoad: boolean
+  isOverrideDirectory: boolean
 }
 
 export type OrganizeSettingUpdate = Partial<OrganizeSetting>

@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
-import { RenameSetting } from '@renderer/types/models/rename'
-import { setRenameSetting } from '@renderer/stores/slices/renames'
 import {
   Button,
   Modal,
@@ -20,10 +18,13 @@ import {
   ModalOverlay,
   Spacer, Checkbox
 } from '@chakra-ui/react'
+import { setOrganizeSetting } from '@renderer/stores/slices/organizes'
+import { OrganizeSetting } from '@renderer/types/models/organize'
 
 const validationSchema = z.object({
   isKeepOriginal: z.boolean(),
   isAutoDuplicatedName: z.boolean(),
+  isOverrideDirectory: z.boolean(),
   isDefaultOpenCard: z.boolean(),
   isDefaultCheckedOnLoad: z.boolean(),
 })
@@ -33,14 +34,13 @@ interface Props {
   children: React.ReactElement
 }
 
-function RenamesSettingModal({ children }: Props) {
-  const setting = useSelector((state: RootState) => state.renames.setting)
+function OrganizesSettingModal({ children }: Props) {
+  const setting = useSelector((state: RootState) => state.organizes.setting)
   const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -50,6 +50,7 @@ function RenamesSettingModal({ children }: Props) {
 
   useEffect(() => {
     setValue('isAutoDuplicatedName', setting.isAutoDuplicatedName)
+    setValue('isOverrideDirectory', setting.isOverrideDirectory)
     setValue('isKeepOriginal', setting.isKeepOriginal)
     setValue('isDefaultOpenCard', setting.isDefaultOpenCard)
     setValue('isDefaultCheckedOnLoad', setting.isDefaultCheckedOnLoad)
@@ -62,16 +63,18 @@ function RenamesSettingModal({ children }: Props) {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       setIsLoading(true)
-      await settingStore.set(SettingStoreKey.RenameSetting, {
+      await settingStore.set(SettingStoreKey.OrganizeSetting, {
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
+        isOverrideDirectory: data.isOverrideDirectory,
         isDefaultOpenCard: data.isDefaultOpenCard,
         isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad,
-      } as RenameSetting)
+      } as OrganizeSetting)
 
-      dispatch(setRenameSetting({
+      dispatch(setOrganizeSetting({
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
+        isOverrideDirectory: data.isOverrideDirectory,
         isDefaultOpenCard: data.isDefaultOpenCard,
         isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad,
       }))
@@ -110,6 +113,14 @@ function RenamesSettingModal({ children }: Props) {
                   {...register('isKeepOriginal')}
                 >
                   <span>Keep original</span>
+                </Checkbox>
+                <Checkbox
+                  size="lg"
+                  iconColor="white"
+                  colorScheme="primary"
+                  {...register('isOverrideDirectory')}
+                >
+                  <span>Override the directory</span>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -156,4 +167,4 @@ function RenamesSettingModal({ children }: Props) {
   )
 }
 
-export default RenamesSettingModal
+export default OrganizesSettingModal
