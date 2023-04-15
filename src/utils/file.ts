@@ -23,6 +23,8 @@ export const overrideOrCreateDirectory = async ({ directoryPath, isOverride, isA
     if (dirExists) {
       if (!isOverride) {
         let newDirectoryPath = directoryPath
+        // Check duplicated file name
+        // Number of increment
         let i = 1
         while (await exists(newDirectoryPath)) {
           // remove (number) name
