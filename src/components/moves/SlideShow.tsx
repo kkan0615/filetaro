@@ -3,61 +3,10 @@ import { AiOutlineClose, AiOutlineDelete, AiOutlineLeft, AiOutlineRight } from '
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
-import { AiOutlineFile } from 'react-icons/all'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
 import { toast } from 'react-toastify'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
-import { Fade, Card, CardBody, Heading, Tooltip, IconButton, Flex, Spacer, CardHeader, Image } from '@chakra-ui/react'
-
-// @TODO: Move to components
- interface PreviewElementProps {
-  slideTargetFileByIndex: TargetFiles | null
-  assetUrl: string
-}
-
-function PreviewElement({ slideTargetFileByIndex, assetUrl }: PreviewElementProps) {
-  // No file
-  if (!slideTargetFileByIndex) {
-    return (
-      <div className="text-4xl">
-        No data
-      </div>
-    )
-  }
-  // Image
-  if (slideTargetFileByIndex.type === 'image') {
-    return (
-      <div className="text-center max-w-full max-h-full p-2">
-        <Image
-          objectFit='cover'
-          src={assetUrl}
-          alt={slideTargetFileByIndex.name}
-        />
-      </div>
-    )
-  }
-  // Video
-  if (slideTargetFileByIndex.type === 'video') {
-    return (
-      <div className="text-center max-w-full max-h-full p-2">
-        <video src={assetUrl} controls>
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    )
-  }
-  // Just file
-  return (
-    <div>
-      <div className="flex justify-center mb-2">
-        <AiOutlineFile className="text-4xl"/>
-      </div>
-      <div className="text-xl">
-        {slideTargetFileByIndex.name}
-      </div>
-    </div>
-  )
-}
+import { Fade, Card, CardBody, Heading, Tooltip, IconButton, Flex, Spacer, CardHeader } from '@chakra-ui/react'
+import MovesSlideShowPreviewElement from '@renderer/components/moves/SlideShowPreviewElement'
 
 interface Props {
   isOpen: boolean
@@ -65,17 +14,17 @@ interface Props {
 }
 function MovesSlideShow({ toggleOpen, isOpen }: Props) {
   const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
-  const movesSlideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
+  const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
   const [assetUrl, setAssetUrl] = useState('')
   const dispatch = useDispatch()
 
   const targetFileByIndex = useMemo(() => {
-    if (movesSlideIndex === -1 || targetFiles.length <= movesSlideIndex) {
+    if (slideIndex === -1 || targetFiles.length <= slideIndex) {
       return null
     }
 
-    return targetFiles[movesSlideIndex]
-  }, [targetFiles, movesSlideIndex])
+    return targetFiles[slideIndex]
+  }, [targetFiles, slideIndex])
 
   useEffect(() => {
     loadFile()
@@ -120,16 +69,16 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
   }
 
   const handlePrev = () => {
-    if (movesSlideIndex > 0) {
+    if (slideIndex > 0) {
       setAssetUrl('')
-      dispatch(setMovesSlideIndex(movesSlideIndex - 1))
+      dispatch(setMovesSlideIndex(slideIndex - 1))
     }
   }
 
   const handleNext = () => {
-    if (movesSlideIndex < targetFiles.length - 1) {
+    if (slideIndex < targetFiles.length - 1) {
       setAssetUrl('')
-      dispatch(setMovesSlideIndex(movesSlideIndex + 1))
+      dispatch(setMovesSlideIndex(slideIndex + 1))
     }
   }
 
@@ -140,9 +89,10 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
   const handleRemove = () => {
     if (targetFileByIndex) {
       dispatch(removeTargetFile(targetFileByIndex.path))
+      // new index of slide
       let newSlideIndex = 0
       if (targetFiles.length === 1) newSlideIndex = -1
-      else if(movesSlideIndex !== 0) newSlideIndex = movesSlideIndex - 1
+      else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
       dispatch(setMovesSlideIndex(newSlideIndex))
     }
   }
@@ -153,7 +103,7 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
         <Card className="h-full">
           <CardHeader>
             <Flex alignItems="center" className="shrink">
-              <Heading size="md">Slide Show ({movesSlideIndex + 1} / {targetFiles.length}) - {targetFileByIndex?.name}</Heading>
+              <Heading size="md">Slide Show ({slideIndex + 1} / {targetFiles.length}) - {targetFileByIndex?.name}</Heading>
               <Spacer />
               <Tooltip label="Close">
                 <IconButton
@@ -176,12 +126,13 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
                   size="sm"
                   className="absolute top-[40%] left-0 z-20"
                   aria-label="prev"
+                  isDisabled={slideIndex === 0}
                   icon={<AiOutlineLeft className="text-xl" />}
                 />
               </Tooltip>
               <div className="flex items-center justify-center h-full w-full z-20">
                 {targetFileByIndex ?
-                  <PreviewElement
+                  <MovesSlideShowPreviewElement
                     slideTargetFileByIndex={targetFileByIndex}
                     assetUrl={assetUrl}
                   /> : null
@@ -195,6 +146,7 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
                   size="sm"
                   className="absolute top-[40%] right-0 z-20"
                   aria-label="home"
+                  isDisabled={slideIndex === targetFiles.length - 1}
                   icon={<AiOutlineRight className="text-xl" />}
                 />
               </Tooltip>

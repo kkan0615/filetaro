@@ -16,7 +16,7 @@ interface Props {
 
 export function MovesDirectoryCard({ directory, onRemove }: Props) {
   const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
-  const movesSlideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
+  const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
   const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.moves.setting)
   const dispatch = useDispatch()
@@ -33,14 +33,14 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
    */
   const handleCard = async () => {
     try {
-      if (movesSlideIndex === -1 && checkedTargetFiles.length === 0) {
+      if (slideIndex === -1 && checkedTargetFiles.length === 0) {
         toast('Select file or open slide show mode', {
           type: 'warning'
         })
         return
       }
       // -1 means it's not slideshow mode.
-      if (movesSlideIndex === -1) {
+      if (slideIndex === -1) {
         await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
           await moveOrCopyFile({
             file: checkedTargetFileEl,
@@ -52,7 +52,7 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
         }))
       } else {
         // File by index
-        const targetFileByIndex = targetFiles[movesSlideIndex]
+        const targetFileByIndex = targetFiles[slideIndex]
 
         await moveOrCopyFile({
           file: targetFileByIndex,
@@ -61,10 +61,12 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
           isCopy: setting.isKeepOriginal
         })
 
+        // new index of slide
         let newSlideIndex = 0
         if (targetFiles.length === 1) newSlideIndex = -1
-        else if(movesSlideIndex !== 0) newSlideIndex = movesSlideIndex - 1
+        else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
         dispatch(setMovesSlideIndex(newSlideIndex))
+        dispatch(removeTargetFile(targetFileByIndex.path))
       }
 
       toast('Success to move file', {
