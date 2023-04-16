@@ -1,4 +1,4 @@
-## 0.0.2 (2023-04-09)
+## 0.0.1 (2023-04-16)
 - Added organize page
 - Added more keywords
 - Added more file types
@@ -10,6 +10,4 @@
 - Changed splitter component name
 - Merged duplicate codes 
 - Refactored codes
-
-## 0.0.1 (2023-04-08)
 - Moved to new repository
