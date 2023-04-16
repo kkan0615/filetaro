@@ -5,6 +5,7 @@
 - Updated Home text
 - Updated sidebar color in SettingDialog
 - Updated README.md
+- Updated 
 - Changed program name
 - Changed splitter component name
 - Merged duplicate codes 

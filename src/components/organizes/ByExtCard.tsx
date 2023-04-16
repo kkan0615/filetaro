@@ -94,7 +94,7 @@ function ByExtCard() {
     <Card>
       <CardHeader onClick={toggleOpen} className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">By Extension type</Heading>
+          <Heading size="md">Extension type</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}

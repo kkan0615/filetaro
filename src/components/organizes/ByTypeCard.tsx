@@ -93,7 +93,7 @@ function ByTypeCard() {
     <Card>
       <CardHeader onClick={toggleOpen} className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">By File type</Heading>
+          <Heading size="md">File type</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}

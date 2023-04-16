@@ -5,7 +5,7 @@ import OrganizesSettingModal from '@renderer/components/organizes/SettingDialog'
 import ByTypeCard from '@renderer/components/organizes/ByTypeCard'
 import DirectoryPathCard from '@renderer/components/organizes/DirectoryPathCard'
 import ByExtCard from '@renderer/components/organizes/ByExtCard'
-import ByIncludingTextCard from '@renderer/components/organizes/ByIncludingTextCard'
+import ByTextCard from '@renderer/components/organizes/ByTextCard'
 
 function OrganizesRight() {
   return (
@@ -35,7 +35,9 @@ function OrganizesRight() {
           <DirectoryPathCard />
           <ByTypeCard />
           <ByExtCard />
-          <ByIncludingTextCard />
+          <ByTextCard type="included"/>
+          <ByTextCard type="prefix"/>
+          <ByTextCard type="suffix"/>
         </List>
       </Box>
     </div>

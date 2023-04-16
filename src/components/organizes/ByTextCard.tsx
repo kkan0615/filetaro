@@ -10,7 +10,7 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -20,6 +20,11 @@ import { RootState } from '@renderer/stores'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
+import { TargetFiles } from '@renderer/types/models/targetFiles'
+
+interface Props {
+  type: 'included' | 'prefix' | 'suffix'
+}
 
 const validationSchema = z.object({
   text: z.string({
@@ -32,7 +37,7 @@ const validationSchema = z.object({
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
-function ByIncludingTextCard() {
+function ByTextCard({ type } : Props) {
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -48,6 +53,21 @@ function ByIncludingTextCard() {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  /**
+   * Title of card
+   */
+  const title = useMemo(() => {
+    if (type === 'included') {
+      return 'Included text type'
+    } else if (type === 'prefix') {
+      return 'Prefix text type'
+    } else if (type === 'suffix') {
+      return 'Suffix text type'
+    }
+
+    return ''
+  }, [type])
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev)
@@ -70,15 +90,23 @@ function ByIncludingTextCard() {
       }
       setIsLoading(true)
 
-      const includedFiles = checkedTargetFiles.filter(checkedTargetFileEl => checkedTargetFileEl.name.includes(data.text))
+      // Filter the files by type
+      let filteredFiles: TargetFiles[] = []
+      if (type === 'included') {
+        filteredFiles = filterIncludedFiles(data.text)
+      } else if (type === 'prefix') {
+        filteredFiles = filterPrefixFiles(data.text)
+      } else if (type === 'suffix') {
+        filteredFiles = filterSuffixFiles(data.text)
+      }
       // If no files including file name, return
-      if (!includedFiles.length) {
-        toast(`No files including the ${data.text}`, {
+      if (!filteredFiles.length) {
+        toast(`No files with the ${data.text}`, {
           type: 'warning'
         })
         return
       }
-
+      // path + text
       let fullDirectoryPath = directoryPath + '\\' + data.text
       // Create directory
       fullDirectoryPath = await overrideOrCreateDirectory({
@@ -86,16 +114,16 @@ function ByIncludingTextCard() {
         isOverride: setting.isOverrideDirectory,
         isAutoDuplicatedName: setting.isAutoDuplicatedName,
       })
-
-      await Promise.all(includedFiles.map(async (checkedTargetFileEl) => {
+      // Loop to move or copy file
+      await Promise.all(filteredFiles.map(async (fileEl) => {
         await moveOrCopyFile({
-          file: checkedTargetFileEl,
+          file: fileEl,
           directoryPath: fullDirectoryPath,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
           isCopy: setting.isKeepOriginal,
         })
         // Remove from slice
-        dispatch(removeOrganizeTargetFileByPath(checkedTargetFileEl.path))
+        dispatch(removeOrganizeTargetFileByPath(fileEl.path))
       }))
       toast('Success to rename files', {
         type: 'success'
@@ -111,11 +139,23 @@ function ByIncludingTextCard() {
     }
   }
 
+  const filterIncludedFiles = (text: string) => {
+    return checkedTargetFiles.filter(checkedTargetFileEl => checkedTargetFileEl.name.includes(text))
+
+  }
+  const filterPrefixFiles = (text: string) => {
+    return checkedTargetFiles.filter(checkedTargetFileEl => checkedTargetFileEl.name.startsWith(text))
+  }
+
+  const filterSuffixFiles = (text: string) => {
+    return checkedTargetFiles.filter(checkedTargetFileEl => checkedTargetFileEl.name.endsWith(text))
+  }
+
   return (
     <Card>
       <CardHeader onClick={toggleOpen} className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">By included text type</Heading>
+          <Heading size="md">{title}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -157,4 +197,4 @@ function ByIncludingTextCard() {
   )
 }
 
-export default ByIncludingTextCard
+export default ByTextCard
