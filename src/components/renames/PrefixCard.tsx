@@ -37,7 +37,6 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>
 
 function RenamesPrefixCard() {
-  const targetFiles = useSelector((state: RootState) => state.renames.targetFiles)
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
   const applicationSetting = useSelector((state: RootState) => state.applications.setting)
@@ -72,8 +71,6 @@ function RenamesPrefixCard() {
       setIsLoading(true)
 
       await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        let dateTimeFormat = applicationSetting.dateFormat
-        if (applicationSetting.timeFormat) dateTimeFormat += ` ${applicationSetting.timeFormat}`
         const { newFileNameWithPath, newFileName } = await renameTargetFile({
           file: checkedTargetFileEl,
           newFileName: `${data.text}${checkedTargetFileEl.name}`,

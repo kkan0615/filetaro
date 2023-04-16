@@ -1,14 +1,13 @@
 import { AiOutlineClose } from 'react-icons/ai'
-import { MoveDirectory } from '../../types/models/moveDirectory'
+import { MoveDirectory } from '@renderer/types/models/moveDirectory'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
-import { copyFile, exists, renameFile } from '@tauri-apps/api/fs'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
 import { useEffect, useState } from 'react'
 import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
 import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
+import { moveOrCopyFile } from '@renderer/utils/file'
 
 interface Props {
   directory: MoveDirectory
@@ -17,7 +16,7 @@ interface Props {
 
 export function MovesDirectoryCard({ directory, onRemove }: Props) {
   const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
-  const movesSlideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
+  const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
   const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.moves.setting)
   const dispatch = useDispatch()
@@ -34,17 +33,40 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
    */
   const handleCard = async () => {
     try {
-      if (movesSlideIndex === -1 && checkedTargetFiles.length === 0) {
+      if (slideIndex === -1 && checkedTargetFiles.length === 0) {
         toast('Select file or open slide show mode', {
           type: 'warning'
         })
         return
       }
-
-      if (setting.isKeepOriginal) {
-        await copyFiles()
+      // -1 means it's not slideshow mode.
+      if (slideIndex === -1) {
+        await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
+          await moveOrCopyFile({
+            file: checkedTargetFileEl,
+            directoryPath: directory.path,
+            isAutoDuplicatedName: setting.isAutoDuplicatedName,
+            isCopy: setting.isKeepOriginal
+          })
+          dispatch(removeTargetFile(checkedTargetFileEl.path))
+        }))
       } else {
-        await moveFiles()
+        // File by index
+        const targetFileByIndex = targetFiles[slideIndex]
+
+        await moveOrCopyFile({
+          file: targetFileByIndex,
+          directoryPath: directory.path,
+          isAutoDuplicatedName: setting.isAutoDuplicatedName,
+          isCopy: setting.isKeepOriginal
+        })
+
+        // new index of slide
+        let newSlideIndex = 0
+        if (targetFiles.length === 1) newSlideIndex = -1
+        else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
+        dispatch(setMovesSlideIndex(newSlideIndex))
+        dispatch(removeTargetFile(targetFileByIndex.path))
       }
 
       toast('Success to move file', {
@@ -55,84 +77,6 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
       toast('Error to move file', {
         type: 'error'
       })
-    }
-  }
-
-  /**
-   * Check file name. If same file name is exists, prompt to type new name
-   * @param targetFile {TargetFiles} - file
-   * @return {string} - new file path
-   */
-  const checkAndPromptFileName = async (targetFile: TargetFiles) => {
-    let newPath = `${directory.path}/${targetFile.name}`
-    // Check duplicated file name
-    // Number of increment
-    let i = 1
-    // Get file extension
-    const splitName = targetFile.name.split('.')
-    splitName.pop()
-    while (await exists(newPath)) {
-      // New file name
-      let newFileName = ''
-      // Automatically set the file name
-      if (setting.isAutoDuplicatedName) {
-        newFileName = `${splitName.join('')} (${i++}).${targetFile.ext}`
-      } else {
-        newFileName = prompt(`${targetFile.name} name is already exists, type new name of it`,
-          `${splitName.join('')} (${i++}).${targetFile.ext}`) || ''
-      }
-      // If user cancel to prompt
-      if (!newFileName) {
-        toast(`Cancel to move file, ${targetFile.name}`, {
-          type: 'warning'
-        })
-        return ''
-      }
-      newPath = `${directory.path}/${newFileName}`
-    }
-
-    return newPath
-  }
-
-  const copyFiles = async () => {
-    if (movesSlideIndex === -1) {
-      checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        const newPath = await checkAndPromptFileName(checkedTargetFileEl)
-        // Copy file to new path
-        await copyFile(checkedTargetFileEl.path, newPath)
-        dispatch(removeTargetFile(checkedTargetFileEl.path))
-      })
-    } else {
-      const targetFileByIndex = targetFiles[movesSlideIndex]
-      const newPath = await checkAndPromptFileName(targetFileByIndex)
-      // Copy file to new path
-      await copyFile(targetFileByIndex.path, newPath)
-      dispatch(removeTargetFile(targetFileByIndex.path))
-      let newSlideIndex = 0
-      if (targetFiles.length === 1) newSlideIndex = -1
-      else if(movesSlideIndex !== 0) newSlideIndex = movesSlideIndex - 1
-      dispatch(setMovesSlideIndex(newSlideIndex))
-    }
-  }
-
-  const moveFiles = async () => {
-    if (movesSlideIndex === -1) {
-      checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        const newPath = await checkAndPromptFileName(checkedTargetFileEl)
-        // Move file to new path
-        await renameFile(checkedTargetFileEl.path, newPath)
-        dispatch(removeTargetFile(checkedTargetFileEl.path))
-      })
-    } else {
-      const targetFileByIndex = targetFiles[movesSlideIndex]
-      const newPath = await checkAndPromptFileName(targetFileByIndex)
-      // Move file to new path
-      await renameFile(targetFileByIndex.path, newPath)
-      dispatch(removeTargetFile(targetFileByIndex.path))
-      let newSlideIndex = 0
-      if (targetFiles.length === 1) newSlideIndex = -1
-      else if(movesSlideIndex !== 0) newSlideIndex = movesSlideIndex - 1
-      dispatch(setMovesSlideIndex(newSlideIndex))
     }
   }
 

@@ -1,13 +1,13 @@
 import { ReactElement, useRef, useState } from 'react'
-import './index.css'
 import { Flex } from '@chakra-ui/react'
+import './index.css'
 
 interface Props {
   left: ReactElement
   right: ReactElement
 }
 
-function Index({ left, right }: Props) {
+function Splitter({ left, right }: Props) {
   const resizer = useRef<HTMLDivElement>(null)
   // const leftSide = createRef<HTMLDivElement>()
   // const rightSide = createRef<HTMLDivElement>()
@@ -75,4 +75,4 @@ function Index({ left, right }: Props) {
   )
 }
 
-export default Index
+export default Splitter

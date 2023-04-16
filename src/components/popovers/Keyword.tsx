@@ -59,6 +59,14 @@ function KeywordPopover({ placement }: Props) {
                   <Td className="pl-0 pr-2 py-2">$[today]</Td>
                   <Td className="pl-0 pr-2 py-2">Display Today with predefined format</Td>
                 </Tr>
+                <Tr>
+                  <Td className="pl-0 pr-2 py-2">$[ext]</Td>
+                  <Td className="pl-0 pr-2 py-2">Display file extension</Td>
+                </Tr>
+                <Tr>
+                  <Td className="pl-0 pr-2 py-2">$[type]</Td>
+                  <Td className="pl-0 pr-2 py-2">Display file type</Td>
+                </Tr>
               </Tbody>
             </Table>
           </TableContainer>

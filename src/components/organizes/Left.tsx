@@ -1,116 +1,33 @@
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { HTMLProps, useEffect, useMemo, useState } from 'react'
+import { Card, CardBody, Flex, IconButton, Tooltip } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+import { AiOutlineDelete, AiOutlineHome } from 'react-icons/ai'
+import AddFileBtn from '@renderer/components/buttons/AddFile'
+import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
+import { MdDeleteForever } from 'react-icons/all'
+import CTable from '@renderer/components/commons/libs/Table'
 import { path } from '@tauri-apps/api'
-import { AiOutlineFile, AiOutlineHome, BiSlideshow, MdDeleteForever } from 'react-icons/all'
+import { getTargetFileTypeByExt, TargetFiles } from '@renderer/types/models/targetFiles'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
-import { AiOutlineDelete } from 'react-icons/ai'
-import { listen, UnlistenFn } from '@tauri-apps/api/event'
-import { Link } from 'react-router-dom'
-import { getTargetFileTypeByExt, TargetFiles, TargetFileType } from '@renderer/types/models/targetFiles'
-import {
-  addTargetFile,
-  removeTargetFile, setMovesSlideIndex,
-  updateTargetFileCheckByIndex
-} from '@renderer/stores/slices/moves'
-import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
+import { useEffect, useMemo, useState } from 'react'
 import { RootState } from '@renderer/stores'
-import MovesSlideShow from '@renderer/components/moves/SlideShow'
+import {
+  addOrganizeTargetFile,
+  removeOrganizeTargetFileByPath,
+  updateOrganizeTargetFileCheckByIndex
+} from '@renderer/stores/slices/organizes'
+import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import IndeterminateCheckbox from '@renderer/components/forms/IndeterminateCheckbox'
-import CTable from '@renderer/components/commons/libs/Table'
 import { deleteTargetFiles } from '@renderer/utils/file'
-import { convertFileSrc } from '@tauri-apps/api/tauri'
-import { Card, CardBody, Flex, IconButton, Tooltip } from '@chakra-ui/react'
-import AddFileBtn from '@renderer/components/buttons/AddFile'
 
-function IndeterminatePreview({
-  path,
-  fileType,
-  ...rest
-}: { path: string, fileType: TargetFileType } & HTMLProps<HTMLInputElement>) {
-  // const assetUrl = convertFileSrc(path)
-  const [assetUrl, setAssetUrl] = useState('')
-
-  useEffect(() => {
-    loadFile()
-  }, [fileType, path])
-
-  const loadFile = async () => {
-    if (fileType === 'image') {
-      const assetUrl = convertFileSrc(path)
-      setAssetUrl(assetUrl)
-    }
-  }
-
-  if (fileType === 'image') {
-    return (
-      <div className="text-center max-w-[52px]">
-        <img
-          className="w-full h-full"
-          src={assetUrl}
-          alt={path}
-        />
-      </div>
-    )
-  }
-
-  return (
-    <div className="tooltip tooltip-bottom" data-tip={fileType}>
-      <AiOutlineFile />
-    </div>
-  )
-}
-
-function MovesLeft() {
-  const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
-  const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
-  const isAllUnchecked = useSelector((state: RootState) => state.moves.targetFiles.some(targetFileEl => targetFileEl.checked))
-  const setting = useSelector((state: RootState) => state.moves.setting)
+function OrganizeLeft() {
+  const targetFiles = useSelector((state: RootState) => state.organizes.targetFiles)
+  const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
+  const isAllUnchecked = useSelector((state: RootState) => state.organizes.targetFiles.some(targetFileEl => targetFileEl.checked))
+  const setting = useSelector((state: RootState) => state.organizes.setting)
   const dispatch = useDispatch()
 
   const [rowSelection, setRowSelection] = useState({})
-  const [isSlideOpen, setIsSlideOpen] = useState(false)
-
-  useEffect(() => {
-    const unlisten = listen<string[]>('tauri://file-drop', async (event) => {
-      const filePaths = event.payload
-      await Promise.all(
-        (filePaths as string[]).map(async (filePathEl) => {
-          const ext = await path.extname(filePathEl)
-          dispatch(
-            addTargetFile({
-              // ...file,
-              name: await path.basename(filePathEl),
-              type: getTargetFileTypeByExt(ext),
-              ext,
-              checked: false,
-              path: filePathEl,
-            })
-          )
-        })
-      )
-    }).catch(e => {
-      console.error(e)
-      toast('Error to add files', {
-        type: 'error'
-      })
-    })
-
-    return () => {
-      const run = async () => {
-        if (unlisten) {
-          const unlistenValue = await unlisten as UnlistenFn
-          unlistenValue()
-        }
-      }
-
-      run()
-    }
-  }, [])
 
   const columnHelper = createColumnHelper<TargetFiles>()
   const columns = useMemo(() => [
@@ -140,22 +57,6 @@ function MovesLeft() {
         </div>
       ),
     }),
-    columnHelper.accessor('path', {
-      id: 'preview',
-      header: 'Preview',
-      cell: (info) => (
-        <IndeterminatePreview
-          {...{
-            path: info.getValue(),
-            fileType: info.row.original.type,
-            checked: info.row.getIsSelected(),
-            disabled: !info.row.getCanSelect(),
-            indeterminate: info.row.getIsSomeSelected(),
-            onChange: info.row.getToggleSelectedHandler(),
-          }}
-        />
-      ),
-    }),
     columnHelper.accessor('name', {
       cell: (info) => info.getValue(),
     }),
@@ -166,31 +67,6 @@ function MovesLeft() {
     columnHelper.accessor('type', {
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor('name', {
-      id: 'action',
-      header: 'actions',
-      cell: ({ row }) => (
-        <Tooltip label="Start slide show">
-          <IconButton
-            onClick={() => startSlideShowByIndex(row.index)}
-            variant="ghost"
-            aria-label="Start slide show"
-            icon={<BiSlideshow className="text-2xl" />}
-          />
-        </Tooltip>
-      ),
-    }),
-    // columnHelper.accessor((row) => row.lastName, {
-    //   id: 'lastName',
-    //   cell: (info) => <i>{info.getValue()}</i>,
-    //   header: () => <span>Last Name</span>,
-    //   footer: (info) => info.column.id,
-    // }),
-    // columnHelper.accessor('age', {
-    //   header: () => 'Age',
-    //   cell: (info) => info.renderValue(),
-    //   footer: (info) => info.column.id,
-    // }),
   ], [targetFiles.length])
 
   const table = useReactTable({
@@ -209,14 +85,13 @@ function MovesLeft() {
    */
   useEffect(() => {
     const rows = table.getSelectedRowModel().rows
-
     const indexList = rows.map((rowEl) => rowEl.index)
     targetFiles
       .filter((targetFileEl) => targetFileEl.checked)
       .map((targetFileEl, index) => {
         if (!indexList.includes(index)) {
           dispatch(
-            updateTargetFileCheckByIndex({
+            updateOrganizeTargetFileCheckByIndex({
               isCheck: false,
               index: index,
             })
@@ -226,7 +101,7 @@ function MovesLeft() {
 
     rows.map((rowEl) => {
       dispatch(
-        updateTargetFileCheckByIndex({
+        updateOrganizeTargetFileCheckByIndex({
           isCheck: true,
           index: rowEl.index,
         })
@@ -240,15 +115,12 @@ function MovesLeft() {
     }
   }, [targetFiles])
 
-  /**
-   * Add selected files
-   */
   const addFiles = async (filePaths: string[]) => {
     try {
       await Promise.all(
         filePaths.map(async (filePathEl, index) => {
           dispatch(
-            addTargetFile({
+            addOrganizeTargetFile({
               name: await path.basename(filePathEl),
               type: getTargetFileTypeByExt(await path.extname(filePathEl)),
               ext: await path.extname(filePathEl),
@@ -272,14 +144,6 @@ function MovesLeft() {
     }
   }
 
-  const startSlideShowByIndex = (index: number) => {
-    if (index <= targetFiles.length) {
-      dispatch(setMovesSlideIndex(index))
-      table.resetRowSelection(false)
-      toggleOpen()
-    }
-  }
-
   /**
    * Load files from directory
    * @param files {TargetFiles} - files from directory
@@ -287,7 +151,7 @@ function MovesLeft() {
   const loadFiles = async (files: TargetFiles[]) => {
     files.map((fileEl, index) => {
       dispatch(
-        addTargetFile({
+        addOrganizeTargetFile({
           ...fileEl,
           checked: setting.isDefaultCheckedOnLoad,
         })
@@ -307,7 +171,7 @@ function MovesLeft() {
     targetFiles
       .filter((targetFileEl) => targetFileEl.checked)
       .map((targetFileEl) => {
-        dispatch(removeTargetFile(targetFileEl.path))
+        dispatch(removeOrganizeTargetFileByPath(targetFileEl.path))
       })
 
     table.resetRowSelection(false)
@@ -324,18 +188,11 @@ function MovesLeft() {
     if (isSuccess) {
       checkedTargetFiles
         .map((targetFileEl) => {
-          dispatch(removeTargetFile(targetFileEl.path))
+          dispatch(removeOrganizeTargetFileByPath(targetFileEl.path))
         })
 
       table.resetRowSelection(false)
     }
-  }
-
-  const toggleOpen = () => {
-    if (isSlideOpen) {
-      dispatch(setMovesSlideIndex(-1))
-    }
-    setIsSlideOpen((prev) => !prev)
   }
 
   return (
@@ -345,7 +202,6 @@ function MovesLeft() {
         width: '75%', // w-9/12 not working because of important
       }}
     >
-      {isSlideOpen && <MovesSlideShow isOpen={isSlideOpen} toggleOpen={toggleOpen} />}
       <div className="min-h-0 mb-2 shrink p-2">
         <Card className="p-0">
           <CardBody padding={0} className="px-2 py-1">
@@ -361,17 +217,6 @@ function MovesLeft() {
               </Link>
               <AddFileBtn onSelected={addFiles} />
               <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
-              {
-                targetFiles.length > 0 &&
-                <Tooltip label="Start slide show">
-                  <IconButton
-                    onClick={() => startSlideShowByIndex(0)}
-                    variant="ghost"
-                    aria-label="Start slide show"
-                    icon={<BiSlideshow className="text-2xl" />}
-                  />
-                </Tooltip>
-              }
               {isAllUnchecked &&
                 <Tooltip label="Remove files from list">
                   <IconButton
@@ -402,4 +247,4 @@ function MovesLeft() {
   )
 }
 
-export default MovesLeft
+export default OrganizeLeft

@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "febtos",
-    "version": "0.0.1"
+    "productName": "filetaro",
+    "version": "0.0.2"
   },
   "tauri": {
     "allowlist": {
@@ -78,7 +78,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "Febtos",
+        "title": "Filetaro",
         "width": 1280,
         "height": 720
       }

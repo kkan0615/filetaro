@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,7 +17,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Button, Checkbox, Spacer,
+  Button, Checkbox, Spacer, Tooltip,
 } from '@chakra-ui/react'
 
 const validationSchema = z.object({
@@ -38,10 +37,7 @@ function MovesDirectorySettingModal({ children }: Props) {
   const {
     register,
     handleSubmit,
-    getValues,
     setValue,
-    watch,
-    reset,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -107,7 +103,9 @@ function MovesDirectorySettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isKeepOriginal')}
                 >
-                  <span>Keep original</span>
+                  <Tooltip label="Keep original file before move" placement='auto'>
+                    <span>Keep original</span>
+                  </Tooltip>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -115,7 +113,9 @@ function MovesDirectorySettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isAutoDuplicatedName')}
                 >
-                  <span>Automatically change duplicated name</span>
+                  <Tooltip label="Automatically rename if there is same file name in directory" placement='auto'>
+                    <span>Auto renaming for same file name</span>
+                  </Tooltip>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -124,7 +124,9 @@ function MovesDirectorySettingModal({ children }: Props) {
                   type="checkbox"
                   {...register('isDefaultCheckedOnLoad')}
                 >
-                  <span>Checked on load file</span>
+                  <Tooltip label="Check for loaded files automatically" placement='auto'>
+                    <span>Check for loaded files</span>
+                  </Tooltip>
                 </Checkbox>
               </div>
             </ModalBody>

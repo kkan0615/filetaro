@@ -1,11 +1,11 @@
-import Index from '@renderer/components/Splitter'
+import Splitter from '@renderer/components/Splitter'
 import MovesLeft from '@renderer/components/moves/Left'
 import MovesRight from '@renderer/components/moves/Right'
 
 function Moves() {
   return (
     <div className="h-screen w-full">
-      <Index left={<MovesLeft />} right={<MovesRight />} />
+      <Splitter left={<MovesLeft />} right={<MovesRight />} />
     </div>
   )
 }

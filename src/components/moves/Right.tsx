@@ -6,8 +6,7 @@ import { addMoveDirectory, removeMoveDirectory } from '@renderer/stores/slices/m
 import { MoveDirectory } from '@renderer/types/models/moveDirectory'
 import MovesDirectorySettingModal from '@renderer/components/moves/DirectorySettingDialog'
 import MovesDirectoryCard from '@renderer/components/moves/DirectoryCard'
-import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading } from '@chakra-ui/react'
-import { AiOutlineHome } from 'react-icons/all'
+import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading, Box } from '@chakra-ui/react'
 
 function MovesRight() {
   const directories = useSelector((state: RootState) => state.moves.moveDirectories)
@@ -69,13 +68,13 @@ function MovesRight() {
           </CardBody>
         </Card>
       </div>
-      <div className="grow h-1 overflow-y-auto px-4 py-2">
+      <Box className="grow h-1 overflow-y-auto px-4 py-2">
         <List spacing={4}>
           {directories.map((dirEl) => (
             <MovesDirectoryCard key={dirEl.path} directory={dirEl} onRemove={removeDirectory} />
           ))}
         </List>
-      </div>
+      </Box>
     </div>
   )
 }
