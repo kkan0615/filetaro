@@ -1,11 +1,15 @@
 ## 0.0.2 (2023-04-09)
 - Added organize page
+- Added more keywords
+- Added more file types
 - Updated Home text
 - Updated sidebar color in SettingDialog
 - Updated README.md
+- Updated 
 - Changed program name
 - Changed splitter component name
-- Removed unused codes
+- Merged duplicate codes 
+- Refactored codes
 
 ## 0.0.1 (2023-04-08)
 - Moved to new repository
