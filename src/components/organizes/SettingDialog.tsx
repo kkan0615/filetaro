@@ -16,7 +16,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  Spacer, Checkbox
+  Spacer, Checkbox, Tooltip
 } from '@chakra-ui/react'
 import { setOrganizeSetting } from '@renderer/stores/slices/organizes'
 import { OrganizeSetting } from '@renderer/types/models/organize'
@@ -112,7 +112,9 @@ function OrganizesSettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isKeepOriginal')}
                 >
-                  <span>Keep original</span>
+                  <Tooltip label="Keep original file before move" placement='auto'>
+                    <span>Keep original</span>
+                  </Tooltip>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -120,7 +122,9 @@ function OrganizesSettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isOverrideDirectory')}
                 >
-                  <span>Override the directory</span>
+                  <Tooltip label="Use existed directory if there are same directory name" placement='auto'>
+                    <span>Use existed directory</span>
+                  </Tooltip>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -128,7 +132,9 @@ function OrganizesSettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isAutoDuplicatedName')}
                 >
-                  <span>Automatically change duplicated name</span>
+                  <Tooltip label="Automatically rename if there is same file name in directory" placement='auto'>
+                    <span>Auto renaming for same file name</span>
+                  </Tooltip>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -136,7 +142,9 @@ function OrganizesSettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isDefaultOpenCard')}
                 >
-                  <span>Open all cards default once you enter page</span>
+                  <Tooltip label="Open all cards default when you enter the page" placement='auto'>
+                    <span>Open all cards</span>
+                  </Tooltip>
                 </Checkbox>
                 <Checkbox
                   size="lg"
@@ -144,7 +152,9 @@ function OrganizesSettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isDefaultCheckedOnLoad')}
                 >
-                  <span>Checked on load file</span>
+                  <Tooltip label="Check for loaded files automatically" placement='auto'>
+                    <span>Check for loaded files</span>
+                  </Tooltip>
                 </Checkbox>
               </div>
             </ModalBody>
