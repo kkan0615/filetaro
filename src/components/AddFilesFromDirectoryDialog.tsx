@@ -2,7 +2,7 @@ import { AiOutlineFolderOpen } from 'react-icons/ai'
 import { useState } from 'react'
 import { open } from '@tauri-apps/api/dialog'
 import { FileEntry, readDir } from '@tauri-apps/api/fs'
-import { getTargetFileTypeByExt, TargetFiles } from '@renderer/types/models/targetFiles'
+import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targetFile'
 import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
@@ -33,7 +33,7 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>
 
 interface Props {
-  onAddFiles: (files: TargetFiles[]) => void
+  onAddFiles: (files: TargetFile[]) => void
 }
 
 function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
@@ -67,7 +67,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       const entries = (await readDir(data.directoryPath, { recursive: data.isRecursive }))
-      const files: TargetFiles[] = []
+      const files: TargetFile[] = []
       const recursive = async (innerEntries: FileEntry[]) => {
         for (let i = 0; i < innerEntries.length; i++) {
           const entryEl = innerEntries[i]

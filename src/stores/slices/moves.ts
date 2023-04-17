@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { MoveDirectory, MoveSetting, MoveSettingUpdate } from '@renderer/types/models/moveDirectory'
 
 const name = 'moves'
@@ -7,7 +7,7 @@ const name = 'moves'
 export interface MoveState {
   setting: MoveSetting
   moveDirectories: MoveDirectory[]
-  targetFiles: TargetFiles[]
+  targetFiles: TargetFile[]
   movesSlideIndex: number
 }
 
@@ -40,7 +40,7 @@ export const moveSlice = createSlice({
         (directoryEl) => directoryEl.path !== action.payload.path
       )
     },
-    addTargetFile: (state, action: PayloadAction<TargetFiles>) => {
+    addTargetFile: (state, action: PayloadAction<TargetFile>) => {
       if (
         state.targetFiles.findIndex((targetFileEl) => targetFileEl.path === action.payload.path) !==
         -1

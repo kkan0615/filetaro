@@ -11,7 +11,7 @@ import {
   removeRenameTargetFileByPath,
   updateRenameTargetFileCheckByIndex
 } from '@renderer/stores/slices/renames'
-import { getTargetFileTypeByExt, TargetFiles } from '@renderer/types/models/targetFiles'
+import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targetFile'
 import IndeterminateCheckbox from '@renderer/components/forms/IndeterminateCheckbox'
 import { RootState } from '@renderer/stores'
 import CTable from '@renderer/components/commons/libs/Table'
@@ -29,7 +29,7 @@ function RenamesLeft() {
 
   const [rowSelection, setRowSelection] = useState({})
 
-  const columnHelper = createColumnHelper<TargetFiles>()
+  const columnHelper = createColumnHelper<TargetFile>()
   const columns = useMemo(() => [
     columnHelper.accessor('checked', {
       id: 'checked',
@@ -165,9 +165,9 @@ function RenamesLeft() {
 
   /**
    * Load files from directory
-   * @param files {TargetFiles} - files from directory
+   * @param files {TargetFile} - files from directory
    */
-  const loadFiles = async (files: TargetFiles[]) => {
+  const loadFiles = async (files: TargetFile[]) => {
     files.map((fileEl, index) => {
       dispatch(
         addRenameTargetFile({

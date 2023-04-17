@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
@@ -48,7 +48,7 @@ function ByTypeCard() {
       setIsLoading(true)
 
       // File type map
-      const fileTypeMap: Record<string, TargetFiles[]> = {}
+      const fileTypeMap: Record<string, TargetFile[]> = {}
       checkedTargetFiles.map(checkedTargetFileEl => {
         if (!fileTypeMap[checkedTargetFileEl.type]) fileTypeMap[checkedTargetFileEl.type] = []
         fileTypeMap[checkedTargetFileEl.type].push(checkedTargetFileEl)

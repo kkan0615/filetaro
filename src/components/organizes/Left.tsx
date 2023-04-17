@@ -6,7 +6,7 @@ import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirect
 import { MdDeleteForever } from 'react-icons/all'
 import CTable from '@renderer/components/commons/libs/Table'
 import { path } from '@tauri-apps/api'
-import { getTargetFileTypeByExt, TargetFiles } from '@renderer/types/models/targetFiles'
+import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targetFile'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
@@ -29,7 +29,7 @@ function OrganizeLeft() {
 
   const [rowSelection, setRowSelection] = useState({})
 
-  const columnHelper = createColumnHelper<TargetFiles>()
+  const columnHelper = createColumnHelper<TargetFile>()
   const columns = useMemo(() => [
     columnHelper.accessor('checked', {
       id: 'checked',
@@ -146,9 +146,9 @@ function OrganizeLeft() {
 
   /**
    * Load files from directory
-   * @param files {TargetFiles} - files from directory
+   * @param files {TargetFile} - files from directory
    */
-  const loadFiles = async (files: TargetFiles[]) => {
+  const loadFiles = async (files: TargetFile[]) => {
     files.map((fileEl, index) => {
       dispatch(
         addOrganizeTargetFile({

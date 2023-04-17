@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
@@ -48,7 +48,7 @@ function ByExtCard() {
       setIsLoading(true)
 
       // File type map
-      const fileExtMap: Record<string, TargetFiles[]> = {}
+      const fileExtMap: Record<string, TargetFile[]> = {}
       checkedTargetFiles.map(checkedTargetFileEl => {
         if (!fileExtMap[checkedTargetFileEl.ext]) fileExtMap[checkedTargetFileEl.ext] = []
         fileExtMap[checkedTargetFileEl.ext].push(checkedTargetFileEl)

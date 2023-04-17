@@ -20,7 +20,7 @@ import { RootState } from '@renderer/stores'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 
 interface Props {
   type: 'included' | 'prefix' | 'suffix'
@@ -91,7 +91,7 @@ function ByTextCard({ type } : Props) {
       setIsLoading(true)
 
       // Filter the files by type
-      let filteredFiles: TargetFiles[] = []
+      let filteredFiles: TargetFile[] = []
       if (type === 'included') {
         filteredFiles = filterIncludedFiles(data.text)
       } else if (type === 'prefix') {

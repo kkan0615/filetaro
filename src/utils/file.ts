@@ -3,7 +3,7 @@ import { ask } from '@tauri-apps/api/dialog'
 import { toast } from 'react-toastify'
 import dayjs from '@renderer/utils/libs/dayjs'
 import store, { RootState } from '@renderer/stores'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { DefaultDateFormat } from '@renderer/types/models/setting'
 
 /**
@@ -67,7 +67,7 @@ export const overrideOrCreateDirectory = async ({ directoryPath, isOverride, isA
  * @param isAutoDuplicatedName - true, no prompt
  */
 export const checkAndPromptFileName = async ({ file, directoryPath, isAutoDuplicatedName } : {
-  file: TargetFiles
+  file: TargetFile
   directoryPath: string
   isAutoDuplicatedName: boolean
 }) => {
@@ -112,7 +112,7 @@ export const checkAndPromptFileName = async ({ file, directoryPath, isAutoDuplic
  * @param isAutoDuplicatedName
  */
 export const moveOrCopyFile = async ({ file, directoryPath, isCopy = false, isAutoDuplicatedName = false }: {
-  file: TargetFiles
+  file: TargetFile
   directoryPath: string
   isCopy: boolean
   isAutoDuplicatedName: boolean
@@ -144,7 +144,7 @@ export const moveOrCopyFile = async ({ file, directoryPath, isCopy = false, isAu
  * @param isAutoDuplicatedName
  */
 export const renameTargetFile = async ({ file, newFileName, isAutoDuplicatedName }: {
-  file: TargetFiles
+  file: TargetFile
   newFileName: string
   isAutoDuplicatedName: boolean
   dateTimeFormat?: string
@@ -184,7 +184,7 @@ export const renameTargetFile = async ({ file, newFileName, isAutoDuplicatedName
  * @param files - Delete all files
  * @return {boolean} - returns true if it's success, else return false
  */
-export const deleteTargetFiles = async (files: TargetFiles[]) => {
+export const deleteTargetFiles = async (files: TargetFile[]) => {
   try {
     const yes = await ask('Would like to delete the files permanently?', {
       title: 'Delete files permanently',
@@ -207,7 +207,7 @@ export const deleteTargetFiles = async (files: TargetFiles[]) => {
 /**
  * Parse all keywords in sting
  */
-export const parseKeywords = (file: TargetFiles) => {
+export const parseKeywords = (file: TargetFile) => {
   const state = store.getState() as RootState
   let fileName = file.name
 

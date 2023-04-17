@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { listen, UnlistenFn } from '@tauri-apps/api/event'
 import { Link } from 'react-router-dom'
-import { getTargetFileTypeByExt, TargetFiles, TargetFileType } from '@renderer/types/models/targetFiles'
+import { getTargetFileTypeByExt, TargetFile, TargetFileType } from '@renderer/types/models/targetFile'
 import {
   addTargetFile,
   removeTargetFile, setMovesSlideIndex,
@@ -112,7 +112,7 @@ function MovesLeft() {
     }
   }, [])
 
-  const columnHelper = createColumnHelper<TargetFiles>()
+  const columnHelper = createColumnHelper<TargetFile>()
   const columns = useMemo(() => [
     columnHelper.accessor('checked', {
       id: 'checked',
@@ -282,9 +282,9 @@ function MovesLeft() {
 
   /**
    * Load files from directory
-   * @param files {TargetFiles} - files from directory
+   * @param files {TargetFile} - files from directory
    */
-  const loadFiles = async (files: TargetFiles[]) => {
+  const loadFiles = async (files: TargetFile[]) => {
     files.map((fileEl, index) => {
       dispatch(
         addTargetFile({
