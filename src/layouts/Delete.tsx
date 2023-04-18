@@ -3,9 +3,10 @@ import { Suspense, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
-import { clearOrganizeSlice, setOrganizeSetting } from '@renderer/stores/slices/organizes'
 import { OrganizeSetting } from '@renderer/types/models/organize'
 import CLoading from '@renderer/components/commons/Loading'
+import { clearDeleteSlice, setDeleteSetting } from '@renderer/stores/slices/deletes'
+import { Box } from '@chakra-ui/react'
 
 function OrganizeLayout() {
   const dispatch = useDispatch()
@@ -14,7 +15,7 @@ function OrganizeLayout() {
   useEffect(() => {
     settingStore.get<Partial<OrganizeSetting>>(SettingStoreKey.DeleteSetting)
       .then(value => {
-        dispatch(setOrganizeSetting({
+        dispatch(setDeleteSetting({
           ...value,
         }))
       })
@@ -25,16 +26,16 @@ function OrganizeLayout() {
    */
   useEffect(() => {
     return () => {
-      dispatch(clearOrganizeSlice())
+      dispatch(clearDeleteSlice())
     }
   }, [])
 
   return (
-    <div>
+    <Box height="100vh">
       <Suspense fallback={<CLoading />}>
         <Outlet />
       </Suspense>
-    </div>
+    </Box>
   )
 }
 
