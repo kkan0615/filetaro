@@ -17,7 +17,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 
-function ByTypeCard() {
+function OrganizesByTypeCard() {
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -121,4 +121,4 @@ function ByTypeCard() {
   )
 }
 
-export default ByTypeCard
+export default OrganizesByTypeCard

@@ -37,7 +37,7 @@ const validationSchema = z.object({
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
-function ByTextCard({ type } : Props) {
+function OrganizesByTextCard({ type } : Props) {
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -197,4 +197,4 @@ function ByTextCard({ type } : Props) {
   )
 }
 
-export default ByTextCard
+export default OrganizesByTextCard
