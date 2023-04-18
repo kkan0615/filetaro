@@ -4,9 +4,7 @@ import RenamesRight from '@renderer/components/renames/Right'
 
 function Renames() {
   return (
-    <div className="h-screen w-full">
-      <Splitter left={<RenamesLeft />} right={<RenamesRight />} />
-    </div>
+    <Splitter left={<RenamesLeft />} right={<RenamesRight />} />
   )
 }
 

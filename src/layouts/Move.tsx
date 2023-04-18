@@ -6,6 +6,7 @@ import { settingStore } from '@renderer/stores/tauriStore'
 import { MoveSetting } from '@renderer/types/models/moveDirectory'
 import { SettingStoreKey } from '@renderer/types/store'
 import CLoading from '@renderer/components/commons/Loading'
+import { Box } from '@chakra-ui/react'
 
 function Move() {
   const dispatch = useDispatch()
@@ -39,11 +40,11 @@ function Move() {
   }, [])
 
   return (
-    <div>
+    <Box height="100vh">
       <Suspense fallback={<CLoading />}>
         <Outlet />
       </Suspense>
-    </div>
+    </Box>
   )
 }
 

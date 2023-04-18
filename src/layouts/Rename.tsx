@@ -6,6 +6,7 @@ import { SettingStoreKey } from '@renderer/types/store'
 import { RenameSetting } from '@renderer/types/models/rename'
 import { clearRenameSlice, setRenameSetting } from '@renderer/stores/slices/renames'
 import CLoading from '@renderer/components/commons/Loading'
+import { Box } from '@chakra-ui/react'
 
 function RenameLayout() {
   const dispatch = useDispatch()
@@ -40,11 +41,11 @@ function RenameLayout() {
   }, [])
 
   return (
-    <div>
+    <Box height="100vh">
       <Suspense fallback={<CLoading />}>
         <Outlet />
       </Suspense>
-    </div>
+    </Box>
   )
 }
 

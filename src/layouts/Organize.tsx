@@ -6,6 +6,7 @@ import { SettingStoreKey } from '@renderer/types/store'
 import { clearOrganizeSlice, setOrganizeSetting } from '@renderer/stores/slices/organizes'
 import { OrganizeSetting } from '@renderer/types/models/organize'
 import CLoading from '@renderer/components/commons/Loading'
+import { Box } from '@chakra-ui/react'
 
 function OrganizeLayout() {
   const dispatch = useDispatch()
@@ -30,11 +31,11 @@ function OrganizeLayout() {
   }, [])
 
   return (
-    <div>
+    <Box height="100vh">
       <Suspense fallback={<CLoading />}>
         <Outlet />
       </Suspense>
-    </div>
+    </Box>
   )
 }
 

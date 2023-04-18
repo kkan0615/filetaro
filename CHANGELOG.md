@@ -1,5 +1,6 @@
 ## 0.0.2
 - Updated interface name from TargetFiles to TargetFile
+- Updated Layout
 
 ## 0.0.1 (2023-04-16)
 - Added organize page

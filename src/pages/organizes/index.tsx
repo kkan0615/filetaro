@@ -4,9 +4,7 @@ import OrganizesRight from '@renderer/components/organizes/Right'
 
 function Organizes() {
   return (
-    <div className="h-screen w-full">
-      <Splitter left={<OrganizeLeft />} right={<OrganizesRight />} />
-    </div>
+    <Splitter left={<OrganizeLeft />} right={<OrganizesRight />} />
   )
 }
 
