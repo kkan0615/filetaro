@@ -153,7 +153,7 @@ function OrganizesByTextCard({ type } : Props) {
 
   return (
     <Card>
-      <CardHeader onClick={toggleOpen} className="p-3">
+      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">{title}</Heading>
           <Spacer />
