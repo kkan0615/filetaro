@@ -18,6 +18,7 @@ import {
   ModalHeader,
   ModalOverlay, Tooltip
 } from '@chakra-ui/react'
+import { findAllFilesInDirectory } from '@renderer/utils/file'
 
 const validationSchema = z.object({
   directoryPath: z.string({
@@ -66,35 +67,11 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
-      const entries = (await readDir(data.directoryPath, { recursive: data.isRecursive }))
-      const files: TargetFile[] = []
-      const recursive = async (innerEntries: FileEntry[]) => {
-        for (let i = 0; i < innerEntries.length; i++) {
-          const entryEl = innerEntries[i]
-          // Pass empty directory
-          if (entryEl.children !== undefined && entryEl.children.length === 0) {
-            continue
-          }
-          // Recursive folder
-          if (entryEl.children && entryEl.children.length) {
-            await recursive(entryEl.children)
-            continue
-          }
-
-          const ext = await path.extname(entryEl.path)
-          files.push({
-            name: entryEl.name || '',
-            type: getTargetFileTypeByExt(ext),
-            ext,
-            checked: false,
-            path: entryEl.path,
-          })
-
-          onAddFiles(files)
-        }
-      }
-
-      await recursive(entries)
+      const files = await findAllFilesInDirectory({
+        directoryPath: data.directoryPath,
+        isRecursive: data.isRecursive,
+      })
+      onAddFiles(files)
       toast(`Success to load (${files.length}) files`, {
         type: 'success'
       })

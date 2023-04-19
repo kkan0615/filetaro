@@ -1,42 +1,18 @@
 import {
   Box,
   Card,
-  CardBody, Checkbox, Flex,
-  FormControl,
-  FormLabel, Heading,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement, List, Spacer,
+  CardBody, Flex,
+  IconButton, Spacer,
   Tooltip
 } from '@chakra-ui/react'
-import { AiOutlineFolderOpen, AiOutlineHome, AiOutlineSetting } from 'react-icons/ai'
-import { useDispatch } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { open } from '@tauri-apps/api/dialog'
-import { setOrganizeDirectoryPath } from '@renderer/stores/slices/organizes'
-import { setDeleteDirectoryPath } from '@renderer/stores/slices/deletes'
-import KeywordPopover from '@renderer/components/popovers/Keyword'
-import OrganizesSettingModal from '@renderer/components/organizes/SettingDialog'
+import { AiOutlineHome, AiOutlineSetting } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
+import DeletesDirectoryBox from '@renderer/components/deletes/DirectoryBox'
+import KeywordPopover from '@renderer/components/popovers/Keyword'
+import DeletesSettingModal from '@renderer/components/deletes/SettingDialog'
+import DeletesByTypeCard from '@renderer/components/deletes/ByTypeCard'
 
 function Deletes() {
-  const dispatch = useDispatch()
-  const [directoryPath, setDirectoryPath] = useState('')
-
-  const selectDirectory = async () => {
-    const directoryPath = await open({
-      title: 'Select Directory',
-      directory: true,
-    })
-
-    setDirectoryPath((directoryPath as string) || '')
-
-  }
-  useEffect(() => {
-    dispatch(setDeleteDirectoryPath(directoryPath))
-  }, [directoryPath])
-
   return (
     <div className="h-full flex-1 flex flex-col">
       <div className="min-h-0 mb-2 shrink p-2">
@@ -54,7 +30,7 @@ function Deletes() {
               </Link>
               <Spacer />
               <KeywordPopover />
-              <OrganizesSettingModal>
+              <DeletesSettingModal>
                 <Tooltip label="Open setting" placement='auto'>
                   <IconButton
                     variant="ghost"
@@ -62,52 +38,18 @@ function Deletes() {
                     icon={<AiOutlineSetting className="text-2xl" />}
                   />
                 </Tooltip>
-              </OrganizesSettingModal>
+              </DeletesSettingModal>
             </Flex>
           </CardBody>
         </Card>
       </div>
       <Box className="grow h-full">
-        <Box className="h-full flex items-center justify-center">
-          <Box className="w-full max-w-xl">
-            {/*<Card className="w-full">*/}
-            {/*  <CardBody className="p-3">*/}
-            <List spacing={4}>
-              <FormControl>
-                <FormLabel>Select or type directory path</FormLabel>
-                <InputGroup>
-                  <Input
-                    placeholder="Type here"
-                    value={directoryPath}
-                    onChange={(e) => setDirectoryPath(e.target.value)}
-                  />
-                  <InputRightElement>
-                    <Tooltip placement="auto" label="select directory">
-                      <IconButton
-                        variant="ghost"
-                        onClick={selectDirectory}
-                        aria-label="select directory"
-                        icon={<AiOutlineFolderOpen className="text-2xl" />}
-                      >
-                      </IconButton>
-                    </Tooltip>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Checkbox
-                size="lg"
-                iconColor="white"
-                colorScheme="primary"
-              >
-                <Tooltip label="Check all files in directories in directories" placement='auto'>
-                  <span>Recursive</span>
-                </Tooltip>
-              </Checkbox>
-            </List>
-            {/*</CardBody>*/}
-            {/*</Card>*/}
-          </Box>
+        <Box className="max-w-xl mx-auto py-12">
+          <DeletesDirectoryBox />
         </Box>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 justify-items-center p-4 pt-12">
+          <DeletesByTypeCard />
+        </div>
       </Box>
     </div>
   )

@@ -20,12 +20,12 @@ import {
   ModalOverlay,
   Spacer, Checkbox, Tooltip
 } from '@chakra-ui/react'
+import { DeleteSetting } from '@renderer/types/models/delete'
+import { setDeleteSetting } from '@renderer/stores/slices/deletes'
 
 const validationSchema = z.object({
-  isKeepOriginal: z.boolean(),
-  isAutoDuplicatedName: z.boolean(),
+  isDefaultRecursive: z.boolean(),
   isDefaultOpenCard: z.boolean(),
-  isDefaultCheckedOnLoad: z.boolean(),
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
@@ -33,8 +33,8 @@ interface Props {
   children: React.ReactElement
 }
 
-function RenamesSettingModal({ children }: Props) {
-  const setting = useSelector((state: RootState) => state.renames.setting)
+function DeletesSettingModal({ children }: Props) {
+  const setting = useSelector((state: RootState) => state.deletes.setting)
   const dispatch = useDispatch()
   const {
     register,
@@ -49,10 +49,8 @@ function RenamesSettingModal({ children }: Props) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    setValue('isAutoDuplicatedName', setting.isAutoDuplicatedName)
-    setValue('isKeepOriginal', setting.isKeepOriginal)
+    setValue('isDefaultRecursive', setting.isDefaultRecursive)
     setValue('isDefaultOpenCard', setting.isDefaultOpenCard)
-    setValue('isDefaultCheckedOnLoad', setting.isDefaultCheckedOnLoad)
   }, [isOpen])
 
   const toggleOpen = () => {
@@ -62,19 +60,13 @@ function RenamesSettingModal({ children }: Props) {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       setIsLoading(true)
-      await settingStore.set(SettingStoreKey.RenameSetting, {
-        isAutoDuplicatedName: data.isAutoDuplicatedName,
-        isKeepOriginal: data.isKeepOriginal,
+      const newSetting: DeleteSetting = {
+        isDefaultRecursive: data.isDefaultRecursive,
         isDefaultOpenCard: data.isDefaultOpenCard,
-        isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad,
-      } as RenameSetting)
+      }
 
-      dispatch(setRenameSetting({
-        isAutoDuplicatedName: data.isAutoDuplicatedName,
-        isKeepOriginal: data.isKeepOriginal,
-        isDefaultOpenCard: data.isDefaultOpenCard,
-        isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad,
-      }))
+      await settingStore.set(SettingStoreKey.DeleteSetting, newSetting)
+      dispatch(setDeleteSetting(newSetting))
 
       toast('Success to save setting', {
         type: 'success'
@@ -107,20 +99,10 @@ function RenamesSettingModal({ children }: Props) {
                   size="lg"
                   iconColor="white"
                   colorScheme="primary"
-                  {...register('isKeepOriginal')}
+                  {...register('isDefaultRecursive')}
                 >
                   <Tooltip label="Keep original file before move" placement='auto'>
-                    <span>Keep original</span>
-                  </Tooltip>
-                </Checkbox>
-                <Checkbox
-                  size="lg"
-                  iconColor="white"
-                  colorScheme="primary"
-                  {...register('isAutoDuplicatedName')}
-                >
-                  <Tooltip label="Automatically rename if there is same file name in directory" placement='auto'>
-                    <span>Auto renaming for same file name</span>
+                    <span>Check recursive all box in default</span>
                   </Tooltip>
                 </Checkbox>
                 <Checkbox
@@ -131,16 +113,6 @@ function RenamesSettingModal({ children }: Props) {
                 >
                   <Tooltip label="Open all cards default when you enter the page" placement='auto'>
                     <span>Open all cards</span>
-                  </Tooltip>
-                </Checkbox>
-                <Checkbox
-                  size="lg"
-                  iconColor="white"
-                  colorScheme="primary"
-                  {...register('isDefaultCheckedOnLoad')}
-                >
-                  <Tooltip label="Check for loaded files automatically" placement='auto'>
-                    <span>Check for loaded files</span>
                   </Tooltip>
                 </Checkbox>
               </div>
@@ -164,4 +136,4 @@ function RenamesSettingModal({ children }: Props) {
   )
 }
 
-export default RenamesSettingModal
+export default DeletesSettingModal

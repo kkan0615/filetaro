@@ -6,7 +6,7 @@ const PdfExts = ['pdf']
 const WordExts = ['doc', 'docm', 'docx', 'dot', 'dotm']
 const ExcelExts = ['xls', 'xlsb', 'xlsm', 'xlsx']
 
-const TargetFileTypes = ['image', 'video', 'audio', 'pdf', 'word', 'excel', 'file'] as const
+export const TargetFileTypes = ['image', 'video', 'audio', 'pdf', 'word', 'excel', 'file'] as const
 export type TargetFileType = typeof TargetFileTypes[number]
 export const getTargetFileTypeByExt = (ext: string): TargetFileType => {
   const lowerExt = ext.toLowerCase()

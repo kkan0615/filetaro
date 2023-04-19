@@ -1,10 +1,49 @@
-import { copyFile, createDir, exists, removeFile, renameFile } from '@tauri-apps/api/fs'
+import { copyFile, createDir, exists, FileEntry, readDir, removeFile, renameFile } from '@tauri-apps/api/fs'
 import { ask } from '@tauri-apps/api/dialog'
 import { toast } from 'react-toastify'
 import dayjs from '@renderer/utils/libs/dayjs'
 import store, { RootState } from '@renderer/stores'
-import { TargetFile } from '@renderer/types/models/targetFile'
+import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targetFile'
 import { DefaultDateFormat } from '@renderer/types/models/setting'
+import { path } from '@tauri-apps/api'
+
+
+export const findAllFilesInDirectory = async ({ directoryPath ,isRecursive }: {
+  directoryPath: string
+  isRecursive: boolean
+}) => {
+  // Formatted files
+  const files: TargetFile[] = []
+  // All files
+  const entries = (await readDir(directoryPath, { recursive: isRecursive }))
+  const recursive = async (innerEntries: FileEntry[]) => {
+    for (let i = 0; i < innerEntries.length; i++) {
+      const entryEl = innerEntries[i]
+      // Pass empty directory
+      if (entryEl.children !== undefined && entryEl.children.length === 0) {
+        continue
+      }
+      // Recursive folder
+      if (entryEl.children && entryEl.children.length) {
+        await recursive(entryEl.children)
+        continue
+      }
+      // extract extension
+      const ext = await path.extname(entryEl.path)
+      files.push({
+        name: entryEl.name || '',
+        type: getTargetFileTypeByExt(ext),
+        ext,
+        checked: false,
+        path: entryEl.path,
+      })
+    }
+  }
+
+  await recursive(entries)
+
+  return files
+}
 
 /**
  * If directory in the path exists, create directory or Override based on isOverride parameter.

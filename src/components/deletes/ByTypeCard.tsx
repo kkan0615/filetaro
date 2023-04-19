@@ -3,8 +3,8 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader, Collapse, Flex,
-  Heading,
+  CardHeader, Collapse, Flex, FormControl, FormErrorMessage, FormLabel,
+  Heading, Input, Select,
   Spacer,
   Text
 } from '@chakra-ui/react'
@@ -12,16 +12,42 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
-import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
-import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
+import { z } from 'zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TargetFileTypes } from '@renderer/types/models/targetFile'
+import { ask } from '@tauri-apps/api/dialog'
+import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
+import * as assert from 'assert'
+
+const validationSchema = z.object({
+  type: z.string({
+    required_error: 'Required field',
+  })
+    // Not empty
+    .min(1, {
+      message: 'Required field',
+    }),
+})
+type ValidationSchema = z.infer<typeof validationSchema>
 
 function DeletesByTypeCard() {
-  const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
-  const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
-  const setting = useSelector((state: RootState) => state.organizes.setting)
+  const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
+  const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
+  const setting = useSelector((state: RootState) => state.deletes.setting)
   const dispatch = useDispatch()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ValidationSchema>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: {
+      type: 'image'
+    }
+  })
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -30,58 +56,32 @@ function DeletesByTypeCard() {
     setIsOpen((prev) => !prev)
   }
 
-  const handleClick = async () => {
+  const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
-      if (!checkedTargetFiles.length) {
-        toast('Select any files', {
-          type: 'warning'
-        })
-        return
-      }
-
       if (!directoryPath) {
-        toast('Select output directory', {
+        toast('Select target directory', {
           type: 'warning'
         })
         return
       }
       setIsLoading(true)
-
-      // File type map
-      const fileTypeMap: Record<string, TargetFile[]> = {}
-      checkedTargetFiles.map(checkedTargetFileEl => {
-        if (!fileTypeMap[checkedTargetFileEl.type]) fileTypeMap[checkedTargetFileEl.type] = []
-        fileTypeMap[checkedTargetFileEl.type].push(checkedTargetFileEl)
+      const files = await findAllFilesInDirectory({
+        directoryPath,
+        isRecursive,
       })
-
-      // Loop file types
-      await Promise.all(Object.keys(fileTypeMap).map(async (keyEl) => {
-        // new directory path
-        let fullDirectoryPath = directoryPath + '\\' + keyEl
-        fullDirectoryPath = await overrideOrCreateDirectory({
-          directoryPath: fullDirectoryPath,
-          isOverride: setting.isOverrideDirectory,
-          isAutoDuplicatedName: setting.isAutoDuplicatedName,
+      const filteredFiles = files.filter((fileEl) => fileEl.type === data.type)
+      if (!filteredFiles.length) {
+        toast(`No files by ${data.type} type in directory`, {
+          type: 'warning'
         })
-        // Move or Copy files
-        await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
-          await moveOrCopyFile({
-            file: fileEl,
-            directoryPath: fullDirectoryPath,
-            isAutoDuplicatedName: setting.isAutoDuplicatedName,
-            isCopy: setting.isKeepOriginal
-          })
-          // Remove from slice
-          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
-        }))
-      }))
+        return
+      }
+      await deleteTargetFiles(filteredFiles)
 
-      toast('Success to organize files', {
-        type: 'success'
-      })
+      reset()
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast('Error to delete files', {
         type: 'error'
       })
     } finally {
@@ -90,8 +90,8 @@ function DeletesByTypeCard() {
   }
 
   return (
-    <Card>
-      <CardHeader onClick={toggleOpen} className="p-3">
+    <Card width="100%">
+      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">File type</Heading>
           <Spacer />
@@ -101,21 +101,37 @@ function DeletesByTypeCard() {
         </Flex>
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
-        <CardBody className="p-3">
-          <Text>Organize files by file type</Text>
-        </CardBody>
-        <CardFooter className="p-3">
-          <Button
-            width='100%'
-            color="white"
-            onClick={handleClick}
-            colorScheme="primary"
-            isLoading={isLoading}
-            loadingText='Organizing...'
-          >
-            Organize
-          </Button>
-        </CardFooter>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardBody className="p-3">
+            <FormControl>
+              <FormLabel>Type</FormLabel>
+              <Select
+                isInvalid={!!errors.type?.message}
+                {...register('type')}
+              >
+                {TargetFileTypes.map(targetFileTypeEl => (
+                  <option key={targetFileTypeEl} value={targetFileTypeEl}>{targetFileTypeEl}</option>
+                ))}
+              </Select>
+              {errors.type?.message ?
+                <FormErrorMessage>{errors.type.message}</FormErrorMessage>
+                : null
+              }
+            </FormControl>
+          </CardBody>
+          <CardFooter className="p-3">
+            <Button
+              width='100%'
+              color="white"
+              type="submit"
+              colorScheme="error"
+              isLoading={isLoading}
+              loadingText='Organizing...'
+            >
+              Delete
+            </Button>
+          </CardFooter>
+        </form>
       </Collapse>
     </Card>
   )

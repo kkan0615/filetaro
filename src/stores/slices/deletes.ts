@@ -6,6 +6,7 @@ const name = 'deletes'
 export interface DeleteState {
   setting: DeleteSetting
   directoryPath: string
+  isRecursive: boolean
 }
 
 const initialState: DeleteState = {
@@ -14,6 +15,7 @@ const initialState: DeleteState = {
     isDefaultOpenCard: false,
   },
   directoryPath: '',
+  isRecursive: false
 }
 
 export const deleteSlice = createSlice({
@@ -29,12 +31,16 @@ export const deleteSlice = createSlice({
     setDeleteDirectoryPath: (state, action: PayloadAction<string>) => {
       state.directoryPath = action.payload
     },
+    setDeleteIsRecursive: (state, action: PayloadAction<boolean>) => {
+      state.isRecursive = action.payload
+    },
     clearDeleteSlice: (state) => {
       state.setting = {
         isDefaultRecursive: false,
         isDefaultOpenCard: false,
       }
       state.directoryPath = ''
+      state.isRecursive = false
     }
   },
 })
@@ -43,6 +49,7 @@ export const deleteSlice = createSlice({
 export const {
   setDeleteSetting,
   setDeleteDirectoryPath,
+  setDeleteIsRecursive,
   clearDeleteSlice,
 } = deleteSlice.actions
 
