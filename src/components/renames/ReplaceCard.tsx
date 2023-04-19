@@ -45,7 +45,7 @@ type ValidationSchema = z.infer<typeof validationSchema>
 function RenamesReplaceCard() {
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
-  const applicationSetting = useSelector((state: RootState) => state.applications.setting)
+
   const dispatch = useDispatch()
   const {
     register,

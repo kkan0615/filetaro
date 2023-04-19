@@ -8,7 +8,7 @@ import {
   Spacer,
   Text
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
@@ -17,9 +17,7 @@ import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TargetFileTypes } from '@renderer/types/models/targetFile'
-import { ask } from '@tauri-apps/api/dialog'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
-import * as assert from 'assert'
 
 const validationSchema = z.object({
   type: z.string({
@@ -36,7 +34,7 @@ function DeletesByTypeCard() {
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
   const setting = useSelector((state: RootState) => state.deletes.setting)
-  const dispatch = useDispatch()
+
   const {
     register,
     handleSubmit,
@@ -51,6 +49,10 @@ function DeletesByTypeCard() {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsOpen(setting.isDefaultOpenCard)
+  }, [setting.isDefaultOpenCard])
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev)
