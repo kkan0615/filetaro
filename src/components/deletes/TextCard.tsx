@@ -37,7 +37,6 @@ type ValidationSchema = z.infer<typeof validationSchema>
 function DeletesTextCard({ type }: Props) {
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
-  const setting = useSelector((state: RootState) => state.deletes.setting)
 
   const {
     register,
@@ -48,12 +47,7 @@ function DeletesTextCard({ type }: Props) {
     resolver: zodResolver(validationSchema),
   })
 
-  const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    setIsOpen(setting.isDefaultOpenCard)
-  }, [setting.isDefaultOpenCard])
 
   /**
    * Title of card
@@ -69,11 +63,6 @@ function DeletesTextCard({ type }: Props) {
 
     return ''
   }, [type])
-
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -119,44 +108,40 @@ function DeletesTextCard({ type }: Props) {
 
   return (
     <Card width="100%">
-      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
+      <CardHeader className="p-3">
         <Flex alignItems="center">
           <Heading size="md">{title}</Heading>
           <Spacer />
-          <Text fontSize="2xl">
-            {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-          </Text>
         </Flex>
       </CardHeader>
-      <Collapse in={isOpen} animateOpacity>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardBody className="p-3">
-            <FormControl isInvalid={!!errors.text?.message}>
-              <FormLabel>Text</FormLabel>
-              <Input
-                placeholder="Type here"
-                {...register('text')}
-              />
-              {errors.text?.message ?
-                <FormErrorMessage>{errors.text.message}</FormErrorMessage>
-                : null
-              }
-            </FormControl>
-          </CardBody>
-          <CardFooter className="p-3">
-            <Button
-              width='100%'
-              color="white"
-              type="submit"
-              colorScheme="error"
-              isLoading={isLoading}
-              loadingText='Organizing...'
-            >
-              Delete
-            </Button>
-          </CardFooter>
-        </form>
-      </Collapse>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CardBody className="p-3">
+          <FormControl isInvalid={!!errors.text?.message}>
+            <FormLabel>Text</FormLabel>
+            <Input
+              placeholder="Type here"
+              {...register('text')}
+            />
+            {errors.text?.message ?
+              <FormErrorMessage>{errors.text.message}</FormErrorMessage>
+              : null
+            }
+          </FormControl>
+        </CardBody>
+        <CardFooter className="p-3">
+          <Button
+            size="sm"
+            width='100%'
+            color="white"
+            type="submit"
+            colorScheme="error"
+            isLoading={isLoading}
+            loadingText='Organizing...'
+          >
+            Delete
+          </Button>
+        </CardFooter>
+      </form>
     </Card>
   )
 }

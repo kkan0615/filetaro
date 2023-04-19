@@ -43,7 +43,7 @@ function DeletesDirectoryBox() {
       <List spacing={4}>
         <FormControl>
           <FormLabel>Select or type directory path</FormLabel>
-          <InputGroup>
+          <InputGroup size="lg">
             <Input
               placeholder="Type here"
               value={directoryPath}

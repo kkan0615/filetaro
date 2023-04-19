@@ -1,19 +1,36 @@
 import {
   Box,
   Card,
-  CardBody, Flex,
-  IconButton, Spacer,
+  CardBody, Collapse, Flex, Heading,
+  IconButton, Spacer, Text,
   Tooltip
 } from '@chakra-ui/react'
 import { AiOutlineHome, AiOutlineSetting } from 'react-icons/ai'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@renderer/stores'
 import DeletesDirectoryBox from '@renderer/components/deletes/DirectoryBox'
 import KeywordPopover from '@renderer/components/popovers/Keyword'
 import DeletesSettingModal from '@renderer/components/deletes/SettingDialog'
 import DeletesByTypeCard from '@renderer/components/deletes/ByTypeCard'
 import DeletesTextCard from '@renderer/components/deletes/TextCard'
+import DeletesExtensionCard from '@renderer/components/deletes/ExtensionCard'
 
 function Deletes() {
+  const setting = useSelector((state: RootState) => state.deletes.setting)
+
+  const [isOpen, setIsOpen] = useState(true)
+
+  useEffect(() => {
+    setIsOpen(setting.isDefaultOpenCard)
+  }, [setting.isDefaultOpenCard])
+
+  const toggleOpen = () => {
+    setIsOpen((prev) => !prev)
+  }
+
   return (
     <div className="h-full flex-1 flex flex-col">
       <div className="min-h-0 mb-2 shrink p-2">
@@ -45,14 +62,26 @@ function Deletes() {
         </Card>
       </div>
       <Box className="grow h-full">
-        <Box className="max-w-xl mx-auto py-12">
+        <Box className="max-w-xl mx-auto pt-24 pb-12">
           <DeletesDirectoryBox />
         </Box>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 justify-items-center p-4 pt-12">
-          <DeletesByTypeCard />
-          <DeletesTextCard type="included" />
-          <DeletesTextCard type="prefix" />
-          <DeletesTextCard type="suffix" />
+        <div className="p-4 pt-12">
+          <Flex onClick={toggleOpen} className="cursor-pointer">
+            <Heading size="md" mb={4}>Features</Heading>
+            <Spacer />
+            <Text fontSize="2xl">
+              {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+            </Text>
+          </Flex>
+          <Collapse in={isOpen} animateOpacity>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 justify-items-center">
+              <DeletesByTypeCard />
+              <DeletesTextCard type="included" />
+              <DeletesTextCard type="prefix" />
+              <DeletesTextCard type="suffix" />
+              <DeletesExtensionCard />
+            </div>
+          </Collapse>
         </div>
       </Box>
     </div>

@@ -8,11 +8,10 @@ import {
   Spacer,
   Text
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,7 +19,7 @@ import { TargetFileTypes } from '@renderer/types/models/targetFile'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
 
 const validationSchema = z.object({
-  type: z.string({
+  ext: z.string({
     required_error: 'Required field',
   })
     // Not empty
@@ -30,7 +29,7 @@ const validationSchema = z.object({
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
-function DeletesByTypeCard() {
+function DeletesExtensionCard() {
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
 
@@ -41,9 +40,6 @@ function DeletesByTypeCard() {
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      type: 'image'
-    }
   })
 
   const [isLoading, setIsLoading] = useState(false)
@@ -61,9 +57,9 @@ function DeletesByTypeCard() {
         directoryPath,
         isRecursive,
       })
-      const filteredFiles = files.filter((fileEl) => fileEl.type === data.type)
+      const filteredFiles = files.filter((fileEl) => fileEl.ext === data.ext)
       if (!filteredFiles.length) {
-        toast(`No files by ${data.type} type in directory`, {
+        toast(`No files by ${data.ext} in directory`, {
           type: 'warning'
         })
         return
@@ -85,25 +81,24 @@ function DeletesByTypeCard() {
     <Card width="100%">
       <CardHeader className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">File type</Heading>
+          <Heading size="md">File Extension</Heading>
         </Flex>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="p-3">
           <FormControl>
             <FormLabel>Type</FormLabel>
-            <Select
-              isInvalid={!!errors.type?.message}
-              {...register('type')}
-            >
-              {TargetFileTypes.map(targetFileTypeEl => (
-                <option key={targetFileTypeEl} value={targetFileTypeEl}>{targetFileTypeEl}</option>
-              ))}
-            </Select>
-            {errors.type?.message ?
-              <FormErrorMessage>{errors.type.message}</FormErrorMessage>
-              : null
-            }
+            <FormControl isInvalid={!!errors.ext?.message}>
+              <FormLabel>ext</FormLabel>
+              <Input
+                placeholder="Extension without ."
+                {...register('ext')}
+              />
+              {errors.ext?.message ?
+                <FormErrorMessage>{errors.ext.message}</FormErrorMessage>
+                : null
+              }
+            </FormControl>
           </FormControl>
         </CardBody>
         <CardFooter className="p-3">
@@ -124,4 +119,4 @@ function DeletesByTypeCard() {
   )
 }
 
-export default DeletesByTypeCard
+export default DeletesExtensionCard

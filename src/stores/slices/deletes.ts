@@ -12,7 +12,7 @@ export interface DeleteState {
 const initialState: DeleteState = {
   setting: {
     isDefaultRecursive: false,
-    isDefaultOpenCard: false,
+    isDefaultOpenCard: true,
   },
   directoryPath: '',
   isRecursive: false
@@ -40,7 +40,7 @@ export const deleteSlice = createSlice({
         isDefaultOpenCard: false,
       }
       state.directoryPath = ''
-      state.isRecursive = false
+      state.isRecursive = true
     }
   },
 })
