@@ -11,6 +11,7 @@ import DeletesDirectoryBox from '@renderer/components/deletes/DirectoryBox'
 import KeywordPopover from '@renderer/components/popovers/Keyword'
 import DeletesSettingModal from '@renderer/components/deletes/SettingDialog'
 import DeletesByTypeCard from '@renderer/components/deletes/ByTypeCard'
+import DeletesTextCard from '@renderer/components/deletes/TextCard'
 
 function Deletes() {
   return (
@@ -49,6 +50,9 @@ function Deletes() {
         </Box>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 justify-items-center p-4 pt-12">
           <DeletesByTypeCard />
+          <DeletesTextCard type="included" />
+          <DeletesTextCard type="prefix" />
+          <DeletesTextCard type="suffix" />
         </div>
       </Box>
     </div>
