@@ -30,7 +30,7 @@ const validationSchema = z.object({
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
-function DeletesByTypeCard() {
+function DeletesTypeCard() {
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
 
@@ -70,6 +70,9 @@ function DeletesByTypeCard() {
       }
       await deleteTargetFiles(filteredFiles)
 
+      toast('Success to delete files', {
+        type: 'success'
+      })
       reset()
     } catch (e) {
       console.error(e)
@@ -124,4 +127,4 @@ function DeletesByTypeCard() {
   )
 }
 
-export default DeletesByTypeCard
+export default DeletesTypeCard

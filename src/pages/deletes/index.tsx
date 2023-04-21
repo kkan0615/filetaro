@@ -14,7 +14,7 @@ import { RootState } from '@renderer/stores'
 import DeletesDirectoryBox from '@renderer/components/deletes/DirectoryBox'
 import KeywordPopover from '@renderer/components/popovers/Keyword'
 import DeletesSettingModal from '@renderer/components/deletes/SettingDialog'
-import DeletesByTypeCard from '@renderer/components/deletes/ByTypeCard'
+import DeletesTypeCard from '@renderer/components/deletes/TypeCard'
 import DeletesTextCard from '@renderer/components/deletes/TextCard'
 import DeletesExtensionCard from '@renderer/components/deletes/ExtensionCard'
 
@@ -75,10 +75,8 @@ function Deletes() {
           </Flex>
           <Collapse in={isOpen} animateOpacity>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 justify-items-center">
-              <DeletesByTypeCard />
-              <DeletesTextCard type="included" />
-              <DeletesTextCard type="prefix" />
-              <DeletesTextCard type="suffix" />
+              <DeletesTypeCard />
+              <DeletesTextCard />
               <DeletesExtensionCard />
             </div>
           </Collapse>

@@ -3,25 +3,20 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader, Collapse, Flex, FormControl, FormErrorMessage, FormLabel,
-  Heading, Input, Select,
-  Spacer,
-  Text
+  CardHeader, Flex, FormControl, FormErrorMessage, FormLabel,
+  Heading, Input, Radio, RadioGroup,
+  Spacer, Stack,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { z } from 'zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TargetFile, TargetFileTypes } from '@renderer/types/models/targetFile'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
-
-interface Props {
-  type: 'included' | 'prefix' | 'suffix'
-}
+const AddMethods = ['included', 'prefix', 'suffix'] as const
 
 const validationSchema = z.object({
   text: z.string({
@@ -31,38 +26,26 @@ const validationSchema = z.object({
     .min(1, {
       message: 'Required field',
     }),
+  methodType: z.enum(AddMethods, {
+    required_error: 'Required field',
+  }),
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
-function DeletesTextCard({ type }: Props) {
+function DeletesTextCard() {
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
-
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
 
   const [isLoading, setIsLoading] = useState(false)
-
-  /**
-   * Title of card
-   */
-  const title = useMemo(() => {
-    if (type === 'included') {
-      return 'Included text type'
-    } else if (type === 'prefix') {
-      return 'Prefix text type'
-    } else if (type === 'suffix') {
-      return 'Suffix text type'
-    }
-
-    return ''
-  }, [type])
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -79,11 +62,11 @@ function DeletesTextCard({ type }: Props) {
       })
       // Filter the files by type
       let filteredFiles: TargetFile[] = []
-      if (type === 'included') {
+      if (data.methodType === 'included') {
         filteredFiles = files.filter(fileEl => fileEl.name.includes(data.text))
-      } else if (type === 'prefix') {
+      } else if (data.methodType === 'prefix') {
         filteredFiles = files.filter(fileEl => fileEl.name.startsWith(data.text))
-      } else if (type === 'suffix') {
+      } else if (data.methodType === 'suffix') {
         filteredFiles = files.filter(fileEl => fileEl.name.endsWith(data.text))
       }
       if (!filteredFiles.length) {
@@ -95,6 +78,9 @@ function DeletesTextCard({ type }: Props) {
       // Delete all files
       await deleteTargetFiles(filteredFiles)
 
+      toast('Success to delete files', {
+        type: 'success'
+      })
       reset()
     } catch (e) {
       console.error(e)
@@ -110,23 +96,51 @@ function DeletesTextCard({ type }: Props) {
     <Card width="100%">
       <CardHeader className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">{title}</Heading>
+          <Heading size="md">Text</Heading>
           <Spacer />
         </Flex>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="p-3">
-          <FormControl isInvalid={!!errors.text?.message}>
-            <FormLabel>Text</FormLabel>
-            <Input
-              placeholder="Type here"
-              {...register('text')}
+          <div className="space-y-4">
+            <FormControl isInvalid={!!errors.text?.message}>
+              <FormLabel>Text</FormLabel>
+              <Input
+                placeholder="Type here"
+                {...register('text')}
+              />
+              {errors.text?.message ?
+                <FormErrorMessage>{errors.text.message}</FormErrorMessage>
+                : null
+              }
+            </FormControl>
+            <Controller
+              name="methodType"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.text?.message}>
+                  <FormLabel>Method</FormLabel>
+                  <RadioGroup onChange={onChange} value={value}>
+                    <Stack direction='row'>
+                      {AddMethods.map(addMethodEl => (
+                        <Radio
+                          {...register('methodType')}
+                          key={addMethodEl}
+                          value={addMethodEl}
+                        >
+                          {addMethodEl}
+                        </Radio>
+                      ))}
+                    </Stack>
+                  </RadioGroup>
+                  {errors.methodType?.message ?
+                    <FormErrorMessage>{errors.methodType?.message}</FormErrorMessage>
+                    : null
+                  }
+                </FormControl>
+              )}
             />
-            {errors.text?.message ?
-              <FormErrorMessage>{errors.text.message}</FormErrorMessage>
-              : null
-            }
-          </FormControl>
+          </div>
         </CardBody>
         <CardFooter className="p-3">
           <Button

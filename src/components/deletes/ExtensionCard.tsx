@@ -3,10 +3,8 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader, Collapse, Flex, FormControl, FormErrorMessage, FormLabel,
-  Heading, Input, Select,
-  Spacer,
-  Text
+  CardHeader, Flex, FormControl, FormErrorMessage, FormLabel,
+  Heading, Input,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -15,7 +13,6 @@ import { RootState } from '@renderer/stores'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TargetFileTypes } from '@renderer/types/models/targetFile'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
 
 const validationSchema = z.object({
@@ -32,7 +29,6 @@ type ValidationSchema = z.infer<typeof validationSchema>
 function DeletesExtensionCard() {
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
-
   const {
     register,
     handleSubmit,
@@ -53,6 +49,7 @@ function DeletesExtensionCard() {
         return
       }
       setIsLoading(true)
+
       const files = await findAllFilesInDirectory({
         directoryPath,
         isRecursive,
@@ -64,8 +61,12 @@ function DeletesExtensionCard() {
         })
         return
       }
+
       await deleteTargetFiles(filteredFiles)
 
+      toast('Success to delete files', {
+        type: 'success'
+      })
       reset()
     } catch (e) {
       console.error(e)
@@ -87,9 +88,8 @@ function DeletesExtensionCard() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="p-3">
           <FormControl>
-            <FormLabel>Type</FormLabel>
             <FormControl isInvalid={!!errors.ext?.message}>
-              <FormLabel>ext</FormLabel>
+              <FormLabel>Extension</FormLabel>
               <Input
                 placeholder="Extension without ."
                 {...register('ext')}
