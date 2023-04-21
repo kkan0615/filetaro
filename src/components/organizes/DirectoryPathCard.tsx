@@ -33,7 +33,7 @@ function DirectoryPathCard() {
     <Card>
       <CardBody className="p-3">
         <FormControl>
-          <FormLabel>Select or type directory path</FormLabel>
+          <FormLabel>Output path</FormLabel>
           <InputGroup>
             <Input
               placeholder="Type here"

@@ -3,9 +3,9 @@ import { AiOutlineSetting } from 'react-icons/ai'
 import KeywordPopover from '@renderer/components/popovers/Keyword'
 import OrganizesSettingModal from '@renderer/components/organizes/SettingDialog'
 import DirectoryPathCard from '@renderer/components/organizes/DirectoryPathCard'
-import OrganizesByTypeCard from '@renderer/components/organizes/ByTypeCard'
-import OrganizesByExtCard from '@renderer/components/organizes/ByExtCard'
-import OrganizesByTextCard from '@renderer/components/organizes/ByTextCard'
+import OrganizesTypeCard from '@renderer/components/organizes/TypeCard'
+import OrganizesExtensionCard from '@renderer/components/organizes/ExtensionCard'
+import OrganizesTextCard from '@renderer/components/organizes/TextCard'
 
 function OrganizesRight() {
   return (
@@ -33,11 +33,9 @@ function OrganizesRight() {
       <Box className="grow h-1 overflow-y-auto px-4 py-2">
         <List spacing={4}>
           <DirectoryPathCard />
-          <OrganizesByTypeCard />
-          <OrganizesByExtCard />
-          <OrganizesByTextCard type="included"/>
-          <OrganizesByTextCard type="prefix"/>
-          <OrganizesByTextCard type="suffix"/>
+          <OrganizesTypeCard />
+          <OrganizesExtensionCard />
+          <OrganizesTextCard/>
         </List>
       </Box>
     </div>

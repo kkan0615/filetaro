@@ -17,7 +17,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 
-function OrganizesByTypeCard() {
+function OrganizesExtensionCard() {
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -48,28 +48,29 @@ function OrganizesByTypeCard() {
       setIsLoading(true)
 
       // File type map
-      const fileTypeMap: Record<string, TargetFile[]> = {}
+      const fileExtMap: Record<string, TargetFile[]> = {}
       checkedTargetFiles.map(checkedTargetFileEl => {
-        if (!fileTypeMap[checkedTargetFileEl.type]) fileTypeMap[checkedTargetFileEl.type] = []
-        fileTypeMap[checkedTargetFileEl.type].push(checkedTargetFileEl)
+        if (!fileExtMap[checkedTargetFileEl.ext]) fileExtMap[checkedTargetFileEl.ext] = []
+        fileExtMap[checkedTargetFileEl.ext].push(checkedTargetFileEl)
       })
 
       // Loop file types
-      await Promise.all(Object.keys(fileTypeMap).map(async (keyEl) => {
+      await Promise.all(Object.keys(fileExtMap).map(async (keyEl) => {
         // new directory path
         let fullDirectoryPath = directoryPath + '\\' + keyEl
+        // Create directory
         fullDirectoryPath = await overrideOrCreateDirectory({
           directoryPath: fullDirectoryPath,
           isOverride: setting.isOverrideDirectory,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
         })
         // Move or Copy files
-        await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
+        await Promise.all(fileExtMap[keyEl].map(async (fileEl) => {
           await moveOrCopyFile({
             file: fileEl,
             directoryPath: fullDirectoryPath,
             isAutoDuplicatedName: setting.isAutoDuplicatedName,
-            isCopy: setting.isKeepOriginal
+            isCopy: setting.isKeepOriginal,
           })
           // Remove from slice
           dispatch(removeOrganizeTargetFileByPath(fileEl.path))
@@ -93,7 +94,7 @@ function OrganizesByTypeCard() {
     <Card>
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">File type</Heading>
+          <Heading size="md">Extension</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -102,7 +103,7 @@ function OrganizesByTypeCard() {
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
         <CardBody className="p-3">
-          <Text>Organize files by file type</Text>
+          <Text>Organize files by file extension</Text>
         </CardBody>
         <CardFooter className="p-3">
           <Button
@@ -121,4 +122,4 @@ function OrganizesByTypeCard() {
   )
 }
 
-export default OrganizesByTypeCard
+export default OrganizesExtensionCard

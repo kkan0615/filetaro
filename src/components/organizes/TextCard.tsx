@@ -6,14 +6,14 @@ import {
   CardHeader, Collapse, Flex,
   FormControl, FormErrorMessage,
   FormLabel,
-  Heading, Input,
-  Spacer,
+  Heading, Input, Radio, RadioGroup,
+  Spacer, Stack,
   Text,
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RootState } from '@renderer/stores'
@@ -22,9 +22,7 @@ import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organize
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { TargetFile } from '@renderer/types/models/targetFile'
 
-interface Props {
-  type: 'included' | 'prefix' | 'suffix'
-}
+const AddMethods = ['included', 'prefix', 'suffix'] as const
 
 const validationSchema = z.object({
   text: z.string({
@@ -34,10 +32,13 @@ const validationSchema = z.object({
     .min(1, {
       message: 'Required field',
     }),
+  methodType: z.enum(AddMethods, {
+    required_error: 'Required field',
+  }),
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
-function OrganizesByTextCard({ type } : Props) {
+function OrganizesTextCard() {
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -46,28 +47,17 @@ function OrganizesByTextCard({ type } : Props) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
+    defaultValues: {
+      methodType: 'included'
+    }
   })
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  /**
-   * Title of card
-   */
-  const title = useMemo(() => {
-    if (type === 'included') {
-      return 'Included text type'
-    } else if (type === 'prefix') {
-      return 'Prefix text type'
-    } else if (type === 'suffix') {
-      return 'Suffix text type'
-    }
-
-    return ''
-  }, [type])
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev)
@@ -92,11 +82,11 @@ function OrganizesByTextCard({ type } : Props) {
 
       // Filter the files by type
       let filteredFiles: TargetFile[] = []
-      if (type === 'included') {
+      if (data.methodType === 'included') {
         filteredFiles = filterIncludedFiles(data.text)
-      } else if (type === 'prefix') {
+      } else if (data.methodType === 'prefix') {
         filteredFiles = filterPrefixFiles(data.text)
-      } else if (type === 'suffix') {
+      } else if (data.methodType === 'suffix') {
         filteredFiles = filterSuffixFiles(data.text)
       }
       // If no files including file name, return
@@ -155,7 +145,7 @@ function OrganizesByTextCard({ type } : Props) {
     <Card>
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">{title}</Heading>
+          <Heading size="md">Text</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -177,6 +167,32 @@ function OrganizesByTextCard({ type } : Props) {
                   : null
                 }
               </FormControl>
+              <Controller
+                name="methodType"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <FormControl isInvalid={!!errors.text?.message}>
+                    <FormLabel>Method</FormLabel>
+                    <RadioGroup onChange={onChange} value={value}>
+                      <Stack direction='row'>
+                        {AddMethods.map(addMethodEl => (
+                          <Radio
+                            {...register('methodType')}
+                            key={addMethodEl}
+                            value={addMethodEl}
+                          >
+                            {addMethodEl}
+                          </Radio>
+                        ))}
+                      </Stack>
+                    </RadioGroup>
+                    {errors.methodType?.message ?
+                      <FormErrorMessage>{errors.methodType?.message}</FormErrorMessage>
+                      : null
+                    }
+                  </FormControl>
+                )}
+              />
             </div>
           </CardBody>
           <CardFooter className="p-3">
@@ -197,4 +213,4 @@ function OrganizesByTextCard({ type } : Props) {
   )
 }
 
-export default OrganizesByTextCard
+export default OrganizesTextCard

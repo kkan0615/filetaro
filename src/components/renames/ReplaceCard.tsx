@@ -85,7 +85,7 @@ function RenamesReplaceCard() {
         if (data.isReplaceAll) {
           replacedFileName = checkedTargetFileEl.name.replaceAll(data.targetStr, data.replaceStr)
         } else {
-        // Replace first text
+          // Replace first text
           replacedFileName = checkedTargetFileEl.name.replace(data.targetStr, data.replaceStr)
         }
 
