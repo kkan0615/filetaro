@@ -1,4 +1,4 @@
-export interface MoveDirectory {
+export interface Move {
   path: string
   kbd?: string[]
 }

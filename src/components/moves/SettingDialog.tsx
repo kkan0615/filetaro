@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { settingStore } from '@renderer/stores/tauriStore'
-import { MoveSetting } from '@renderer/types/models/moveDirectory'
+import { MoveSetting } from '@renderer/types/models/move'
 import { SettingStoreKey } from '@renderer/types/store'
 import { setMoveSetting } from '@renderer/stores/slices/moves'
 import {
@@ -31,7 +31,7 @@ interface Props {
   children: React.ReactElement
 }
 
-function MovesDirectorySettingModal({ children }: Props) {
+function MovesSettingModal({ children }: Props) {
   const setting = useSelector((state: RootState) => state.moves.setting)
   const dispatch = useDispatch()
   const {
@@ -149,4 +149,4 @@ function MovesDirectorySettingModal({ children }: Props) {
   )
 }
 
-export default MovesDirectorySettingModal
+export default MovesSettingModal

@@ -1,5 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai'
-import { MoveDirectory } from '@renderer/types/models/moveDirectory'
+import { Move } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
@@ -10,8 +10,8 @@ import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
 import { moveOrCopyFile } from '@renderer/utils/file'
 
 interface Props {
-  directory: MoveDirectory
-  onRemove: (directory: MoveDirectory) => void
+  directory: Move
+  onRemove: (directory: Move) => void
 }
 
 export function MovesDirectoryCard({ directory, onRemove }: Props) {
