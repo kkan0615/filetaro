@@ -91,7 +91,7 @@ function DeletesTypeCard() {
           <Heading size="md">File type</Heading>
         </Flex>
       </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="h-full flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="p-3">
           <FormControl>
             <FormLabel>Type</FormLabel>
@@ -109,7 +109,7 @@ function DeletesTypeCard() {
             }
           </FormControl>
         </CardBody>
-        <CardFooter className="p-3">
+        <CardFooter className="p-3 mt-auto">
           <Button
             size="sm"
             width='100%'

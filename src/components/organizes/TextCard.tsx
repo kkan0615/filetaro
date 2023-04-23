@@ -138,7 +138,11 @@ function OrganizesTextCard() {
   }
 
   const filterSuffixFiles = (text: string) => {
-    return checkedTargetFiles.filter(checkedTargetFileEl => checkedTargetFileEl.name.endsWith(text))
+    return checkedTargetFiles.filter(checkedTargetFileEl => {
+      const splitName = checkedTargetFileEl.name.split('.')
+      splitName.pop()
+      return splitName.join('').endsWith(text)
+    })
   }
 
   return (

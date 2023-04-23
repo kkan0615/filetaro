@@ -16,6 +16,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TargetFile } from '@renderer/types/models/targetFile'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
+
 const AddMethods = ['included', 'prefix', 'suffix'] as const
 
 const validationSchema = z.object({
@@ -49,6 +50,7 @@ function DeletesTextCard() {
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
+
       if (!directoryPath) {
         toast('Select target directory', {
           type: 'warning'
@@ -60,6 +62,7 @@ function DeletesTextCard() {
         directoryPath,
         isRecursive,
       })
+
       // Filter the files by type
       let filteredFiles: TargetFile[] = []
       if (data.methodType === 'included') {
@@ -67,7 +70,11 @@ function DeletesTextCard() {
       } else if (data.methodType === 'prefix') {
         filteredFiles = files.filter(fileEl => fileEl.name.startsWith(data.text))
       } else if (data.methodType === 'suffix') {
-        filteredFiles = files.filter(fileEl => fileEl.name.endsWith(data.text))
+        filteredFiles = files.filter(fileEl => {
+          const splitName = fileEl.name.split('.')
+          splitName.pop()
+          return splitName.join('').endsWith(data.text)
+        })
       }
       if (!filteredFiles.length) {
         toast(`No files by ${data.text} in directory`, {
@@ -100,7 +107,7 @@ function DeletesTextCard() {
           <Spacer />
         </Flex>
       </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="h-full flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="p-3">
           <div className="space-y-4">
             <FormControl isInvalid={!!errors.text?.message}>
@@ -142,7 +149,7 @@ function DeletesTextCard() {
             />
           </div>
         </CardBody>
-        <CardFooter className="p-3">
+        <CardFooter className="p-3 mt-auto">
           <Button
             size="sm"
             width='100%'
