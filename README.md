@@ -110,6 +110,7 @@ See more detail to click the [Link](https://nuxt.com/docs/guide/directory-struct
 
 ## Packages
 The program is using following packages.
+
 ### Frontend
 - [eslint]()
 - [zod](https://zod.dev/): TypeScript-first schema validation with static type inference
@@ -131,8 +132,9 @@ The program is using following packages.
   - [@reduxjs/toolkit](https://redux.js.org/): A Predictable State Container for JS Apps
 - [@tauri-apps/api](https://tauri.app/v1/api/js/)
 - [react-toastify](https://fkhadra.github.io/react-toastify/introduction)
-- [react-dropzone](https://react-dropzone.js.org/)
 - [sass](https://sass-lang.com/): CSS with superpowers
+- [reactour/tour](https://www.npmjs.com/package/@reactour/tour): Tourist Guide into your React Components
+ 
 ### Backend
 - [tauri-plugin-store](https://github.com/tauri-apps/tauri-plugin-store): Simple, persistent key-value store.
 
