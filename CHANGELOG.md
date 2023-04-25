@@ -3,6 +3,8 @@
 - Updated Layout
 - Merged duplicate codes
 - Refactored name of components
+- Added tour
+  - Move page
 
 ## 0.0.1 (2023-04-16)
 - Added organize page

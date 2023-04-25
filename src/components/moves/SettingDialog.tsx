@@ -59,6 +59,7 @@ function MovesSettingModal({ children }: Props) {
     try {
       setIsLoading(true)
       await settingStore.set(SettingStoreKey.MoveSetting, {
+        ...setting,
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
         isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad

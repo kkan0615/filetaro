@@ -91,6 +91,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
     <>
       <Tooltip label="Add files from directory">
         <IconButton
+          id="add-files-from-directory-button"
           onClick={toggleOpen}
           variant="ghost"
           aria-label="home"

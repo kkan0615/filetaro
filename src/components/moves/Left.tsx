@@ -120,6 +120,7 @@ function MovesLeft() {
         <div className="text-center">
           <IndeterminateCheckbox
             {...{
+              id: 'selection-checkbox-th',
               checked: table.getIsAllRowsSelected(),
               indeterminate: table.getIsSomeRowsSelected(),
               onChange: table.getToggleAllRowsSelectedHandler(),
@@ -365,6 +366,7 @@ function MovesLeft() {
                 targetFiles.length > 0 &&
                 <Tooltip label="Start slide show">
                   <IconButton
+                    id="start-slide-show-button"
                     onClick={() => startSlideShowByIndex(0)}
                     variant="ghost"
                     aria-label="Start slide show"
@@ -375,9 +377,10 @@ function MovesLeft() {
               {isAllUnchecked &&
                 <Tooltip label="Remove files from list">
                   <IconButton
+                    id="remove-file-button"
                     onClick={removeCheckedFiles}
                     variant="ghost"
-                    aria-label="Start slide show"
+                    aria-label="Remove file from list"
                     icon={<AiOutlineDelete className="text-2xl" />}
                   />
                 </Tooltip>}
@@ -385,6 +388,7 @@ function MovesLeft() {
               {isAllUnchecked &&
                 <Tooltip label="Delete files permanently">
                   <IconButton
+                    id="delete-file-button"
                     onClick={deleteCheckedFiles}
                     variant="ghost"
                     aria-label="Delete files permanently"

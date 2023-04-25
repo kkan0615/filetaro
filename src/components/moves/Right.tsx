@@ -3,7 +3,7 @@ import { open } from '@tauri-apps/api/dialog'
 import { AiOutlineFolderAdd, AiOutlineSetting } from 'react-icons/ai'
 import { RootState } from '@renderer/stores'
 import { addMoveDirectory, removeMoveDirectory } from '@renderer/stores/slices/moves'
-import { Move } from '@renderer/types/models/move'
+import { MoveDirectory } from '@renderer/types/models/move'
 import MovesSettingModal from '@renderer/components/moves/SettingDialog'
 import MovesDirectoryCard from '@renderer/components/moves/DirectoryCard'
 import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading, Box } from '@chakra-ui/react'
@@ -35,7 +35,7 @@ function MovesRight() {
     }
   }
 
-  const removeDirectory = (directory: Move) => {
+  const removeDirectory = (directory: MoveDirectory) => {
     dispatch(removeMoveDirectory(directory))
   }
 
@@ -49,6 +49,7 @@ function MovesRight() {
               <Spacer />
               <Tooltip label="Add directory">
                 <IconButton
+                  id="add-directory-button"
                   onClick={handleAddDir}
                   variant="ghost"
                   aria-label="Add directory"

@@ -13,19 +13,20 @@ function Move() {
 
   // Load Move Page Setting
   useEffect(() => {
-    const fn = async () => {
-      const settingVal = await settingStore.get<Partial<MoveSetting>>(SettingStoreKey.MoveSetting)
-      dispatch(setMoveSetting({
-        ...settingVal,
-      }))
-    }
-    fn()
+    settingStore.get<Partial<MoveSetting>>(SettingStoreKey.MoveSetting)
+      .then((value) => {
+        dispatch(setMoveSetting({
+          ...value,
+        }))
+      })
 
     return () => {
       dispatch(setMoveSetting({
         isAutoDuplicatedName: false,
         isKeepOriginal: false,
         isDefaultCheckedOnLoad: false,
+        isFirstPageEnter: false,
+        isFirstLoad: false,
       }))
     }
   }, [])

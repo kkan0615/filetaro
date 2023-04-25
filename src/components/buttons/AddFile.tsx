@@ -30,6 +30,7 @@ function AddFileBtn({ onSelected } : Props) {
   return (
     <Tooltip label="Add files">
       <IconButton
+        id="add-files-button"
         onClick={handleClick}
         variant="ghost"
         aria-label="home"

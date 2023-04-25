@@ -1,5 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai'
-import { Move } from '@renderer/types/models/move'
+import { MoveDirectory } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
@@ -10,8 +10,8 @@ import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
 import { moveOrCopyFile } from '@renderer/utils/file'
 
 interface Props {
-  directory: Move
-  onRemove: (directory: Move) => void
+  directory: MoveDirectory
+  onRemove: (directory: MoveDirectory) => void
 }
 
 export function MovesDirectoryCard({ directory, onRemove }: Props) {
@@ -115,15 +115,15 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
             <div className="break-all">{directory.path}</div>
           </Flex>
         </div>
-        {directory.kbd ? (
-          <div className="flex">
-            {directory.kbd.map((kbdEl) => (
-              <div key={kbdEl} className="kbd">
-                {kbdEl}
-              </div>
-            ))}
-          </div>
-        ) : null}
+        {/*{directory.kbd ? (*/}
+        {/*  <div className="flex">*/}
+        {/*    {directory.kbd.map((kbdEl) => (*/}
+        {/*      <div key={kbdEl} className="kbd">*/}
+        {/*        {kbdEl}*/}
+        {/*      </div>*/}
+        {/*    ))}*/}
+        {/*  </div>*/}
+        {/*) : null}*/}
       </CardBody>
     </Card>
   )
