@@ -91,7 +91,7 @@ function OrganizesExtensionCard() {
   }
 
   return (
-    <Card>
+    <Card id="extension-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">Extension</Heading>

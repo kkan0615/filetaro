@@ -64,6 +64,7 @@ function OrganizesSettingModal({ children }: Props) {
     try {
       setIsLoading(true)
       await settingStore.set(SettingStoreKey.OrganizeSetting, {
+        ...setting,
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
         isOverrideDirectory: data.isOverrideDirectory,

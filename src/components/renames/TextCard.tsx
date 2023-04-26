@@ -119,7 +119,7 @@ function RenamesTextCard() {
 
 
   return (
-    <Card>
+    <Card id="add-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">Add</Heading>

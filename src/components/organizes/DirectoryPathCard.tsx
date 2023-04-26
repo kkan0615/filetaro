@@ -30,7 +30,7 @@ function DirectoryPathCard() {
   }, [directoryPath])
 
   return (
-    <Card>
+    <Card id="directory-path-card">
       <CardBody className="p-3">
         <FormControl>
           <FormLabel>Output path</FormLabel>

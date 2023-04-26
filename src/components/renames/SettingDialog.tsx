@@ -63,6 +63,7 @@ function RenamesSettingModal({ children }: Props) {
     try {
       setIsLoading(true)
       await settingStore.set(SettingStoreKey.RenameSetting, {
+        ...setting,
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
         isDefaultOpenCard: data.isDefaultOpenCard,

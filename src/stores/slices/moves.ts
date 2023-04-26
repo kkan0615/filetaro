@@ -16,8 +16,8 @@ const initialState: MoveState = {
     isAutoDuplicatedName: false,
     isKeepOriginal: false,
     isDefaultCheckedOnLoad: false,
-    isFirstPageEnter: false,
-    isFirstLoad: false,
+    isNotFirstPage: false,
+    isNotFirstLoad: false,
   },
   moveDirectories: [],
   targetFiles: [],
@@ -71,8 +71,8 @@ export const moveSlice = createSlice({
         isAutoDuplicatedName: false,
         isKeepOriginal: false,
         isDefaultCheckedOnLoad: false,
-        isFirstPageEnter: false,
-        isFirstLoad: false
+        isNotFirstPage: false,
+        isNotFirstLoad: false
       }
       state.moveDirectories = []
       state. targetFiles = []

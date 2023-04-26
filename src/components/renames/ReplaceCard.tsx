@@ -120,7 +120,7 @@ function RenamesReplaceCard() {
   }
 
   return (
-    <Card>
+    <Card id="replace-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">Replacer</Heading>

@@ -5,6 +5,10 @@
 - Refactored name of components
 - Added tour
   - Move page
+  - Rename page
+  - Organize page
+  - Delete page
+- Removed suspense and add isLoading to handle loading
 
 ## 0.0.1 (2023-04-16)
 - Added organize page

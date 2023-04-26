@@ -15,6 +15,8 @@ const initialState: RenameState = {
     isKeepOriginal: false,
     isDefaultOpenCard: false,
     isDefaultCheckedOnLoad: false,
+    isNotFirstPage: false,
+    isNotFirstLoad: false,
   },
   targetFiles: [],
 }
@@ -64,6 +66,8 @@ export const moveSlice = createSlice({
         isKeepOriginal: false,
         isDefaultOpenCard: false,
         isDefaultCheckedOnLoad: false,
+        isNotFirstPage: false,
+        isNotFirstLoad: false,
       }
       state.targetFiles = []
     }

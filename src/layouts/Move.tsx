@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router'
-import { Suspense, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { clearMoveSlice, setMoveSetting } from '@renderer/stores/slices/moves'
 import { settingStore } from '@renderer/stores/tauriStore'
@@ -10,24 +10,21 @@ import { Box } from '@chakra-ui/react'
 
 function Move() {
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
 
   // Load Move Page Setting
   useEffect(() => {
+    setIsLoading(true)
     settingStore.get<Partial<MoveSetting>>(SettingStoreKey.MoveSetting)
       .then((value) => {
         dispatch(setMoveSetting({
           ...value,
         }))
+        setIsLoading(false)
       })
 
     return () => {
-      dispatch(setMoveSetting({
-        isAutoDuplicatedName: false,
-        isKeepOriginal: false,
-        isDefaultCheckedOnLoad: false,
-        isFirstPageEnter: false,
-        isFirstLoad: false,
-      }))
+      setIsLoading(true)
     }
   }, [])
 
@@ -42,9 +39,7 @@ function Move() {
 
   return (
     <Box height="100vh">
-      <Suspense fallback={<CLoading />}>
-        <Outlet />
-      </Suspense>
+      { isLoading ? <CLoading /> : <Outlet /> }
     </Box>
   )
 }

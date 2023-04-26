@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router'
-import { Suspense, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
@@ -10,15 +10,22 @@ import { Box } from '@chakra-ui/react'
 
 function OrganizeLayout() {
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
 
   // Load Move Page Setting
   useEffect(() => {
+    setIsLoading(true)
     settingStore.get<Partial<OrganizeSetting>>(SettingStoreKey.OrganizeSetting)
       .then(value => {
         dispatch(setOrganizeSetting({
           ...value,
         }))
+        setIsLoading(false)
       })
+
+    return () => {
+      setIsLoading(true)
+    }
   }, [])
 
   /**
@@ -32,9 +39,7 @@ function OrganizeLayout() {
 
   return (
     <Box height="100vh">
-      <Suspense fallback={<CLoading />}>
-        <Outlet />
-      </Suspense>
+      { isLoading ? <CLoading /> : <Outlet /> }
     </Box>
   )
 }

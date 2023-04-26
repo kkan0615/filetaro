@@ -79,7 +79,7 @@ function DeletesExtensionCard() {
   }
 
   return (
-    <Card width="100%">
+    <Card id="extension-card" width="100%">
       <CardHeader className="p-3">
         <Flex alignItems="center">
           <Heading size="md">File Extension</Heading>

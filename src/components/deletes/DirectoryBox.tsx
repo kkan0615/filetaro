@@ -39,7 +39,7 @@ function DeletesDirectoryBox() {
   }, [isRecursive])
 
   return (
-    <Box className="w-full">
+    <Box id="directory-box" className="w-full">
       <List spacing={4}>
         <FormControl>
           <FormLabel>Select or type directory path</FormLabel>

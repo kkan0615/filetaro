@@ -90,7 +90,7 @@ function OrganizesTypeCard() {
   }
 
   return (
-    <Card>
+    <Card id="type-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">File type</Heading>

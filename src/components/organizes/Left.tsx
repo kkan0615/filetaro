@@ -37,6 +37,7 @@ function OrganizeLeft() {
         <div className="text-center">
           <IndeterminateCheckbox
             {...{
+              id: 'selection-checkbox-th',
               checked: table.getIsAllRowsSelected(),
               indeterminate: table.getIsSomeRowsSelected(),
               onChange: table.getToggleAllRowsSelectedHandler(),

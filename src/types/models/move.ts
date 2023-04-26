@@ -7,8 +7,8 @@ export interface MoveSetting {
   isAutoDuplicatedName: boolean
   isKeepOriginal: boolean
   isDefaultCheckedOnLoad: boolean
-  isFirstPageEnter: boolean
-  isFirstLoad: boolean
+  isNotFirstPage: boolean
+  isNotFirstLoad: boolean
 }
 
 export type MoveSettingUpdate = Partial<MoveSetting>

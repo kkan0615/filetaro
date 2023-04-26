@@ -17,6 +17,8 @@ const initialState: OrganizeState = {
     isDefaultOpenCard: false,
     isDefaultCheckedOnLoad: false,
     isOverrideDirectory: false,
+    isNotFirstPage: false,
+    isNotFirstLoad: false,
   },
   targetFiles: [],
   directoryPath: '',
@@ -71,6 +73,8 @@ export const moveSlice = createSlice({
         isDefaultOpenCard: false,
         isDefaultCheckedOnLoad: false,
         isOverrideDirectory: false,
+        isNotFirstPage: false,
+        isNotFirstLoad: false,
       }
       state.targetFiles = []
       state.directoryPath = ''

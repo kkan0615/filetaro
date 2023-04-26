@@ -3,6 +3,8 @@ export interface RenameSetting {
   isKeepOriginal: boolean
   isDefaultOpenCard: boolean
   isDefaultCheckedOnLoad: boolean
+  isNotFirstPage: boolean
+  isNotFirstLoad: boolean
 }
 
 export type RenameSettingUpdate = Partial<RenameSetting>

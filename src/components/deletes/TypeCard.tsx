@@ -3,16 +3,13 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader, Collapse, Flex, FormControl, FormErrorMessage, FormLabel,
-  Heading, Input, Select,
-  Spacer,
-  Text
+  CardHeader, Flex, FormControl, FormErrorMessage, FormLabel,
+  Heading, Select,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -85,7 +82,7 @@ function DeletesTypeCard() {
   }
 
   return (
-    <Card width="100%">
+    <Card id="type-card" width="100%">
       <CardHeader className="p-3">
         <Flex alignItems="center">
           <Heading size="md">File type</Heading>

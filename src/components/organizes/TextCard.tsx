@@ -146,7 +146,7 @@ function OrganizesTextCard() {
   }
 
   return (
-    <Card>
+    <Card id="text-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">Text</Heading>

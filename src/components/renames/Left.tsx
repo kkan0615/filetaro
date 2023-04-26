@@ -37,6 +37,7 @@ function RenamesLeft() {
         <div className="text-center">
           <IndeterminateCheckbox
             {...{
+              id: 'selection-checkbox-th',
               checked: table.getIsAllRowsSelected(),
               indeterminate: table.getIsSomeRowsSelected(),
               onChange: table.getToggleAllRowsSelectedHandler(),
@@ -57,22 +58,6 @@ function RenamesLeft() {
         </div>
       ),
     }),
-    // columnHelper.accessor('path', {
-    //   id: 'preview',
-    //   header: 'Preview',
-    //   cell: (info) => (
-    //     <IndeterminatePreview
-    //       {...{
-    //         path: info.getValue(),
-    //         fileType: info.row.original.type,
-    //         checked: info.row.getIsSelected(),
-    //         disabled: !info.row.getCanSelect(),
-    //         indeterminate: info.row.getIsSomeSelected(),
-    //         onChange: info.row.getToggleSelectedHandler(),
-    //       }}
-    //     />
-    //   ),
-    // }),
     columnHelper.accessor('name', {
       cell: (info) => info.getValue(),
     }),

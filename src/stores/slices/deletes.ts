@@ -13,6 +13,7 @@ const initialState: DeleteState = {
   setting: {
     isDefaultRecursive: false,
     isDefaultOpenCard: true,
+    isNotFirstPage: false,
   },
   directoryPath: '',
   isRecursive: false
@@ -37,7 +38,8 @@ export const deleteSlice = createSlice({
     clearDeleteSlice: (state) => {
       state.setting = {
         isDefaultRecursive: false,
-        isDefaultOpenCard: false,
+        isDefaultOpenCard: true,
+        isNotFirstPage: false,
       }
       state.directoryPath = ''
       state.isRecursive = true

@@ -20,8 +20,9 @@ function Moves() {
    * Start to tour once user enter page.
    */
   useEffect(() => {
+    console.log(setting)
     // Only run if it is first time to enter the page
-    if (setting.isFirstPageEnter) return
+    if (setting.isNotFirstPage) return
 
     // Open tour
     setIsOpen(true)
@@ -45,11 +46,11 @@ function Moves() {
 
     // Set it's not first time anymore
     dispatch(setMoveSetting({
-      isFirstPageEnter: true,
+      isNotFirstPage: true,
     }))
     settingStore.set(SettingStoreKey.MoveSetting, {
       ...setting,
-      isFirstPageEnter: true
+      isNotFirstPage: true
     } as MoveSetting).then()
 
     return () => {
@@ -62,7 +63,7 @@ function Moves() {
    */
   useEffect(() => {
     // Only run if it is first time to enter the page
-    if (!targetFiles.length || setting.isFirstLoad) return
+    if (!targetFiles.length || setting.isNotFirstLoad) return
 
     // Open tour
     setIsOpen(true)
@@ -82,11 +83,11 @@ function Moves() {
 
     // Set it's not first time anymore
     dispatch(setMoveSetting({
-      isFirstLoad: true,
+      isNotFirstLoad: true,
     }))
     settingStore.set(SettingStoreKey.MoveSetting, {
       ...setting,
-      isFirstLoad: true
+      isNotFirstLoad: true
     } as MoveSetting).then()
 
     return () => {
