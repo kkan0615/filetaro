@@ -1,6 +1,13 @@
+import { FaSpinner } from 'react-icons/all'
+
 function CLoading() {
   return (
-    <p className="text-lg">Loading...</p>
+    <div className="h-full w-full flex items-center justify-center">
+      <div className="flex flex-col justify-center items-center gap-y-4">
+        <FaSpinner className="text-2xl animate-spin" />
+        <p className="text-xl">Loading ...</p>
+      </div>
+    </div>
   )
 }
 
