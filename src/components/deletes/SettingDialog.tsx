@@ -61,6 +61,7 @@ function DeletesSettingModal({ children }: Props) {
     try {
       setIsLoading(true)
       const newSetting: DeleteSetting = {
+        ...setting,
         isDefaultRecursive: data.isDefaultRecursive,
         isDefaultOpenCard: data.isDefaultOpenCard,
       }
