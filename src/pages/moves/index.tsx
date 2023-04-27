@@ -9,11 +9,13 @@ import { MoveSetting } from '@renderer/types/models/move'
 import Splitter from '@renderer/components/Splitter'
 import MovesLeft from '@renderer/components/moves/Left'
 import MovesRight from '@renderer/components/moves/Right'
+import { useTranslation } from 'react-i18next'
 
 function Moves() {
+  const { t } = useTranslation()
   const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
   const setting = useSelector((state: RootState) => state.moves.setting)
-  const { setIsOpen, setSteps, setCurrentStep } = useTour()
+  const { setIsOpen, setSteps, setCurrentStep, isOpen } = useTour()
   const dispatch = useDispatch()
 
   /**
@@ -24,25 +26,26 @@ function Moves() {
     // Only run if it is first time to enter the page
     if (setting.isNotFirstPage) return
 
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
           selector: '#add-files-button',
-          content: 'Click it to add files',
+          content: t('tours.addFilesButton').toString(),
         },
         {
           selector: '#add-files-from-directory-button',
-          content: 'Or you can load files from directory',
+          content: t('tours.addFilesFromDirectoryButton').toString(),
         },
         {
           selector: '#add-directory-button',
-          content: 'Add Directories to move',
+          content: t('pages.moves.tours.addDirectoryButton').toString(),
         },
       ])
     }
+
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
 
     // Set it's not first time anymore
     dispatch(setMoveSetting({
@@ -52,10 +55,6 @@ function Moves() {
       ...setting,
       isNotFirstPage: true
     } as MoveSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [])
 
   /**
@@ -64,22 +63,22 @@ function Moves() {
   useEffect(() => {
     // Only run if it is first time to enter the page
     if (!targetFiles.length || setting.isNotFirstLoad) return
-
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
           selector: '#start-slide-show-button',
-          content: 'Start slide show from first',
+          content: t('pages.moves.tours.startSlideShowButton').toString(),
         },
         {
           selector: '#selection-checkbox-th',
-          content: 'Select the files that you would like to move',
+          content: t('tours.selectionCheckboxTh').toString(),
         },
       ])
     }
+
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
 
     // Set it's not first time anymore
     dispatch(setMoveSetting({
@@ -89,10 +88,6 @@ function Moves() {
       ...setting,
       isNotFirstLoad: true
     } as MoveSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [targetFiles])
 
   return (

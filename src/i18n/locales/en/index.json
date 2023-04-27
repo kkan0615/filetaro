@@ -1,3 +1,44 @@
 {
-  "hello": "Hello World"
+  "hello": "Hello World",
+  "SEO": {
+    "title": "Filetaro",
+    "description": "Filetaro - Easy File handler"
+  },
+  "buttons": {
+    "setting": "setting"
+  },
+  "tooltips": {
+    "openSetting": "Open setting"
+  },
+  "tours": {
+    "addFilesButton": "Click it to add files",
+    "addFilesFromDirectoryButton": "Or you can load files from directory",
+    "selectionCheckboxTh": "Select the files that you would like to move"
+  },
+  "pages": {
+    "home": {
+      "moves": {
+        "title": "moves",
+        "description": "Move files to new folder easily!"
+      },
+      "renames": {
+        "title": "renames",
+        "description": "Rename files (change or add)"
+      },
+      "organizes": {
+        "title": "organizes",
+        "description": "Organize files by your preference!"
+      },
+      "deletes": {
+        "title": "deletes",
+        "description": "Delete files by your preference in folder"
+      }
+    },
+    "moves": {
+      "tours": {
+        "addDirectoryButton": "Add Directories to move",
+        "startSlideShowButton": "Start slide show from first"
+      }
+    }
+  }
 }

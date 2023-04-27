@@ -23,9 +23,6 @@ function Renames() {
     // Only run if it is first time to enter the page
     if (setting.isNotFirstPage) return
 
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
@@ -47,6 +44,10 @@ function Renames() {
       ])
     }
 
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
+
     // Set it's not first time anymore
     dispatch(setRenameSetting({
       isNotFirstPage: true,
@@ -55,10 +56,6 @@ function Renames() {
       ...setting,
       isNotFirstPage: true
     } as RenameSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [])
 
   /**
@@ -68,9 +65,6 @@ function Renames() {
     // Only run if it is first time to enter the page
     if (!targetFiles.length || setting.isNotFirstLoad) return
 
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
@@ -80,6 +74,10 @@ function Renames() {
       ])
     }
 
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
+
     // Set it's not first time anymore
     dispatch(setRenameSetting({
       isNotFirstLoad: true,
@@ -88,10 +86,6 @@ function Renames() {
       ...setting,
       isNotFirstLoad: true
     } as RenameSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [targetFiles])
 
   return (

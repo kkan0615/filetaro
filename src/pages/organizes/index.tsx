@@ -23,9 +23,6 @@ function Organizes() {
     // Only run if it is first time to enter the page
     if (setting.isNotFirstPage) return
 
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
@@ -55,6 +52,10 @@ function Organizes() {
       ])
     }
 
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
+
     // Set it's not first time anymore
     dispatch(setOrganizeSetting({
       isNotFirstPage: true,
@@ -63,10 +64,6 @@ function Organizes() {
       ...setting,
       isNotFirstPage: true
     } as OrganizeSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [])
 
   /**
@@ -76,9 +73,6 @@ function Organizes() {
     // Only run if it is first time to enter the page
     if (!targetFiles.length || setting.isNotFirstLoad) return
 
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
@@ -88,6 +82,10 @@ function Organizes() {
       ])
     }
 
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
+
     // Set it's not first time anymore
     dispatch(setOrganizeSetting({
       isNotFirstLoad: true,
@@ -96,10 +94,6 @@ function Organizes() {
       ...setting,
       isNotFirstLoad: true
     } as OrganizeSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [targetFiles])
 
   return (

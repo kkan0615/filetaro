@@ -37,9 +37,6 @@ function Deletes() {
     // Only run if it is first time to enter the page
     if (setting.isNotFirstPage) return
 
-    // Open tour
-    setIsOpen(true)
-    setCurrentStep(0)
     if (setSteps) {
       setSteps([
         {
@@ -61,18 +58,18 @@ function Deletes() {
       ])
     }
 
+    // Open tour
+    setIsOpen(true)
+    setCurrentStep(0)
+
     // Set it's not first time anymore
     dispatch(setDeleteSetting({
       isNotFirstPage: true,
     }))
     settingStore.set(SettingStoreKey.DeleteSetting, {
       ...setting,
-      // isNotFirstPage: true
+      isNotFirstPage: true
     } as DeleteSetting).then()
-
-    return () => {
-      setIsOpen(false)
-    }
   }, [])
 
   useEffect(() => {

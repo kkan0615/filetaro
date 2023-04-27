@@ -3,24 +3,26 @@ import { AiOutlineSetting, BiRename, ImLab, MdDriveFileMoveOutline, VscFileSubmo
 import SettingDialog from '@renderer/components/Settings/SettingDialog'
 import { Card, CardBody, Heading, IconButton, Text, Tooltip } from '@chakra-ui/react'
 import { AiOutlineDelete } from 'react-icons/ai'
+import { useTranslation } from 'react-i18next'
 
 function Home() {
+  const { t } = useTranslation()
   const isDev = import.meta.env.DEV
 
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="mx-auto max-w-4xl text-center">
-        <Heading size="xl">Filetaro</Heading>
+        <Heading size="xl">{t('SEO.title')}</Heading>
         <Text className="mt-2">
-          File handler - File handler - Rename, Organize, or Delete files easily
+          {t('SEO.description')}
         </Text>
         <div className="flex mb-4">
           <div className="mx-auto" />
           <SettingDialog>
-            <Tooltip label='Open setting'>
+            <Tooltip label={t('tooltips.openSetting')}>
               <IconButton
                 variant="ghost"
-                aria-label="home"
+                aria-label={t('buttons.setting')}
                 icon={<AiOutlineSetting className="text-2xl" />}
               />
             </Tooltip>
@@ -31,8 +33,8 @@ function Home() {
             <Card className="text-base-content card-bg-effect p-4">
               <CardBody className="flex flex-col items-center">
                 <MdDriveFileMoveOutline className="text-4xl mb-2" />
-                <Heading size='md' className="mb-0.5">Moves</Heading>
-                <Text>Move your file to new directory easily!</Text>
+                <Heading size='md' className="mb-0.5 capitalize">{t('pages.home.moves.title')}</Heading>
+                <Text>{t('pages.home.moves.description')}</Text>
               </CardBody>
             </Card>
           </Link>
@@ -40,8 +42,8 @@ function Home() {
             <Card className="text-base-content card-bg-effect p-4">
               <CardBody className="flex flex-col items-center">
                 <BiRename className="text-4xl mb-2" />
-                <Heading size='md' className="mb-0.5">Renames</Heading>
-                <Text>Add or Change text to file names!</Text>
+                <Heading size='md' className="mb-0.5 capitalize">{t('pages.home.renames.title')}</Heading>
+                <Text>{t('pages.home.renames.description')}</Text>
               </CardBody>
             </Card>
           </Link>
@@ -49,8 +51,8 @@ function Home() {
             <Card className="text-base-content card-bg-effect p-4">
               <CardBody className="flex flex-col items-center">
                 <VscFileSubmodule className="text-4xl mb-2" />
-                <Heading size='md' className="mb-0.5">Organizes</Heading>
-                <Text>Organize files to directories by your preferences</Text>
+                <Heading size='md' className="mb-0.5 capitalize">{t('pages.home.organizes.title')}</Heading>
+                <Text>{t('pages.home.organizes.description')}</Text>
               </CardBody>
             </Card>
           </Link>
@@ -59,8 +61,8 @@ function Home() {
               <Card className="text-base-content card-bg-effect p-4">
                 <CardBody className="flex flex-col items-center">
                   <AiOutlineDelete className="text-4xl mb-2" />
-                  <Heading size='md' className="mb-0.5">Deletes</Heading>
-                  <Text>Delete files in directory</Text>
+                  <Heading size='md' className="mb-0.5 capitalize">{t('pages.home.deletes.title')}</Heading>
+                  <Text>{t('pages.home.deletes.description')}</Text>
                 </CardBody>
               </Card>
             </Link>
@@ -71,7 +73,7 @@ function Home() {
                 <CardBody className="flex flex-col items-center">
                   <ImLab className="text-4xl mb-2" />
                   <Heading size='md' className="mb-0.5">Playgrounds</Heading>
-                  <Text>est code in here!</Text>
+                  <Text>test code in here!</Text>
                 </CardBody>
               </Card>
             </Link>
