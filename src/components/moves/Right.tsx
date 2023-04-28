@@ -7,12 +7,16 @@ import { MoveDirectory } from '@renderer/types/models/move'
 import MovesSettingModal from '@renderer/components/moves/SettingDialog'
 import MovesDirectoryCard from '@renderer/components/moves/DirectoryCard'
 import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading, Box } from '@chakra-ui/react'
+import { toast } from 'react-toastify'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { useTranslation } from 'react-i18next'
 
 function MovesRight() {
+  const { t } = useTranslation()
   const directories = useSelector((state: RootState) => state.moves.moveDirectories)
   const dispatch = useDispatch()
 
-  const handleAddDir = async () => {
+  const addDirectories = async () => {
     const directoryPaths = await open({
       title: 'Select Directory',
       directory: true,
@@ -22,7 +26,9 @@ function MovesRight() {
       (directoryPaths as string[]).map((directoryPathEl) => {
         const foundIndex = directories.findIndex((directoryEl) => directoryEl.path === directoryPathEl)
         if (foundIndex !== -1) {
-          alert('Same directory path already exists')
+          toast(capitalizeFirstLetter(t('texts.alerts.sameDirectoryWarning', { name: directories[foundIndex].path })), {
+            type: 'warning'
+          })
           return
         }
 
@@ -45,22 +51,22 @@ function MovesRight() {
         <Card className="p-0">
           <CardBody padding={0} className="p-2 py-1">
             <Flex alignItems="center">
-              <Heading size="md">Directories</Heading>
+              <Heading size="md">{capitalizeFirstLetter(t('pages.moves.labels.directories'))}</Heading>
               <Spacer />
-              <Tooltip label="Add directory">
+              <Tooltip label={capitalizeFirstLetter(t('tooltips.addDirectories'))}>
                 <IconButton
                   id="add-directory-button"
-                  onClick={handleAddDir}
+                  onClick={addDirectories}
                   variant="ghost"
-                  aria-label="Add directory"
+                  aria-label={capitalizeFirstLetter(t('tooltips.addDirectories'))}
                   icon={<AiOutlineFolderAdd className="text-2xl" />}
                 />
               </Tooltip>
               <MovesSettingModal>
-                <Tooltip label="Open setting" placement='left'>
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.openSetting'))} placement='left'>
                   <IconButton
                     variant="ghost"
-                    aria-label="Open setting"
+                    aria-label={capitalizeFirstLetter(t('tooltips.openSetting'))}
                     icon={<AiOutlineSetting className="text-2xl" />}
                   />
                 </Tooltip>

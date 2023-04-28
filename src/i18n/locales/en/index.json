@@ -4,16 +4,43 @@
     "title": "Filetaro",
     "description": "Filetaro - Easy File handler"
   },
+  "labels": {
+    "preview": "preview",
+    "name": "name",
+    "path": "path",
+    "type": "type",
+    "actions": "actions",
+    "setting": "setting",
+    "keepOriginal": "keep original",
+    "autoRenameFile": "auto renaming for same file name",
+    "checkLoadedFiles": "check for loaded files"
+  },
   "buttons": {
-    "setting": "setting"
+    "setting": "setting",
+    "save": "save"
   },
   "tooltips": {
-    "openSetting": "Open setting"
+    "home": "home",
+    "openSetting": "open setting",
+    "addDirectories": "add directories",
+    "removeFilesFromList": "remove files from list",
+    "deleteFiles": "delete files permanently",
+    "keepOriginal": "keep original file before move",
+    "autoRenameFile": "automatically rename if there is same file name in directory",
+    "checkLoadedFiles": "Check for loaded files automatically"
   },
   "tours": {
     "addFilesButton": "Click it to add files",
     "addFilesFromDirectoryButton": "Or you can load files from directory",
     "selectionCheckboxTh": "Select the files that you would like to move"
+  },
+  "texts": {
+    "alerts": {
+      "saveSettingSuccess": "success to save setting",
+      "addFilesError": "error to add files",
+      "saveSettingError": "error to save setting",
+      "sameDirectoryWarning": "There is same directory {{ name }}"
+    }
   },
   "pages": {
     "home": {
@@ -35,9 +62,15 @@
       }
     },
     "moves": {
+      "labels": {
+        "directories": "directories"
+      },
       "tours": {
         "addDirectoryButton": "Add Directories to move",
         "startSlideShowButton": "Start slide show from first"
+      },
+      "tooltips": {
+        "startSlideShow": "start slide show"
       }
     }
   }

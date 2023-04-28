@@ -26,6 +26,8 @@ import { deleteTargetFiles } from '@renderer/utils/file'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { Card, CardBody, Flex, IconButton, Tooltip } from '@chakra-ui/react'
 import AddFileBtn from '@renderer/components/buttons/AddFile'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function IndeterminatePreview({
   path,
@@ -66,6 +68,7 @@ function IndeterminatePreview({
 }
 
 function MovesLeft() {
+  const { t } = useTranslation()
   const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
   const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const isAllUnchecked = useSelector((state: RootState) => state.moves.targetFiles.some(targetFileEl => targetFileEl.checked))
@@ -158,24 +161,26 @@ function MovesLeft() {
       ),
     }),
     columnHelper.accessor('name', {
+      header: t('labels.name').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('path', {
-      header: 'original path',
+      header: t('labels.path').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('type', {
+      header: t('labels.type').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('name', {
       id: 'action',
-      header: 'actions',
+      header: t('labels.actions').toString(),
       cell: ({ row }) => (
-        <Tooltip label="Start slide show">
+        <Tooltip label={t('pages.moves.tooltips.startSlideShow')}>
           <IconButton
             onClick={() => startSlideShowByIndex(row.index)}
             variant="ghost"
-            aria-label="Start slide show"
+            aria-label={t('pages.moves.tooltips.startSlideShow')}
             icon={<BiSlideshow className="text-2xl" />}
           />
         </Tooltip>
@@ -267,7 +272,7 @@ function MovesLeft() {
       )
     } catch (e) {
       console.error(e)
-      toast('Error to add files', {
+      toast(capitalizeFirstLetter(t('texts.alerts.addFilesError')), {
         type: 'error'
       })
     }
@@ -352,10 +357,10 @@ function MovesLeft() {
           <CardBody padding={0} className="px-2 py-1">
             <Flex alignItems="center">
               <Link to="/">
-                <Tooltip label="Home">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
                   <IconButton
                     variant="ghost"
-                    aria-label="home"
+                    aria-label={t('tooltips.home')}
                     icon={<AiOutlineHome className="text-2xl" />}
                   />
                 </Tooltip>
@@ -364,34 +369,34 @@ function MovesLeft() {
               <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
               {
                 targetFiles.length > 0 &&
-                <Tooltip label="Start slide show">
+                <Tooltip label={t('pages.moves.tooltips.startSlideShow')}>
                   <IconButton
                     id="start-slide-show-button"
                     onClick={() => startSlideShowByIndex(0)}
                     variant="ghost"
-                    aria-label="Start slide show"
+                    aria-label={t('pages.moves.tooltips.startSlideShow')}
                     icon={<BiSlideshow className="text-2xl" />}
                   />
                 </Tooltip>
               }
               {isAllUnchecked &&
-                <Tooltip label="Remove files from list">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}>
                   <IconButton
                     id="remove-file-button"
                     onClick={removeCheckedFiles}
                     variant="ghost"
-                    aria-label="Remove file from list"
+                    aria-label="{capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}"
                     icon={<AiOutlineDelete className="text-2xl" />}
                   />
                 </Tooltip>}
               <div className="mx-auto" />
               {isAllUnchecked &&
-                <Tooltip label="Delete files permanently">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}>
                   <IconButton
                     id="delete-file-button"
                     onClick={deleteCheckedFiles}
                     variant="ghost"
-                    aria-label="Delete files permanently"
+                    aria-label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}
                     icon={<MdDeleteForever className="text-2xl" />}
                   />
                 </Tooltip>}

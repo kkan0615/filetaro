@@ -19,8 +19,11 @@ import { MdDeleteForever } from 'react-icons/all'
 import { deleteTargetFiles } from '@renderer/utils/file'
 import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
 import AddFileBtn from '@renderer/components/buttons/AddFile'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { useTranslation } from 'react-i18next'
 
 function RenamesLeft() {
+  const { t } = useTranslation()
   const targetFiles = useSelector((state: RootState) => state.renames.targetFiles)
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const isAllUnchecked = useSelector((state: RootState) => state.renames.targetFiles.some(targetFileEl => targetFileEl.checked))
@@ -211,10 +214,10 @@ function RenamesLeft() {
           <CardBody padding={0} className="px-2 py-1">
             <Flex alignItems="center">
               <Link to="/">
-                <Tooltip label="Home">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
                   <IconButton
                     variant="ghost"
-                    aria-label="home"
+                    aria-label={capitalizeFirstLetter(t('tooltips.home'))}
                     icon={<AiOutlineHome className="text-2xl" />}
                   />
                 </Tooltip>
