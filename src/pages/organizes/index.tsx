@@ -9,8 +9,12 @@ import { OrganizeSetting } from '@renderer/types/models/organize'
 import Splitter from '@renderer/components/Splitter'
 import OrganizeLeft from '@renderer/components/organizes/Left'
 import OrganizesRight from '@renderer/components/organizes/Right'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function Organizes() {
+  const { t } = useTranslation()
+
   const targetFiles = useSelector((state: RootState) => state.organizes.targetFiles)
   const setting = useSelector((state: RootState) => state.organizes.setting)
   const { setIsOpen, setSteps, setCurrentStep } = useTour()
@@ -27,27 +31,27 @@ function Organizes() {
       setSteps([
         {
           selector: '#add-files-button',
-          content: 'Click it to add files',
+          content: t('tours.addFilesButton').toString(),
         },
         {
           selector: '#add-files-from-directory-button',
-          content: 'Or you can load files from directory',
+          content: t('tours.addFilesFromDirectoryButton').toString(),
         },
         {
           selector: '#directory-path-card',
-          content: 'Select or type output path. Folders will be here',
+          content: t('pages.organizes.tours.directoryPathCard').toString(),
         },
         {
           selector: '#type-card',
-          content: 'Organize files by file type',
+          content: t('pages.organizes.tours.typeCard').toString(),
         },
         {
           selector: '#extension-card',
-          content: 'Organize files by file extension',
+          content: t('pages.organizes.tours.extensionCard').toString(),
         },
         {
           selector: '#text-card',
-          content: 'Organize files by text',
+          content: t('pages.organizes.tours.textCard').toString(),
         },
       ])
     }
@@ -77,7 +81,7 @@ function Organizes() {
       setSteps([
         {
           selector: '#selection-checkbox-th',
-          content: 'Select the files that you would like to organize',
+          content: capitalizeFirstLetter(t('tours.selectionCheckboxTh')),
         },
       ])
     }

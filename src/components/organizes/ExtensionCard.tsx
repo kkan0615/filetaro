@@ -16,8 +16,12 @@ import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function OrganizesExtensionCard() {
+  const { t } = useTranslation()
+
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -33,14 +37,14 @@ function OrganizesExtensionCard() {
   const handleClick = async () => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
       }
 
       if (!directoryPath) {
-        toast('Select output directory', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noOutputWarning')), {
           type: 'warning'
         })
         return
@@ -77,12 +81,12 @@ function OrganizesExtensionCard() {
         }))
       }))
 
-      toast('Success to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
         type: 'error'
       })
     } finally {
@@ -94,7 +98,7 @@ function OrganizesExtensionCard() {
     <Card id="extension-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Extension</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.extension'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -103,7 +107,7 @@ function OrganizesExtensionCard() {
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
         <CardBody className="p-3">
-          <Text>Organize files by file extension</Text>
+          <Text>{capitalizeFirstLetter(t('pages.organizes.labels.extensionSubtitle'))}</Text>
         </CardBody>
         <CardFooter className="p-3">
           <Button
@@ -112,9 +116,9 @@ function OrganizesExtensionCard() {
             onClick={handleClick}
             colorScheme="primary"
             isLoading={isLoading}
-            loadingText='Organizing...'
+            loadingText={capitalizeFirstLetter(t('labels.organizing'))}
           >
-            Organize
+            {capitalizeFirstLetter(t('buttons.organize'))}
           </Button>
         </CardFooter>
       </Collapse>

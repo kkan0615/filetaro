@@ -21,6 +21,8 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { TargetFile } from '@renderer/types/models/targetFile'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 const AddMethods = ['included', 'prefix', 'suffix'] as const
 
@@ -39,6 +41,8 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>
 
 function OrganizesTextCard() {
+  const { t } = useTranslation()
+
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -149,7 +153,7 @@ function OrganizesTextCard() {
     <Card id="text-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Text</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.text'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}

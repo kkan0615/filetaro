@@ -4,6 +4,7 @@ import { AiOutlineDelete, AiOutlineHome } from 'react-icons/ai'
 import AddFileBtn from '@renderer/components/buttons/AddFile'
 import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
 import { MdDeleteForever } from 'react-icons/all'
+import { useTranslation } from 'react-i18next'
 import CTable from '@renderer/components/commons/libs/Table'
 import { path } from '@tauri-apps/api'
 import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targetFile'
@@ -19,8 +20,11 @@ import {
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import IndeterminateCheckbox from '@renderer/components/forms/IndeterminateCheckbox'
 import { deleteTargetFiles } from '@renderer/utils/file'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function OrganizeLeft() {
+  const { t } = useTranslation()
+
   const targetFiles = useSelector((state: RootState) => state.organizes.targetFiles)
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const isAllUnchecked = useSelector((state: RootState) => state.organizes.targetFiles.some(targetFileEl => targetFileEl.checked))
@@ -59,13 +63,15 @@ function OrganizeLeft() {
       ),
     }),
     columnHelper.accessor('name', {
+      header: t('labels.name').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('path', {
-      header: 'original path',
+      header: t('labels.path').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('type', {
+      header: t('labels.type').toString(),
       cell: (info) => info.getValue(),
     }),
   ], [targetFiles.length])
@@ -139,7 +145,7 @@ function OrganizeLeft() {
       )
     } catch (e) {
       console.error(e)
-      toast('Error to add files', {
+      toast(capitalizeFirstLetter(t('texts.alerts.addFilesError')), {
         type: 'error'
       })
     }
@@ -208,10 +214,10 @@ function OrganizeLeft() {
           <CardBody padding={0} className="px-2 py-1">
             <Flex alignItems="center">
               <Link to="/">
-                <Tooltip label="Home">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
                   <IconButton
                     variant="ghost"
-                    aria-label="home"
+                    aria-label={capitalizeFirstLetter(t('tooltips.home'))}
                     icon={<AiOutlineHome className="text-2xl" />}
                   />
                 </Tooltip>
@@ -219,21 +225,21 @@ function OrganizeLeft() {
               <AddFileBtn onSelected={addFiles} />
               <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
               {isAllUnchecked &&
-                <Tooltip label="Remove files from list">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}>
                   <IconButton
                     onClick={removeCheckedFiles}
                     variant="ghost"
-                    aria-label="Start slide show"
+                    aria-label={capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}
                     icon={<AiOutlineDelete className="text-2xl" />}
                   />
                 </Tooltip>}
               <div className="mx-auto" />
               {isAllUnchecked &&
-                <Tooltip label="Delete files permanently">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}>
                   <IconButton
                     onClick={deleteCheckedFiles}
                     variant="ghost"
-                    aria-label="Delete files permanently"
+                    aria-label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}
                     icon={<MdDeleteForever className="text-2xl" />}
                   />
                 </Tooltip>}

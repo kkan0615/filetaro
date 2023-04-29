@@ -22,13 +22,17 @@
     "prefix": "prefix",
     "suffix": "suffix",
     "included": "included",
-    "submitting": "submitting"
+    "submitting": "submitting",
+    "outputPath": "output path",
+    "organizing": "organizing...",
+    "extension": "extension"
   },
   "buttons": {
     "setting": "setting",
     "save": "save",
     "load": "load",
-    "submit": "submit"
+    "submit": "submit",
+    "organize": "organize"
   },
   "tooltips": {
     "home": "home",
@@ -56,7 +60,8 @@
       "saveSettingError": "error to save setting",
       "loadFilesError": "error to load files",
       "sameDirectoryWarning": "There is same directory {{ name }}",
-      "noSelectedFileWarning": "select any files"
+      "noSelectedFileWarning": "select any files",
+      "noOutputWarning": "select output directory"
     },
     "validations": {
       "required": "required field",
@@ -135,6 +140,30 @@
         "alerts": {
           "renameSuccess": "success to rename files",
           "renameError": "error to rename files"
+        }
+      }
+    },
+    "organizes": {
+      "tours": {
+        "directoryPathCard": "select or type output path. Folders will be here",
+        "typeCard": "organize files by file type",
+        "extensionCard": "organize files by file extension",
+        "textCard": "organize files by text"
+      },
+      "labels": {
+        "functions": "functions",
+        "add": "add",
+        "replace": "replace",
+        "targetText": "target text",
+        "replaceText": "replace text",
+        "replaceAllText": "replace all text",
+        "typeSubtitle": "organize files by file type",
+        "extensionSubtitle": "organize files by extension"
+      },
+      "texts": {
+        "alerts": {
+          "organizeSuccess": "success to rename files",
+          "organizeError": "error to rename files"
         }
       }
     }

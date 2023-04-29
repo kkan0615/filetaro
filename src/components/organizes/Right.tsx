@@ -6,22 +6,26 @@ import DirectoryPathCard from '@renderer/components/organizes/DirectoryPathCard'
 import OrganizesTypeCard from '@renderer/components/organizes/TypeCard'
 import OrganizesExtensionCard from '@renderer/components/organizes/ExtensionCard'
 import OrganizesTextCard from '@renderer/components/organizes/TextCard'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function OrganizesRight() {
+  const { t } = useTranslation()
+
   return (
     <div className="h-full flex-1 flex flex-col">
       <div className="min-h-0 mb-2 shrink p-2">
         <Card position="static" className="p-0">
           <CardBody padding={0} className="p-2 py-1">
             <Flex alignItems="center">
-              <Heading size="md">Functions</Heading>
+              <Heading size="md">{capitalizeFirstLetter(t('pages.organizes.labels.functions'))}</Heading>
               <Spacer />
               <KeywordPopover />
               <OrganizesSettingModal>
-                <Tooltip label="Open setting" placement='auto'>
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.openSetting'))} placement='auto'>
                   <IconButton
                     variant="ghost"
-                    aria-label="Open setting"
+                    aria-label={capitalizeFirstLetter(t('tooltips.openSetting'))}
                     icon={<AiOutlineSetting className="text-2xl" />}
                   />
                 </Tooltip>

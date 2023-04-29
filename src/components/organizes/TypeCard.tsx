@@ -16,8 +16,12 @@ import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function OrganizesTypeCard() {
+  const { t } = useTranslation()
+
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -33,14 +37,14 @@ function OrganizesTypeCard() {
   const handleClick = async () => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
       }
 
       if (!directoryPath) {
-        toast('Select output directory', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noOutputWarning')), {
           type: 'warning'
         })
         return
@@ -76,12 +80,12 @@ function OrganizesTypeCard() {
         }))
       }))
 
-      toast('Success to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
         type: 'error'
       })
     } finally {
@@ -93,7 +97,7 @@ function OrganizesTypeCard() {
     <Card id="type-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">File type</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.type'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -102,7 +106,7 @@ function OrganizesTypeCard() {
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
         <CardBody className="p-3">
-          <Text>Organize files by file type</Text>
+          <Text>{capitalizeFirstLetter(t('pages.organizes.labels.typeSubtitle'))}</Text>
         </CardBody>
         <CardFooter className="p-3">
           <Button
@@ -111,9 +115,9 @@ function OrganizesTypeCard() {
             onClick={handleClick}
             colorScheme="primary"
             isLoading={isLoading}
-            loadingText='Organizing...'
+            loadingText={capitalizeFirstLetter(t('labels.organizing'))}
           >
-            Organize
+            {capitalizeFirstLetter(t('buttons.organize'))}
           </Button>
         </CardFooter>
       </Collapse>
