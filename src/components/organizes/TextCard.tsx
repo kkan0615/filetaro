@@ -119,13 +119,13 @@ function OrganizesTextCard() {
         // Remove from slice
         dispatch(removeOrganizeTargetFileByPath(fileEl.path))
       }))
-      toast('Success to rename files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
         type: 'error'
       })
     } finally {
@@ -165,7 +165,7 @@ function OrganizesTextCard() {
           <CardBody className="p-3">
             <div className="space-y-4">
               <FormControl isInvalid={!!errors.text?.message}>
-                <FormLabel>Text</FormLabel>
+                <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
                 <Input
                   placeholder="Type here"
                   {...register('text')}
@@ -180,7 +180,7 @@ function OrganizesTextCard() {
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <FormControl isInvalid={!!errors.text?.message}>
-                    <FormLabel>Method</FormLabel>
+                    <FormLabel>{capitalizeFirstLetter(t('labels.method'))}</FormLabel>
                     <RadioGroup onChange={onChange} value={value}>
                       <Stack direction='row'>
                         {AddMethods.map(addMethodEl => (
@@ -189,7 +189,7 @@ function OrganizesTextCard() {
                             key={addMethodEl}
                             value={addMethodEl}
                           >
-                            {addMethodEl}
+                            {capitalizeFirstLetter(t(`labels.${addMethodEl}`))}
                           </Radio>
                         ))}
                       </Stack>
@@ -210,9 +210,9 @@ function OrganizesTextCard() {
               type="submit"
               colorScheme="primary"
               isLoading={isLoading}
-              loadingText='Organizing...'
+              loadingText={capitalizeFirstLetter(t('labels.organizing'))}
             >
-              Organize
+              {capitalizeFirstLetter(t('buttons.organize'))}
             </Button>
           </CardFooter>
         </form>

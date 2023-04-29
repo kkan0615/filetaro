@@ -1,5 +1,9 @@
 {
   "hello": "Hello World",
+  "i18n": {
+    "en": "english",
+    "ko": "한국어"
+  },
   "SEO": {
     "title": "Filetaro",
     "description": "Filetaro - Easy File handler"
