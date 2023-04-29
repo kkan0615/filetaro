@@ -62,13 +62,15 @@ function RenamesLeft() {
       ),
     }),
     columnHelper.accessor('name', {
+      header: t('labels.name').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('path', {
-      header: 'original path',
+      header: t('labels.path').toString(),
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('type', {
+      header: t('labels.type').toString(),
       cell: (info) => info.getValue(),
     }),
   ], [targetFiles.length])
@@ -145,7 +147,7 @@ function RenamesLeft() {
       )
     } catch (e) {
       console.error(e)
-      toast('Error to add files', {
+      toast(capitalizeFirstLetter(t('texts.alerts.addFilesError')), {
         type: 'error'
       })
     }
@@ -225,21 +227,21 @@ function RenamesLeft() {
               <AddFileBtn onSelected={addFiles} />
               <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
               {isAllUnchecked &&
-                <Tooltip label="Remove files from list">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}>
                   <IconButton
                     onClick={removeCheckedFiles}
                     variant="ghost"
-                    aria-label="Start slide show"
+                    aria-label={capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}
                     icon={<AiOutlineDelete className="text-2xl" />}
                   />
                 </Tooltip>}
               <div className="mx-auto" />
               {isAllUnchecked &&
-                <Tooltip label="Delete files permanently">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}>
                   <IconButton
                     onClick={deleteCheckedFiles}
                     variant="ghost"
-                    aria-label="Delete files permanently"
+                    aria-label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}
                     icon={<MdDeleteForever className="text-2xl" />}
                   />
                 </Tooltip>}

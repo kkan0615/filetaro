@@ -23,23 +23,25 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 const AddMethods = ['prefix', 'suffix'] as const
-// type AddMethodType = typeof AddMethods[number]
-
-const validationSchema = z.object({
-  text: z.string({
-    required_error: 'Required field',
-  }).refine(checkSpecialCharsInName, {
-    message: '\ / : * < > | are not allowed',
-  }),
-  methodType: z.enum(AddMethods, {
-    required_error: 'Required field',
-  }),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
 
 function RenamesTextCard() {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    text: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    }).refine(checkSpecialCharsInName, {
+      message: capitalizeFirstLetter(t('texts.validations.fileName')),
+    }),
+    methodType: z.enum(AddMethods, {
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    }),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
+
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
   const dispatch = useDispatch()
@@ -69,7 +71,7 @@ function RenamesTextCard() {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
@@ -103,13 +105,13 @@ function RenamesTextCard() {
         }))
       }))
 
-      toast('Success to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameError')), {
         type: 'error'
       })
     } finally {
@@ -122,7 +124,7 @@ function RenamesTextCard() {
     <Card id="add-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Add</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.add'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -133,9 +135,9 @@ function RenamesTextCard() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardBody className="p-3 space-y-4">
             <FormControl isInvalid={!!errors.text?.message}>
-              <FormLabel>Text</FormLabel>
+              <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
               <Input
-                placeholder="Type text"
+                placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
                 {...register('text')}
               />
               {errors.text?.message ?
@@ -148,7 +150,7 @@ function RenamesTextCard() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <FormControl isInvalid={!!errors.text?.message}>
-                  <FormLabel>Method</FormLabel>
+                  <FormLabel>{capitalizeFirstLetter(t('labels.method'))}</FormLabel>
                   <RadioGroup onChange={onChange} value={value}>
                     <Stack direction='row'>
                       {AddMethods.map(addMethodEl => (
@@ -157,7 +159,7 @@ function RenamesTextCard() {
                           key={addMethodEl}
                           value={addMethodEl}
                         >
-                          {addMethodEl}
+                          {capitalizeFirstLetter(t(`labels.${addMethodEl}`))}
                         </Radio>
                       ))}
                     </Stack>
@@ -177,9 +179,9 @@ function RenamesTextCard() {
               colorScheme="primary"
               type="submit"
               isLoading={isLoading}
-              loadingText='Submitting'
+              loadingText={capitalizeFirstLetter(t('labels.submitting'))}
             >
-              Submit
+              {capitalizeFirstLetter(t('buttons.submit'))}
             </Button>
           </CardFooter>
         </form>

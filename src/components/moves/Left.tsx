@@ -98,7 +98,7 @@ function MovesLeft() {
       )
     }).catch(e => {
       console.error(e)
-      toast('Error to add files', {
+      toast(capitalizeFirstLetter(t('texts.alerts.addFilesError')), {
         type: 'error'
       })
     })

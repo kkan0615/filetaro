@@ -13,33 +13,78 @@
     "setting": "setting",
     "keepOriginal": "keep original",
     "autoRenameFile": "auto renaming for same file name",
-    "checkLoadedFiles": "check for loaded files"
+    "checkLoadedFiles": "check for loaded files",
+    "selectDirectory": "select directory",
+    "selectDirectoryPath": "select or type directory path",
+    "recursive": "recursive",
+    "text": "text",
+    "method": "method",
+    "prefix": "prefix",
+    "suffix": "suffix",
+    "included": "included",
+    "submitting": "submitting"
   },
   "buttons": {
     "setting": "setting",
-    "save": "save"
+    "save": "save",
+    "load": "load",
+    "submit": "submit"
   },
   "tooltips": {
     "home": "home",
     "openSetting": "open setting",
     "addDirectories": "add directories",
+    "addFiles": "add files",
+    "addFilesFromDirectory": "add files from directory",
     "removeFilesFromList": "remove files from list",
     "deleteFiles": "delete files permanently",
     "keepOriginal": "keep original file before move",
     "autoRenameFile": "automatically rename if there is same file name in directory",
-    "checkLoadedFiles": "Check for loaded files automatically"
+    "checkLoadedFiles": "Check for loaded files automatically",
+    "selectDirectory": "select directory"
   },
   "tours": {
     "addFilesButton": "Click it to add files",
     "addFilesFromDirectoryButton": "Or you can load files from directory",
-    "selectionCheckboxTh": "Select the files that you would like to move"
+    "selectionCheckboxTh": "select the files that you would like to move"
   },
   "texts": {
     "alerts": {
       "saveSettingSuccess": "success to save setting",
+      "loadFilesSuccess": "success to load {{ count }} files",
       "addFilesError": "error to add files",
       "saveSettingError": "error to save setting",
-      "sameDirectoryWarning": "There is same directory {{ name }}"
+      "loadFilesError": "error to load files",
+      "sameDirectoryWarning": "There is same directory {{ name }}",
+      "noSelectedFileWarning": "select any files"
+    },
+    "validations": {
+      "required": "required field",
+      "fileName": " / : * < > | are not allowed"
+    }
+  },
+  "placeholders": {
+    "typeHere": "type here"
+  },
+  "components": {
+    "addFilesFromDirectoryDialog": {
+      "title": "Add files from directories"
+    },
+    "popovers": {
+      "keyword": {
+        "tooltips": {
+          "help": "Keyword help"
+        },
+        "labels": {
+          "title": "keywords",
+          "subTitle": "replace keyword to specific words",
+          "keyword": "keyword",
+          "description": "description",
+          "todayDesc": "display today with predefined format",
+          "extDesc": "display file extension",
+          "typeDesc": "display file type"
+        }
+      }
     }
   },
   "pages": {
@@ -71,6 +116,26 @@
       },
       "tooltips": {
         "startSlideShow": "start slide show"
+      }
+    },
+    "renames": {
+      "tours": {
+        "addCard": "add text to file name",
+        "replaceCard": "replace specific text to new text"
+      },
+      "labels": {
+        "functions": "functions",
+        "add": "add",
+        "replace": "replace",
+        "targetText": "target text",
+        "replaceText": "replace text",
+        "replaceAllText": "replace all text"
+      },
+      "texts": {
+        "alerts": {
+          "renameSuccess": "success to rename files",
+          "renameError": "error to rename files"
+        }
       }
     }
   }

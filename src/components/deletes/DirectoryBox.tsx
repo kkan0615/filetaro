@@ -15,15 +15,18 @@ import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { open } from '@tauri-apps/api/dialog'
 import { setDeleteDirectoryPath, setDeleteIsRecursive } from '@renderer/stores/slices/deletes'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { useTranslation } from 'react-i18next'
 
 function DeletesDirectoryBox() {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const [directoryPath, setDirectoryPath] = useState('')
   const [isRecursive, setIsRecursive] = useState(false)
 
   const selectDirectory = async () => {
     const directoryPath = await open({
-      title: 'Select Directory',
+      title: capitalizeFirstLetter(t('labels.selectDirectory')),
       directory: true,
     })
 

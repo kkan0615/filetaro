@@ -22,31 +22,35 @@ import {
   Text
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
-
-const validationSchema = z.object({
-  targetStr: z.string({
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field',
-    }),
-  replaceStr: z.string({
-    required_error: 'Required field',
-  }).refine(checkSpecialCharsInName, {
-    message: '\ / : * < > | are not allowed',
-  }),
-  isReplaceAll: z.boolean({
-    required_error: 'Required field',
-  })
-})
-type ValidationSchema = z.infer<typeof validationSchema>
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function RenamesReplaceCard() {
+  const { t } = useTranslation()
+
+  const validationSchema = z.object({
+    targetStr: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.required')),
+      }),
+    replaceStr: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    }).refine(checkSpecialCharsInName, {
+      message: capitalizeFirstLetter(t('texts.validations.fileName')),
+    }),
+    isReplaceAll: z.boolean({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
+
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
-
   const dispatch = useDispatch()
+
   const {
     register,
     handleSubmit,
@@ -72,7 +76,7 @@ function RenamesReplaceCard() {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
@@ -105,13 +109,13 @@ function RenamesReplaceCard() {
         }))
       }))
 
-      toast('Success to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameError')), {
         type: 'error'
       })
     } finally {
@@ -123,7 +127,7 @@ function RenamesReplaceCard() {
     <Card id="replace-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Replacer</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.replace'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -134,7 +138,7 @@ function RenamesReplaceCard() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardBody className="p-3 space-y-4">
             <FormControl isInvalid={!!errors.targetStr?.message}>
-              <FormLabel>Target Text</FormLabel>
+              <FormLabel>{capitalizeFirstLetter(t('pages.renames.labels.targetText'))}</FormLabel>
               <Input
                 placeholder="Type text"
                 {...register('targetStr')}
@@ -145,7 +149,7 @@ function RenamesReplaceCard() {
               }
             </FormControl>
             <FormControl isInvalid={!!errors.replaceStr?.message}>
-              <FormLabel>Replace Text</FormLabel>
+              <FormLabel>{capitalizeFirstLetter(t('pages.renames.labels.replaceText'))}</FormLabel>
               <Input
                 placeholder="Type text"
                 {...register('replaceStr')}
@@ -162,7 +166,7 @@ function RenamesReplaceCard() {
               type="checkbox"
               {...register('isReplaceAll')}
             >
-              <span>Replace all text</span>
+              <span>{capitalizeFirstLetter(t('pages.renames.labels.replaceAllText'))}</span>
             </Checkbox>
           </CardBody>
           <CardFooter className="p-3">
@@ -172,9 +176,9 @@ function RenamesReplaceCard() {
               colorScheme="primary"
               type="submit"
               isLoading={isLoading}
-              loadingText='Submitting'
+              loadingText={capitalizeFirstLetter(t('labels.submitting'))}
             >
-              Submit
+              {capitalizeFirstLetter(t('buttons.submit'))}
             </Button>
           </CardFooter>
         </form>

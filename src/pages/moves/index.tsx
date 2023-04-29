@@ -10,6 +10,7 @@ import Splitter from '@renderer/components/Splitter'
 import MovesLeft from '@renderer/components/moves/Left'
 import MovesRight from '@renderer/components/moves/Right'
 import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function Moves() {
   const { t } = useTranslation()
@@ -71,7 +72,7 @@ function Moves() {
         },
         {
           selector: '#selection-checkbox-th',
-          content: t('tours.selectionCheckboxTh').toString(),
+          content: capitalizeFirstLetter(t('tours.selectionCheckboxTh')),
         },
       ])
     }

@@ -9,8 +9,11 @@ import { RenameSetting } from '@renderer/types/models/rename'
 import Splitter from '@renderer/components/Splitter'
 import RenamesLeft from '@renderer/components/renames/Left'
 import RenamesRight from '@renderer/components/renames/Right'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function Renames() {
+  const { t } = useTranslation()
   const targetFiles = useSelector((state: RootState) => state.renames.targetFiles)
   const setting = useSelector((state: RootState) => state.renames.setting)
   const { setIsOpen, setSteps, setCurrentStep } = useTour()
@@ -27,19 +30,19 @@ function Renames() {
       setSteps([
         {
           selector: '#add-files-button',
-          content: 'Click it to add files',
+          content: t('tours.addFilesButton').toString(),
         },
         {
           selector: '#add-files-from-directory-button',
-          content: 'Or you can load files from directory',
+          content: t('tours.addFilesFromDirectoryButton').toString(),
         },
         {
           selector: '#add-card',
-          content: 'Add text to file name',
+          content: capitalizeFirstLetter(t('pages.renames.tours.addCard')),
         },
         {
           selector: '#replace-card',
-          content: 'Replace specific text to new text',
+          content: capitalizeFirstLetter(t('pages.renames.tours.replaceCard')),
         },
       ])
     }
@@ -69,7 +72,7 @@ function Renames() {
       setSteps([
         {
           selector: '#selection-checkbox-th',
-          content: 'Select the files that you would like to move',
+          content: capitalizeFirstLetter(t('tours.selectionCheckboxTh')),
         },
       ])
     }
