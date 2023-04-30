@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTour } from '@reactour/tour'
+import { useTranslation } from 'react-i18next'
 import { RootState } from '@renderer/stores'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
@@ -22,8 +23,10 @@ import DeletesSettingModal from '@renderer/components/deletes/SettingDialog'
 import DeletesTypeCard from '@renderer/components/deletes/TypeCard'
 import DeletesTextCard from '@renderer/components/deletes/TextCard'
 import DeletesExtensionCard from '@renderer/components/deletes/ExtensionCard'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function Deletes() {
+  const { t } = useTranslation()
   const setting = useSelector((state: RootState) => state.deletes.setting)
   const { setIsOpen, setSteps, setCurrentStep } = useTour()
   const dispatch = useDispatch()
@@ -41,19 +44,19 @@ function Deletes() {
       setSteps([
         {
           selector: '#directory-box',
-          content: 'Select or type target directory',
+          content: capitalizeFirstLetter(t('tours.selectTargetDirectory')),
         },
         {
           selector: '#type-card',
-          content: 'Delete all files by file type',
+          content: capitalizeFirstLetter(t('pages.deletes.tours.typeCard')),
         },
         {
           selector: '#text-card',
-          content: 'Delete all files by text',
+          content: capitalizeFirstLetter(t('pages.deletes.tours.textCard')),
         },
         {
           selector: '#extension-card',
-          content: 'Delete all files by file extension',
+          content: capitalizeFirstLetter(t('pages.deletes.tours.extensionCard')),
         },
       ])
     }
@@ -87,10 +90,10 @@ function Deletes() {
           <CardBody padding={0} className="p-2 py-1">
             <Flex alignItems="center">
               <Link to="/">
-                <Tooltip label="Home">
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
                   <IconButton
                     variant="ghost"
-                    aria-label="home"
+                    aria-label={capitalizeFirstLetter(t('tooltips.home'))}
                     icon={<AiOutlineHome className="text-2xl" />}
                   />
                 </Tooltip>
@@ -98,10 +101,10 @@ function Deletes() {
               <Spacer />
               <KeywordPopover />
               <DeletesSettingModal>
-                <Tooltip label="Open setting" placement='auto'>
+                <Tooltip label={t('tooltips.openSetting')} placement='auto'>
                   <IconButton
                     variant="ghost"
-                    aria-label="Open setting"
+                    aria-label={t('tooltips.openSetting')}
                     icon={<AiOutlineSetting className="text-2xl" />}
                   />
                 </Tooltip>
@@ -116,7 +119,7 @@ function Deletes() {
         </Box>
         <div className="p-4 pt-12">
           <Flex onClick={toggleOpen} className="cursor-pointer">
-            <Heading size="md" mb={4}>Features</Heading>
+            <Heading size="md" mb={4}>{capitalizeFirstLetter(t('pages.deletes.labels.features'))}</Heading>
             <Spacer />
             <Text fontSize="2xl">
               {isFeatureOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}

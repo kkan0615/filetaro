@@ -20,7 +20,9 @@ import { useTranslation } from 'react-i18next'
 
 function DeletesDirectoryBox() {
   const { t } = useTranslation()
+
   const dispatch = useDispatch()
+
   const [directoryPath, setDirectoryPath] = useState('')
   const [isRecursive, setIsRecursive] = useState(false)
 
@@ -45,7 +47,7 @@ function DeletesDirectoryBox() {
     <Box id="directory-box" className="w-full">
       <List spacing={4}>
         <FormControl>
-          <FormLabel>Select or type directory path</FormLabel>
+          <FormLabel>{capitalizeFirstLetter(t('labels.selectDirectoryPath'))}</FormLabel>
           <InputGroup size="lg">
             <Input
               placeholder="Type here"
@@ -53,11 +55,11 @@ function DeletesDirectoryBox() {
               onChange={(e) => setDirectoryPath(e.target.value)}
             />
             <InputRightElement>
-              <Tooltip placement="auto" label="select directory">
+              <Tooltip placement="auto" label={capitalizeFirstLetter(t('labels.selectDirectory'))}>
                 <IconButton
                   variant="ghost"
                   onClick={selectDirectory}
-                  aria-label="select directory"
+                  aria-label={capitalizeFirstLetter(t('labels.selectDirectory'))}
                   icon={<AiOutlineFolderOpen className="text-2xl" />}
                 >
                 </IconButton>
@@ -72,8 +74,8 @@ function DeletesDirectoryBox() {
           checked={isRecursive}
           onChange={() => setIsRecursive(prevState => !prevState)}
         >
-          <Tooltip label="Check all files in directories in directories" placement='auto'>
-            <span>Recursive</span>
+          <Tooltip label={capitalizeFirstLetter(t('pages.deletes.labels.recursive'))} placement='auto'>
+            <span>{capitalizeFirstLetter(t('labels.recursive'))}</span>
           </Tooltip>
         </Checkbox>
       </List>

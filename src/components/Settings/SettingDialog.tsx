@@ -37,26 +37,29 @@ import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
 import SettingDialogProgram from '@renderer/components/Settings/Program'
 import SettingDialogMenuItem from '@renderer/components/Settings/MenuItem'
-
-const validationSchema = z.object({
-  dateFormat: z.string({
-    // Not empty
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field'
-    }),
-  isIncludeTime: z.boolean(),
-  timeFormat: z.string().nullable(),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
-
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 interface Props {
   children: React.ReactElement
 }
 
 function SettingDialog({ children }: Props) {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    dateFormat: z.string({
+      // Not empty
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.fileName')),
+      }),
+    isIncludeTime: z.boolean(),
+    timeFormat: z.string().nullable(),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
+
+
   const setting = useSelector((state: RootState) => state.applications.setting)
   const dispatch = useDispatch()
 
@@ -108,7 +111,7 @@ function SettingDialog({ children }: Props) {
         dateFormat: data.dateFormat as DateFormatType,
         timeFormat: data.isIncludeTime ? data.timeFormat as TimeFormatType | null : null,
       }))
-      toast('Success to save setting', {
+      toast(capitalizeFirstLetter(t('texts.alerts.saveSettingSuccess')), {
         type: 'success'
       })
       // toggle on-off
@@ -117,7 +120,7 @@ function SettingDialog({ children }: Props) {
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to load files', {
+      toast(capitalizeFirstLetter(t('texts.alerts.saveSettingError')), {
         type: 'error'
       })
     } finally {
@@ -137,20 +140,20 @@ function SettingDialog({ children }: Props) {
               className="w-52 shrink py-4"
             >
               <Text className="px-4 mb-2 opacity-70">
-                Menus
+                {capitalizeFirstLetter(t('labels.menu'))}
               </Text>
               <ul>
                 <SettingDialogMenuItem active={currMenu === 0} onClick={() => setCurrMenu(0)}>
-                  General
+                  {capitalizeFirstLetter(t('components.settings.menus.general'))}
                 </SettingDialogMenuItem>
                 <SettingDialogMenuItem active={currMenu === 1} onClick={() => setCurrMenu(1)}>
-                  Program
+                  {capitalizeFirstLetter(t('components.settings.menus.program'))}
                 </SettingDialogMenuItem>
               </ul>
             </Box>
             <div className="grow">
               <ModalHeader>
-                Setting
+                {capitalizeFirstLetter(t('labels.setting'))}
               </ModalHeader>
               <ModalCloseButton />
               {(() => {
@@ -160,7 +163,7 @@ function SettingDialog({ children }: Props) {
                       <ModalBody>
                         <div className="space-y-4">
                           <FormControl isInvalid={!!errors.dateFormat?.message}>
-                            <FormLabel>Date format</FormLabel>
+                            <FormLabel>{capitalizeFirstLetter(t('components.settings.labels.dateFormat'))}</FormLabel>
                             <Select
                               className="select select-bordered"
                               {...register('dateFormat')}
@@ -186,12 +189,12 @@ function SettingDialog({ children }: Props) {
                             colorScheme="primary"
                             {...register('isIncludeTime')}
                           >
-                            <span>Include time</span>
+                            <span>{capitalizeFirstLetter(t('components.settings.labels.timeFormat'))}</span>
                           </Checkbox>
                           {
                             isShowTimeInput &&
                               <FormControl isInvalid={!!errors.timeFormat?.message}>
-                                <FormLabel>Time format</FormLabel>
+                                <FormLabel>{capitalizeFirstLetter(t('components.settings.labels.includeTime'))}</FormLabel>
                                 <Select
                                   className="select select-bordered"
                                   {...register('timeFormat')}
@@ -220,9 +223,9 @@ function SettingDialog({ children }: Props) {
                           colorScheme="primary"
                           type="submit"
                           isLoading={isLoading}
-                          loadingText='Submitting'
+                          loadingText={capitalizeFirstLetter(t('labels.saving'))}
                         >
-                        Save
+                          {capitalizeFirstLetter(t('buttons.save'))}
                         </Button>
                       </ModalFooter>
                     </form>

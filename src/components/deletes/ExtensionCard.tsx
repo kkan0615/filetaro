@@ -14,19 +14,22 @@ import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
-
-const validationSchema = z.object({
-  ext: z.string({
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field',
-    }),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
+import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { useTranslation } from 'react-i18next'
 
 function DeletesExtensionCard() {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    ext: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.fileName')),
+      }),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
+
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
   const {
@@ -43,7 +46,7 @@ function DeletesExtensionCard() {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       if (!directoryPath) {
-        toast('Select target directory', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noTargetDirectoryWarning')), {
           type: 'warning'
         })
         return
@@ -56,7 +59,7 @@ function DeletesExtensionCard() {
       })
       const filteredFiles = files.filter((fileEl) => fileEl.ext === data.ext)
       if (!filteredFiles.length) {
-        toast(`No files by ${data.ext} in directory`, {
+        toast(capitalizeFirstLetter(t('pages.deletes.texts.alerts.noFileBytWarning', { standard: data.ext })), {
           type: 'warning'
         })
         return
@@ -64,13 +67,13 @@ function DeletesExtensionCard() {
 
       await deleteTargetFiles(filteredFiles)
 
-      toast('Success to delete files', {
+      toast(capitalizeFirstLetter(t('pages.deletes.texts.alerts.deleteSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to delete files', {
+      toast(capitalizeFirstLetter(t('pages.deletes.texts.alerts.deleteError')), {
         type: 'error'
       })
     } finally {
@@ -82,16 +85,16 @@ function DeletesExtensionCard() {
     <Card id="extension-card" width="100%">
       <CardHeader className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">File Extension</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.extension'))}</Heading>
         </Flex>
       </CardHeader>
       <form className="h-full flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="p-3">
           <FormControl>
             <FormControl isInvalid={!!errors.ext?.message}>
-              <FormLabel>Extension</FormLabel>
+              <FormLabel>{capitalizeFirstLetter(t('labels.extension'))}</FormLabel>
               <Input
-                placeholder="Extension without ."
+                placeholder={capitalizeFirstLetter(t('pages.deletes.placeholders.without'))}
                 {...register('ext')}
               />
               {errors.ext?.message ?
@@ -109,9 +112,9 @@ function DeletesExtensionCard() {
             type="submit"
             colorScheme="error"
             isLoading={isLoading}
-            loadingText='Organizing...'
+            loadingText={capitalizeFirstLetter(t('labels.deleting'))}
           >
-            Delete
+            {capitalizeFirstLetter(t('labels.delete'))}
           </Button>
         </CardFooter>
       </form>

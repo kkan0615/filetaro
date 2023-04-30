@@ -16,24 +16,27 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TargetFile } from '@renderer/types/models/targetFile'
 import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { useTranslation } from 'react-i18next'
 
 const AddMethods = ['included', 'prefix', 'suffix'] as const
 
-const validationSchema = z.object({
-  text: z.string({
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field',
-    }),
-  methodType: z.enum(AddMethods, {
-    required_error: 'Required field',
-  }),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
-
 function DeletesTextCard() {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    text: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.fileName')),
+      }),
+    methodType: z.enum(AddMethods, {
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    }),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
+
   const directoryPath = useSelector((state: RootState) => state.deletes.directoryPath)
   const isRecursive = useSelector((state: RootState) => state.deletes.isRecursive)
   const {
@@ -44,6 +47,9 @@ function DeletesTextCard() {
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
+    defaultValues:{
+      methodType: 'included'
+    }
   })
 
   const [isLoading, setIsLoading] = useState(false)
@@ -52,7 +58,7 @@ function DeletesTextCard() {
     try {
 
       if (!directoryPath) {
-        toast('Select target directory', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noTargetDirectoryWarning')), {
           type: 'warning'
         })
         return
@@ -77,7 +83,7 @@ function DeletesTextCard() {
         })
       }
       if (!filteredFiles.length) {
-        toast(`No files by ${data.text} in directory`, {
+        toast(capitalizeFirstLetter(t('pages.deletes.texts.alerts.noFileBytWarning', { standard: data.text })), {
           type: 'warning'
         })
         return
@@ -85,13 +91,13 @@ function DeletesTextCard() {
       // Delete all files
       await deleteTargetFiles(filteredFiles)
 
-      toast('Success to delete files', {
+      toast(capitalizeFirstLetter(t('pages.deletes.texts.alerts.deleteSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to delete files', {
+      toast(capitalizeFirstLetter(t('pages.deletes.texts.alerts.deleteError')), {
         type: 'error'
       })
     } finally {
@@ -103,7 +109,7 @@ function DeletesTextCard() {
     <Card id="text-card" width="100%">
       <CardHeader className="p-3">
         <Flex alignItems="center">
-          <Heading size="md">Text</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.text'))}</Heading>
           <Spacer />
         </Flex>
       </CardHeader>
@@ -111,7 +117,7 @@ function DeletesTextCard() {
         <CardBody className="p-3">
           <div className="space-y-4">
             <FormControl isInvalid={!!errors.text?.message}>
-              <FormLabel>Text</FormLabel>
+              <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
               <Input
                 placeholder="Type here"
                 {...register('text')}
@@ -126,7 +132,7 @@ function DeletesTextCard() {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <FormControl isInvalid={!!errors.text?.message}>
-                  <FormLabel>Method</FormLabel>
+                  <FormLabel>{capitalizeFirstLetter(t('labels.method'))}</FormLabel>
                   <RadioGroup onChange={onChange} value={value}>
                     <Stack direction='row'>
                       {AddMethods.map(addMethodEl => (
@@ -157,9 +163,9 @@ function DeletesTextCard() {
             type="submit"
             colorScheme="error"
             isLoading={isLoading}
-            loadingText='Organizing...'
+            loadingText={capitalizeFirstLetter(t('labels.deleting'))}
           >
-            Delete
+            {capitalizeFirstLetter(t('labels.delete'))}
           </Button>
         </CardFooter>
       </form>

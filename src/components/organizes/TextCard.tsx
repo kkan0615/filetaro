@@ -26,22 +26,21 @@ import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 const AddMethods = ['included', 'prefix', 'suffix'] as const
 
-const validationSchema = z.object({
-  text: z.string({
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field',
-    }),
-  methodType: z.enum(AddMethods, {
-    required_error: 'Required field',
-  }),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
-
 function OrganizesTextCard() {
   const { t } = useTranslation()
+  const validationSchema = z.object({
+    text: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.fileName')),
+      }),
+    methodType: z.enum(AddMethods, {
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    }),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
 
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
@@ -167,7 +166,7 @@ function OrganizesTextCard() {
               <FormControl isInvalid={!!errors.text?.message}>
                 <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
                 <Input
-                  placeholder="Type here"
+                  placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
                   {...register('text')}
                 />
                 {errors.text?.message ?

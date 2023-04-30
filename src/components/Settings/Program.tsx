@@ -7,8 +7,12 @@ import { toast } from 'react-toastify'
 import CDisplayLabel from '@renderer/components/commons/labels/Display'
 import LanguageSelect from '@renderer/components/forms/LanguageSelect'
 import { FormControl, FormLabel } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function SettingDialogProgram() {
+  const { t } = useTranslation()
+
   const [version, setVersion] = useState('')
 
   useEffect(() => {
@@ -41,11 +45,11 @@ function SettingDialogProgram() {
   return (
     <div>
       <FormControl className="mb-4">
-        <FormLabel>Language</FormLabel>
+        <FormLabel>{capitalizeFirstLetter(t('labels.language'))}</FormLabel>
         <LanguageSelect />
       </FormControl>
       <CDisplayLabel>
-        Current Version
+        {capitalizeFirstLetter(t('labels.currentVersion'))}
       </CDisplayLabel>
       <div className="space-y-2">
         <div className="text-lg font-bold">

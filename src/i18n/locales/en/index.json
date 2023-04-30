@@ -9,6 +9,8 @@
     "description": "Filetaro - Easy File handler"
   },
   "labels": {
+    "language": "language",
+    "currentVersion": "current version",
     "preview": "preview",
     "name": "name",
     "path": "path",
@@ -29,7 +31,11 @@
     "submitting": "submitting",
     "outputPath": "output path",
     "organizing": "organizing...",
-    "extension": "extension"
+    "extension": "extension",
+    "delete": "delete",
+    "deleting": "deleting...",
+    "menu": "menu",
+    "saving": "saving..."
   },
   "buttons": {
     "setting": "setting",
@@ -54,7 +60,8 @@
   "tours": {
     "addFilesButton": "Click it to add files",
     "addFilesFromDirectoryButton": "Or you can load files from directory",
-    "selectionCheckboxTh": "select the files that you would like to move"
+    "selectionCheckboxTh": "select the files that you would like to move",
+    "selectTargetDirectory": "select or type target directory"
   },
   "texts": {
     "alerts": {
@@ -65,7 +72,8 @@
       "loadFilesError": "error to load files",
       "sameDirectoryWarning": "There is same directory {{ name }}",
       "noSelectedFileWarning": "select any files",
-      "noOutputWarning": "select output directory"
+      "noOutputWarning": "select output directory",
+      "noTargetDirectoryWarning": "select target directory"
     },
     "validations": {
       "required": "required field",
@@ -77,7 +85,7 @@
   },
   "components": {
     "addFilesFromDirectoryDialog": {
-      "title": "Add files from directories"
+      "title": "Add files from directory"
     },
     "popovers": {
       "keyword": {
@@ -94,6 +102,16 @@
           "typeDesc": "display file type"
         }
       }
+    },
+    "settings": {
+      "menus": {
+        "general": "general",
+        "program": "program"
+      },
+      "labels": {
+        "dateFormat": "date format",
+        "includeTime": "include time",
+        "timeFormat": "time format"}
     }
   },
   "pages": {
@@ -149,7 +167,7 @@
     },
     "organizes": {
       "tours": {
-        "directoryPathCard": "select or type output path. Folders will be here",
+        "directoryPathCard": "select or type output path. Organized Folders will be here",
         "typeCard": "organize files by file type",
         "extensionCard": "organize files by file extension",
         "textCard": "organize files by text"
@@ -168,6 +186,27 @@
         "alerts": {
           "organizeSuccess": "success to rename files",
           "organizeError": "error to rename files"
+        }
+      }
+    },
+    "deletes": {
+      "labels": {
+        "features": "features",
+        "recursive": "check all files in directories in directories"
+      },
+      "placeholders": {
+        "without": "extension without ."
+      },
+      "tours": {
+        "typeCard": "delete all files by file type",
+        "textCard": "delete all files by text",
+        "extensionCard": "delete all files by file extension"
+      },
+      "texts": {
+        "alerts": {
+          "deleteSuccess": "success to delete files",
+          "deleteError": "error to delete files",
+          "noFileBytWarning": "no files by {{ standard }} in directory"
         }
       }
     }
