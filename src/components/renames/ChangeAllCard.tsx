@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
-import { renameTargetFile } from '@renderer/utils/file'
+import { renameOrCopyTargetFile } from '@renderer/utils/file'
 import { updateRenameTargetFile } from '@renderer/stores/slices/renames'
 import { checkSpecialCharsInName } from '@renderer/utils/validation'
 import {
@@ -23,21 +23,23 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
-
-const validationSchema = z.object({
-  text: z.string({
-    required_error: 'Required field',
-  }).refine(checkSpecialCharsInName, {
-    message: '\ / : * < > | are not allowed',
-  }),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
-
-function ChangeAllTextCard() {
+function RenamesChangeAllTextCard() {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    text: z.string({
+      required_error: 'Required field',
+    }).refine(checkSpecialCharsInName, {
+      message: '\ / : * < > | are not allowed',
+    }),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
   const dispatch = useDispatch()
+
   const {
     register,
     handleSubmit,
@@ -46,6 +48,7 @@ function ChangeAllTextCard() {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
+
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -60,33 +63,44 @@ function ChangeAllTextCard() {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
       }
       setIsLoading(true)
+      for (let i = 0; i < checkedTargetFiles.length; i++) {
+        const checkedTargetFileEl = checkedTargetFiles[i]
+        const splitName = checkedTargetFileEl.name.split('.')
+        const ext = splitName.pop()
+        const tempFileName = `${data.text}.${ext}`
 
-      await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        // @TODO: Add logic
+        const { newFileNameWithPath, newFileName } = await renameOrCopyTargetFile({
+          file: checkedTargetFileEl,
+          newFileName: tempFileName,
+          isAutoDuplicatedName: true,
+          isKeepOriginal: setting.isKeepOriginal,
+        })
 
-        // dispatch(updateRenameTargetFile({
-        //   path: checkedTargetFileEl.path,
-        //   newData: {
-        //     ...checkedTargetFileEl,
-        //     path: newFileNameWithPath,
-        //     name: newFileName,
-        //   }
-        // }))
-      }))
+        dispatch(updateRenameTargetFile({
+          path: checkedTargetFileEl.path,
+          newData: {
+            ...checkedTargetFileEl,
+            path: newFileNameWithPath,
+            name: newFileName,
+          }
+        }))
+      }
+      // await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
+      // }))
 
-      toast('Success to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameError')), {
         type: 'error'
       })
     } finally {
@@ -139,4 +153,4 @@ function ChangeAllTextCard() {
   )
 }
 
-export default ChangeAllTextCard
+export default RenamesChangeAllTextCard

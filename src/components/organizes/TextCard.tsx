@@ -109,14 +109,17 @@ function OrganizesTextCard() {
       })
       // Loop to move or copy file
       await Promise.all(filteredFiles.map(async (fileEl) => {
-        await moveOrCopyFile({
+        const isDone = await moveOrCopyFile({
           file: fileEl,
           directoryPath: fullDirectoryPath,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
           isCopy: setting.isKeepOriginal,
         })
-        // Remove from slice
-        dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+
+        if (isDone) {
+          // Remove from slice
+          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+        }
       }))
       toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'

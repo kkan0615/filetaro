@@ -35,7 +35,8 @@
     "delete": "delete",
     "deleting": "deleting...",
     "menu": "menu",
-    "saving": "saving..."
+    "saving": "saving...",
+    "confirmDeleteTitle": "delete files permanently"
   },
   "buttons": {
     "setting": "setting",
@@ -64,6 +65,11 @@
     "selectTargetDirectory": "select or type target directory"
   },
   "texts": {
+    "prompts": {
+      "duplicateName": "Same name is already exists",
+      "duplicatedNameAt": "file is already exists at {{ at }}, type new name of it",
+      "delete": "would like to delete files permanently?"
+    },
     "alerts": {
       "saveSettingSuccess": "success to save setting",
       "loadFilesSuccess": "success to load {{ count }} files",
@@ -73,7 +79,8 @@
       "sameDirectoryWarning": "There is same directory {{ name }}",
       "noSelectedFileWarning": "select any files",
       "noOutputWarning": "select output directory",
-      "noTargetDirectoryWarning": "select target directory"
+      "noTargetDirectoryWarning": "select target directory",
+      "cancelTypeNameWarning": "Cancel to type name {{ name }}"
     },
     "validations": {
       "required": "required field",

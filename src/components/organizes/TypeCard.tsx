@@ -69,14 +69,16 @@ function OrganizesTypeCard() {
         })
         // Move or Copy files
         await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
-          await moveOrCopyFile({
+          const isDone = await moveOrCopyFile({
             file: fileEl,
             directoryPath: fullDirectoryPath,
             isAutoDuplicatedName: setting.isAutoDuplicatedName,
             isCopy: setting.isKeepOriginal
           })
-          // Remove from slice
-          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          if (isDone) {
+            // Remove from slice
+            dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          }
         }))
       }))
 

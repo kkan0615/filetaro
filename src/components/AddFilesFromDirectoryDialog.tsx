@@ -68,7 +68,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
         isRecursive: data.isRecursive,
       })
       onAddFiles(files)
-      toast(capitalizeFirstLetter(t('texts.alerts.sameDirectoryWarning', { count: files.length })), {
+      toast(capitalizeFirstLetter(t('texts.alerts.loadFilesSuccess', { count: files.length })), {
         type: 'success'
       })
       // toggle on-off

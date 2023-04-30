@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
-import { renameTargetFile } from '@renderer/utils/file'
+import { renameOrCopyTargetFile } from '@renderer/utils/file'
 import { updateRenameTargetFile } from '@renderer/stores/slices/renames'
 import { checkSpecialCharsInName } from '@renderer/utils/validation'
 import {
@@ -93,10 +93,11 @@ function RenamesReplaceCard() {
           replacedFileName = checkedTargetFileEl.name.replace(data.targetStr, data.replaceStr)
         }
 
-        const { newFileNameWithPath, newFileName } = await renameTargetFile({
+        const { newFileNameWithPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
           newFileName: replacedFileName,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
+          isKeepOriginal: setting.isKeepOriginal,
         })
 
         dispatch(updateRenameTargetFile({
