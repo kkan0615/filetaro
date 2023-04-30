@@ -1,0 +1,216 @@
+{
+  "hello": "안녕 세상아!",
+  "i18n": {
+    "en": "English",
+    "ko": "한국어"
+  },
+  "SEO": {
+    "title": "Filetaro",
+    "description": "Filetaro - 쉬운 파일 핸들러"
+  },
+  "labels": {
+    "language": "언어",
+    "currentVersion": "현재 버전",
+    "preview": "미리보기",
+    "name": "파일명",
+    "path": "경로",
+    "type": "타입",
+    "actions": "액션",
+    "setting": "설정",
+    "keepOriginal": "원본 나두기",
+    "autoRenameFile": "동일 파일명 자동 변경",
+    "checkLoadedFiles": "불러온 파일 항상 선택",
+    "selectDirectory": "폴더 선택",
+    "selectDirectoryPath": "파일경로를 입력 혹은 선택해주세요.",
+    "recursive": "재귀",
+    "text": "문자",
+    "method": "방법",
+    "prefix": "접두사",
+    "suffix": "접미사",
+    "included": "포함",
+    "submitting": "제출 중..",
+    "outputPath": "출력 경로",
+    "organizing": "분류 중...",
+    "extension": "확장자",
+    "delete": "삭제",
+    "deleting": "삭제 중...",
+    "menu": "메뉴",
+    "saving": "저장중 ..."
+  },
+  "buttons": {
+    "setting": "설정",
+    "save": "저장",
+    "load": "불러오기",
+    "submit": "제출",
+    "organize": "분류"
+  },
+  "tooltips": {
+    "home": "홈",
+    "openSetting": "설정 열기",
+    "addDirectories": "폴더 추가",
+    "addFiles": "파일 추가",
+    "addFilesFromDirectory": "폴더에서 파일 가져오기",
+    "removeFilesFromList": "목록에서 파일 제거",
+    "deleteFiles": "파일 영국적으로 삭제",
+    "keepOriginal": "파일 옮길 때 원본파일 지키기",
+    "autoRenameFile": "폴더내에 동일파일 존재시 자동으로 이름 변경",
+    "checkLoadedFiles": "불러온 파일들 자동적으로 선택하기",
+    "selectDirectory": "폴더 선택하기"
+  },
+  "tours": {
+    "addFilesButton": "이것을 선택하여 파일을 추가할 수 있습니다.",
+    "addFilesFromDirectoryButton": "또는 폴더에서 파일을 가져올 수 있습니다.",
+    "selectionCheckboxTh": "옮기고 싶은 파일 선택하세요.",
+    "selectTargetDirectory": "폴더 선택 혹은 입력하세요."
+  },
+  "texts": {
+    "alerts": {
+      "saveSettingSuccess": "성공적으로 설정을 저장했습니다.",
+      "loadFilesSuccess": "성공적으로 {{ count }}개의 파일을 불러왔습니다.",
+      "addFilesError": "파일을 추가하는데 문제가 발생했습니다.",
+      "saveSettingError": "설정을 저장하는데 문제가 발생했습니다.",
+      "loadFilesError": "파일을 불러오는데 문제가 발생했습니다.",
+      "sameDirectoryWarning": "동일 폴더가 존재합니다: {{ name }}",
+      "noSelectedFileWarning": "파일을 먼저 선택해주세요.",
+      "noOutputWarning": "출력할 폴더를 선택해주세요.",
+      "noTargetDirectoryWarning": "폴더를 선택해주세요.",
+      "cancelTypeNameWarning": "{{ name }} 대한 새로운 이름입력을 취소했습니다."
+    },
+    "validations": {
+      "required": "필수 항목입력주세요.",
+      "fileName": " / : * < > | 는 허용되지 않습니다."
+    }
+  },
+  "placeholders": {
+    "typeHere": "입력주해주세요."
+  },
+  "components": {
+    "addFilesFromDirectoryDialog": {
+      "title": "폴더에서 파일 불러오기"
+    },
+    "popovers": {
+      "keyword": {
+        "tooltips": {
+          "help": "키워드 도움말"
+        },
+        "labels": {
+          "title": "키워드",
+          "subTitle": "키워드를 특정 문자로 변경합니다.",
+          "keyword": "키워드",
+          "description": "설명",
+          "todayDesc": "오늘날짜를 설정된 형식으로 보여집니다.",
+          "extDesc": "파일 확장자를 보여줍니다. display file extension",
+          "typeDesc": "파일 타입을 보여줍니다."
+        }
+      }
+    },
+    "settings": {
+      "menus": {
+        "general": "일반",
+        "program": "프로그램"
+      },
+      "labels": {
+        "dateFormat": "날짜 형식",
+        "includeTime": "시간 포함",
+        "timeFormat": "시간 형식"}
+    }
+  },
+  "pages": {
+    "home": {
+      "moves": {
+        "title": "이동",
+        "description": "파일들을 새로운 폴더로 이동시킵니다."
+      },
+      "renames": {
+        "title": "파일명 변경",
+        "description": "파일명을 변경 혹은 추가합니다."
+      },
+      "organizes": {
+        "title": "분류",
+        "description": "특정 조건으로 파일을 분류 합니다."
+      },
+      "deletes": {
+        "title": "삭제",
+        "description": "폴더내 파일을 삭제합니다."
+      }
+    },
+    "moves": {
+      "labels": {
+        "directories": "폴더"
+      },
+      "tours": {
+        "addDirectoryButton": "이동할 폴더를 추가합니다.",
+        "startSlideShowButton": "처음부터 슬라이드 쇼를 시작합니다."
+      },
+      "tooltips": {
+        "startSlideShow": "슬라이드 쇼 시작"
+      }
+    },
+    "renames": {
+      "tours": {
+        "addCard": "파일명에 문자를 추가합니다.",
+        "replaceCard": "특정문자를 신규 문자로 치환합니다."
+      },
+      "labels": {
+        "functions": "기능",
+        "add": "추가",
+        "replace": "치환",
+        "targetText": "치환활 문자",
+        "replaceText": "변경할 text",
+        "replaceAllText": "모든 문자 변경"
+      },
+      "texts": {
+        "prompts": {
+          "duplicatedName": "{{ at }}에 같은 파일명이 이미 존재합니다. 새로운 이름을 입력해주세요.",
+          "delete": "would like to delete files permanently?"
+        },
+        "alerts": {
+          "renameSuccess": "성공적으로 이름을 변경했습니다.",
+          "renameError": "이름을 변경하는데 문제가 발생했습니다."
+        }
+      }
+    },
+    "organizes": {
+      "tours": {
+        "directoryPathCard": "출력 경로를 선택 혹은 입력해주세요. 분류된 파일은 여기에 저장됩니다.",
+        "typeCard": "파일 타입으로 분류합니다.",
+        "extensionCard": "파일 확장자로 분류합니다.",
+        "textCard": "문자로 확장자를 분류합니다."
+      },
+      "labels": {
+        "functions": "기능",
+        "replaceAllText": "모든 문자 변경",
+        "typeSubtitle": "파일 타입으로 분류",
+        "extensionSubtitle": "확장자로 분류"
+      },
+      "texts": {
+        "alerts": {
+          "organizeSuccess": "성공적으로 분류했습니다.",
+          "organizeError": "분류하는데 문제가 발생했습니다."
+        }
+      }
+    },
+    "deletes": {
+      "labels": {
+        "features": "기능",
+        "recursive": "폴더 내 폴더의 파일도 가져오기"
+      },
+      "placeholders": {
+        "without": ". 없이 확장자명을 입력해주세요."
+      },
+      "tours": {
+        "typeCard": "파일 타입으로 삭제",
+        "textCard": "문자로 삭제",
+        "extensionCard": "확장자명으로 삭제"
+      },
+      "texts": {
+        "alerts": {
+          "deleteSuccess": "성공적으로 파일을 삭제했습니다.",
+          "deleteError": "파일을 삭제하느데 문제가 발생했습니다.",
+          "noFileBytWarning": "기준 {{ standard }}으로 된 파일이 폴더내 존재하지 않습니다."
+        }
+      }
+    }
+  }
+}
+

@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
-import { MoveDirectory, MoveSetting, MoveSettingUpdate } from '@renderer/types/models/moveDirectory'
+import { TargetFile } from '@renderer/types/models/targetFile'
+import { MoveDirectory, MoveSetting, MoveSettingUpdate } from '@renderer/types/models/move'
 
 const name = 'moves'
 
 export interface MoveState {
   setting: MoveSetting
   moveDirectories: MoveDirectory[]
-  targetFiles: TargetFiles[]
+  targetFiles: TargetFile[]
   movesSlideIndex: number
 }
 
@@ -16,6 +16,8 @@ const initialState: MoveState = {
     isAutoDuplicatedName: false,
     isKeepOriginal: false,
     isDefaultCheckedOnLoad: false,
+    isNotFirstPage: false,
+    isNotFirstLoad: false,
   },
   moveDirectories: [],
   targetFiles: [],
@@ -40,7 +42,7 @@ export const moveSlice = createSlice({
         (directoryEl) => directoryEl.path !== action.payload.path
       )
     },
-    addTargetFile: (state, action: PayloadAction<TargetFiles>) => {
+    addTargetFile: (state, action: PayloadAction<TargetFile>) => {
       if (
         state.targetFiles.findIndex((targetFileEl) => targetFileEl.path === action.payload.path) !==
         -1
@@ -69,6 +71,8 @@ export const moveSlice = createSlice({
         isAutoDuplicatedName: false,
         isKeepOriginal: false,
         isDefaultCheckedOnLoad: false,
+        isNotFirstPage: false,
+        isNotFirstLoad: false
       }
       state.moveDirectories = []
       state. targetFiles = []

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
-import { clearOrganizeSlice, setOrganizeSetting } from '@renderer/stores/slices/organizes'
 import { OrganizeSetting } from '@renderer/types/models/organize'
 import CLoading from '@renderer/components/commons/Loading'
+import { clearDeleteSlice, setDeleteSetting } from '@renderer/stores/slices/deletes'
 import { Box } from '@chakra-ui/react'
 
 function OrganizeLayout() {
@@ -15,9 +15,9 @@ function OrganizeLayout() {
   // Load Move Page Setting
   useEffect(() => {
     setIsLoading(true)
-    settingStore.get<Partial<OrganizeSetting>>(SettingStoreKey.OrganizeSetting)
+    settingStore.get<Partial<OrganizeSetting>>(SettingStoreKey.DeleteSetting)
       .then(value => {
-        dispatch(setOrganizeSetting({
+        dispatch(setDeleteSetting({
           ...value,
         }))
         setIsLoading(false)
@@ -33,7 +33,7 @@ function OrganizeLayout() {
    */
   useEffect(() => {
     return () => {
-      dispatch(clearOrganizeSlice())
+      dispatch(clearDeleteSlice())
     }
   }, [])
 

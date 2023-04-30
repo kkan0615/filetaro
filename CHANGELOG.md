@@ -1,3 +1,18 @@
+## 0.0.2
+- Added tour
+  - Move page
+  - Rename page
+  - Organize page
+  - Delete page
+- Added Korean i18n
+- Added change all feature in renames
+- Updated interface name from TargetFiles to TargetFile
+- Updated Layout
+- Update Loading component
+- Merged duplicate codes
+- Refactored name of components
+- Removed suspense and add isLoading to handle loading
+
 ## 0.0.1 (2023-04-16)
 - Added organize page
 - Added more keywords

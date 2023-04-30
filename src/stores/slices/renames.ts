@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TargetFiles, UpdateTargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile, UpdateTargetFiles } from '@renderer/types/models/targetFile'
 import { RenameSetting, RenameSettingUpdate } from '@renderer/types/models/rename'
 
 const name = 'renames'
 
 export interface RenameState {
   setting: RenameSetting
-  targetFiles: TargetFiles[]
+  targetFiles: TargetFile[]
 }
 
 const initialState: RenameState = {
@@ -15,6 +15,8 @@ const initialState: RenameState = {
     isKeepOriginal: false,
     isDefaultOpenCard: false,
     isDefaultCheckedOnLoad: false,
+    isNotFirstPage: false,
+    isNotFirstLoad: false,
   },
   targetFiles: [],
 }
@@ -29,7 +31,7 @@ export const moveSlice = createSlice({
         ...action.payload
       }
     },
-    addRenameTargetFile: (state, action: PayloadAction<TargetFiles>) => {
+    addRenameTargetFile: (state, action: PayloadAction<TargetFile>) => {
       if (state.targetFiles.findIndex((targetFileEl) => targetFileEl.path === action.payload.path) !== -1) return
       state.targetFiles = [...state.targetFiles, action.payload]
     },
@@ -64,6 +66,8 @@ export const moveSlice = createSlice({
         isKeepOriginal: false,
         isDefaultOpenCard: false,
         isDefaultCheckedOnLoad: false,
+        isNotFirstPage: false,
+        isNotFirstLoad: false,
       }
       state.targetFiles = []
     }

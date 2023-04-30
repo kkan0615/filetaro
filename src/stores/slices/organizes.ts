@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TargetFiles, UpdateTargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile, UpdateTargetFiles } from '@renderer/types/models/targetFile'
 import { OrganizeSetting, OrganizeSettingUpdate } from '@renderer/types/models/organize'
 
 const name = 'organizes'
 
 export interface OrganizeState {
   setting: OrganizeSetting
-  targetFiles: TargetFiles[]
+  targetFiles: TargetFile[]
   directoryPath: string
 }
 
@@ -17,6 +17,8 @@ const initialState: OrganizeState = {
     isDefaultOpenCard: false,
     isDefaultCheckedOnLoad: false,
     isOverrideDirectory: false,
+    isNotFirstPage: false,
+    isNotFirstLoad: false,
   },
   targetFiles: [],
   directoryPath: '',
@@ -32,7 +34,7 @@ export const moveSlice = createSlice({
         ...action.payload
       }
     },
-    addOrganizeTargetFile: (state, action: PayloadAction<TargetFiles>) => {
+    addOrganizeTargetFile: (state, action: PayloadAction<TargetFile>) => {
       if (state.targetFiles.findIndex((targetFileEl) => targetFileEl.path === action.payload.path) !== -1) return
       state.targetFiles = [...state.targetFiles, action.payload]
     },
@@ -71,6 +73,8 @@ export const moveSlice = createSlice({
         isDefaultOpenCard: false,
         isDefaultCheckedOnLoad: false,
         isOverrideDirectory: false,
+        isNotFirstPage: false,
+        isNotFirstLoad: false,
       }
       state.targetFiles = []
       state.directoryPath = ''

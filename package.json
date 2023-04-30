@@ -2,7 +2,7 @@
   "name": "filetaro",
   "description": "File handler - File handler - Rename, Organize, or Delete files easily",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,6 +15,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@hookform/resolvers": "^3.0.0",
+    "@reactour/tour": "^3.3.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@tanstack/react-table": "^8.8.2",
     "@tauri-apps/api": "^1.2.0",
@@ -35,6 +36,7 @@
     "react-router-dom": "^6.9.0",
     "react-toastify": "^9.1.2",
     "sass": "^1.60.0",
+    "styled-components": "^5.3.10",
     "tauri-plugin-store-api": "https://github.com/tauri-apps/tauri-plugin-store",
     "zod": "^3.21.4"
   },

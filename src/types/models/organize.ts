@@ -4,6 +4,8 @@ export interface OrganizeSetting {
   isDefaultOpenCard: boolean
   isDefaultCheckedOnLoad: boolean
   isOverrideDirectory: boolean
+  isNotFirstPage: boolean
+  isNotFirstLoad: boolean
 }
 
 export type OrganizeSettingUpdate = Partial<OrganizeSetting>

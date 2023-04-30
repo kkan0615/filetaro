@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { settingStore } from '@renderer/stores/tauriStore'
-import { MoveSetting } from '@renderer/types/models/moveDirectory'
+import { MoveSetting } from '@renderer/types/models/move'
 import { SettingStoreKey } from '@renderer/types/store'
 import { setMoveSetting } from '@renderer/stores/slices/moves'
 import {
@@ -19,6 +19,8 @@ import {
   ModalFooter,
   Button, Checkbox, Spacer, Tooltip,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 const validationSchema = z.object({
   isKeepOriginal: z.boolean(),
@@ -31,7 +33,8 @@ interface Props {
   children: React.ReactElement
 }
 
-function MovesDirectorySettingModal({ children }: Props) {
+function MovesSettingModal({ children }: Props) {
+  const { t } = useTranslation()
   const setting = useSelector((state: RootState) => state.moves.setting)
   const dispatch = useDispatch()
   const {
@@ -59,6 +62,7 @@ function MovesDirectorySettingModal({ children }: Props) {
     try {
       setIsLoading(true)
       await settingStore.set(SettingStoreKey.MoveSetting, {
+        ...setting,
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
         isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad
@@ -70,13 +74,13 @@ function MovesDirectorySettingModal({ children }: Props) {
         isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad
       }))
 
-      toast('Success to save setting', {
+      toast(capitalizeFirstLetter(t('texts.alerts.saveSettingSuccess')), {
         type: 'success'
       })
       toggleOpen()
     } catch (e) {
       console.error(e)
-      toast('Error to save setting', {
+      toast(capitalizeFirstLetter(t('texts.alerts.saveSettingError')), {
         type: 'error'
       })
     } finally {
@@ -92,7 +96,7 @@ function MovesDirectorySettingModal({ children }: Props) {
         <ModalContent>
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
             <ModalHeader>
-              Setting
+              {capitalizeFirstLetter(t('labels.setting'))}
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
@@ -103,8 +107,8 @@ function MovesDirectorySettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isKeepOriginal')}
                 >
-                  <Tooltip label="Keep original file before move" placement='auto'>
-                    <span>Keep original</span>
+                  <Tooltip label={capitalizeFirstLetter(t('tooltips.keepOriginal'))} placement='auto'>
+                    <span>{capitalizeFirstLetter(t('labels.keepOriginal'))}</span>
                   </Tooltip>
                 </Checkbox>
                 <Checkbox
@@ -113,8 +117,8 @@ function MovesDirectorySettingModal({ children }: Props) {
                   colorScheme="primary"
                   {...register('isAutoDuplicatedName')}
                 >
-                  <Tooltip label="Automatically rename if there is same file name in directory" placement='auto'>
-                    <span>Auto renaming for same file name</span>
+                  <Tooltip label={capitalizeFirstLetter(t('tooltips.autoRenameFile'))} placement='auto'>
+                    <span>{capitalizeFirstLetter(t('labels.autoRenameFile'))}</span>
                   </Tooltip>
                 </Checkbox>
                 <Checkbox
@@ -124,8 +128,8 @@ function MovesDirectorySettingModal({ children }: Props) {
                   type="checkbox"
                   {...register('isDefaultCheckedOnLoad')}
                 >
-                  <Tooltip label="Check for loaded files automatically" placement='auto'>
-                    <span>Check for loaded files</span>
+                  <Tooltip label={capitalizeFirstLetter(t('tooltips.checkLoadedFiles'))} placement='auto'>
+                    <span>{capitalizeFirstLetter(t('labels.checkLoadedFiles'))}</span>
                   </Tooltip>
                 </Checkbox>
               </div>
@@ -139,7 +143,7 @@ function MovesDirectorySettingModal({ children }: Props) {
                 isLoading={isLoading}
                 loadingText='Submitting'
               >
-                Save
+                {capitalizeFirstLetter(t('buttons.save'))}
               </Button>
             </ModalFooter>
           </form>
@@ -149,4 +153,4 @@ function MovesDirectorySettingModal({ children }: Props) {
   )
 }
 
-export default MovesDirectorySettingModal
+export default MovesSettingModal

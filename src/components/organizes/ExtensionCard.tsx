@@ -12,12 +12,16 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
-function ByExtCard() {
+function OrganizesExtensionCard() {
+  const { t } = useTranslation()
+
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -33,14 +37,14 @@ function ByExtCard() {
   const handleClick = async () => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
       }
 
       if (!directoryPath) {
-        toast('Select output directory', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noOutputWarning')), {
           type: 'warning'
         })
         return
@@ -48,7 +52,7 @@ function ByExtCard() {
       setIsLoading(true)
 
       // File type map
-      const fileExtMap: Record<string, TargetFiles[]> = {}
+      const fileExtMap: Record<string, TargetFile[]> = {}
       checkedTargetFiles.map(checkedTargetFileEl => {
         if (!fileExtMap[checkedTargetFileEl.ext]) fileExtMap[checkedTargetFileEl.ext] = []
         fileExtMap[checkedTargetFileEl.ext].push(checkedTargetFileEl)
@@ -66,23 +70,25 @@ function ByExtCard() {
         })
         // Move or Copy files
         await Promise.all(fileExtMap[keyEl].map(async (fileEl) => {
-          await moveOrCopyFile({
+          const isDone = await moveOrCopyFile({
             file: fileEl,
             directoryPath: fullDirectoryPath,
             isAutoDuplicatedName: setting.isAutoDuplicatedName,
             isCopy: setting.isKeepOriginal,
           })
-          // Remove from slice
-          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          if (isDone) {
+            // Remove from slice
+            dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          }
         }))
       }))
 
-      toast('Success to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
         type: 'error'
       })
     } finally {
@@ -91,10 +97,10 @@ function ByExtCard() {
   }
 
   return (
-    <Card>
-      <CardHeader onClick={toggleOpen} className="p-3">
+    <Card id="extension-card">
+      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Extension type</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.extension'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -103,7 +109,7 @@ function ByExtCard() {
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
         <CardBody className="p-3">
-          <Text>Organize files by file extension</Text>
+          <Text>{capitalizeFirstLetter(t('pages.organizes.labels.extensionSubtitle'))}</Text>
         </CardBody>
         <CardFooter className="p-3">
           <Button
@@ -112,9 +118,9 @@ function ByExtCard() {
             onClick={handleClick}
             colorScheme="primary"
             isLoading={isLoading}
-            loadingText='Organizing...'
+            loadingText={capitalizeFirstLetter(t('labels.organizing'))}
           >
-            Organize
+            {capitalizeFirstLetter(t('buttons.organize'))}
           </Button>
         </CardFooter>
       </Collapse>
@@ -122,4 +128,4 @@ function ByExtCard() {
   )
 }
 
-export default ByExtCard
+export default OrganizesExtensionCard
