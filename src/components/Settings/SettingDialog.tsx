@@ -35,7 +35,8 @@ import { RootState } from '@renderer/stores'
 import { setApplicationSetting } from '@renderer/stores/slices/application'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
-import SettingDialogVersion from '@renderer/components/Settings/Version'
+import SettingDialogProgram from '@renderer/components/Settings/Program'
+import SettingDialogMenuItem from '@renderer/components/Settings/MenuItem'
 
 const validationSchema = z.object({
   dateFormat: z.string({
@@ -139,18 +140,12 @@ function SettingDialog({ children }: Props) {
                 Menus
               </Text>
               <ul>
-                <li
-                  onClick={() => setCurrMenu(0)}
-                  className={`py-2 px-4 cursor-pointer text-white hover:bg-primary ${currMenu === 0 ? 'bg-primary text-white' : ''}`}
-                >
+                <SettingDialogMenuItem active={currMenu === 0} onClick={() => setCurrMenu(0)}>
                   General
-                </li>
-                <li
-                  onClick={() => setCurrMenu(1)}
-                  className={`py-2 px-4 cursor-pointer text-white hover:bg-primary ${currMenu === 1 ? 'bg-primary text-white' : ''}`}
-                >
-                  Version
-                </li>
+                </SettingDialogMenuItem>
+                <SettingDialogMenuItem active={currMenu === 1} onClick={() => setCurrMenu(1)}>
+                  Program
+                </SettingDialogMenuItem>
               </ul>
             </Box>
             <div className="grow">
@@ -235,7 +230,7 @@ function SettingDialog({ children }: Props) {
                 } else if(currMenu === 1) {
                   return (
                     <ModalBody>
-                      <SettingDialogVersion />
+                      <SettingDialogProgram />
                     </ModalBody>
                   )
                 }

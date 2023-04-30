@@ -1,0 +1,11 @@
+{
+  "hello": "안녕 세상아!",
+  "i18n": {
+    "en": "English",
+    "ko": "한국어"
+  },
+  "SEO": {
+    "title": "Filetaro",
+    "description": "Filetaro - 쉬운 파일 핸들러"
+  }
+}

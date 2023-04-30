@@ -2,6 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import enDictionary from './locales/en'
+import koDictionary from './locales/ko'
 import { defaultLocale } from '@renderer/types/i18n'
 // import { koDictionary } from './langs/ko'
 
@@ -9,9 +10,9 @@ const resources = {
   en: {
     translation: enDictionary,
   },
-  // ko: {
-  //   translation: koDictionary
-  // }
+  ko: {
+    translation: koDictionary
+  }
 }
 
 i18n
