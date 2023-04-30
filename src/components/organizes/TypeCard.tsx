@@ -12,12 +12,16 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { RootState } from '@renderer/stores'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
-function ByTypeCard() {
+function OrganizesTypeCard() {
+  const { t } = useTranslation()
+
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -33,14 +37,14 @@ function ByTypeCard() {
   const handleClick = async () => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
       }
 
       if (!directoryPath) {
-        toast('Select output directory', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noOutputWarning')), {
           type: 'warning'
         })
         return
@@ -48,7 +52,7 @@ function ByTypeCard() {
       setIsLoading(true)
 
       // File type map
-      const fileTypeMap: Record<string, TargetFiles[]> = {}
+      const fileTypeMap: Record<string, TargetFile[]> = {}
       checkedTargetFiles.map(checkedTargetFileEl => {
         if (!fileTypeMap[checkedTargetFileEl.type]) fileTypeMap[checkedTargetFileEl.type] = []
         fileTypeMap[checkedTargetFileEl.type].push(checkedTargetFileEl)
@@ -65,23 +69,25 @@ function ByTypeCard() {
         })
         // Move or Copy files
         await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
-          await moveOrCopyFile({
+          const isDone = await moveOrCopyFile({
             file: fileEl,
             directoryPath: fullDirectoryPath,
             isAutoDuplicatedName: setting.isAutoDuplicatedName,
             isCopy: setting.isKeepOriginal
           })
-          // Remove from slice
-          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          if (isDone) {
+            // Remove from slice
+            dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          }
         }))
       }))
 
-      toast('Success to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
         type: 'error'
       })
     } finally {
@@ -90,10 +96,10 @@ function ByTypeCard() {
   }
 
   return (
-    <Card>
-      <CardHeader onClick={toggleOpen} className="p-3">
+    <Card id="type-card">
+      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">File type</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.type'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -102,7 +108,7 @@ function ByTypeCard() {
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
         <CardBody className="p-3">
-          <Text>Organize files by file type</Text>
+          <Text>{capitalizeFirstLetter(t('pages.organizes.labels.typeSubtitle'))}</Text>
         </CardBody>
         <CardFooter className="p-3">
           <Button
@@ -111,9 +117,9 @@ function ByTypeCard() {
             onClick={handleClick}
             colorScheme="primary"
             isLoading={isLoading}
-            loadingText='Organizing...'
+            loadingText={capitalizeFirstLetter(t('labels.organizing'))}
           >
-            Organize
+            {capitalizeFirstLetter(t('buttons.organize'))}
           </Button>
         </CardFooter>
       </Collapse>
@@ -121,4 +127,4 @@ function ByTypeCard() {
   )
 }
 
-export default ByTypeCard
+export default OrganizesTypeCard

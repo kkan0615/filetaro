@@ -1,5 +1,6 @@
+
 import { z } from 'zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -12,54 +13,48 @@ import {
   Button,
   Card,
   CardBody, CardFooter,
-  CardHeader, Checkbox,
+  CardHeader,
   Collapse,
   Flex,
   FormControl, FormErrorMessage,
   FormLabel,
-  Heading, Input,
-  Spacer,
-  Text
+  Heading, Input, Radio, RadioGroup,
+  Spacer, Stack,
+  Text,
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 
-function RenamesReplaceCard() {
-  const { t } = useTranslation()
+const AddMethods = ['prefix', 'suffix'] as const
 
+function RenamesTextCard() {
+  const { t } = useTranslation()
   const validationSchema = z.object({
-    targetStr: z.string({
-      required_error: capitalizeFirstLetter(t('texts.validations.required')),
-    })
-      // Not empty
-      .min(1, {
-        message: capitalizeFirstLetter(t('texts.validations.required')),
-      }),
-    replaceStr: z.string({
+    text: z.string({
       required_error: capitalizeFirstLetter(t('texts.validations.required')),
     }).refine(checkSpecialCharsInName, {
       message: capitalizeFirstLetter(t('texts.validations.fileName')),
     }),
-    isReplaceAll: z.boolean({
+    methodType: z.enum(AddMethods, {
       required_error: capitalizeFirstLetter(t('texts.validations.required')),
-    })
+    }),
   })
   type ValidationSchema = z.infer<typeof validationSchema>
 
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
   const dispatch = useDispatch()
-
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
-      isReplaceAll: true,
+      methodType: 'prefix'
     }
   })
   const [isOpen, setIsOpen] = useState(false)
@@ -84,18 +79,18 @@ function RenamesReplaceCard() {
       setIsLoading(true)
 
       await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        let replacedFileName = ''
-        // Replace all text
-        if (data.isReplaceAll) {
-          replacedFileName = checkedTargetFileEl.name.replaceAll(data.targetStr, data.replaceStr)
+        // File name by type
+        let tempFileName = ''
+        if(data.methodType === 'prefix') {
+          tempFileName = `${data.text}${checkedTargetFileEl.name}`
         } else {
-          // Replace first text
-          replacedFileName = checkedTargetFileEl.name.replace(data.targetStr, data.replaceStr)
+          const splitName = checkedTargetFileEl.name.split('.')
+          const ext = splitName.pop()
+          tempFileName = `${splitName.join('')}${data.text}.${ext}`
         }
-
         const { newFileNameWithPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
-          newFileName: replacedFileName,
+          newFileName: tempFileName,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
           isKeepOriginal: setting.isKeepOriginal,
         })
@@ -124,11 +119,12 @@ function RenamesReplaceCard() {
     }
   }
 
+
   return (
-    <Card id="replace-card">
+    <Card id="add-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.replace'))}</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.add'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -138,37 +134,43 @@ function RenamesReplaceCard() {
       <Collapse in={isOpen} animateOpacity>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardBody className="p-3 space-y-4">
-            <FormControl isInvalid={!!errors.targetStr?.message}>
-              <FormLabel>{capitalizeFirstLetter(t('pages.renames.labels.targetText'))}</FormLabel>
+            <FormControl isInvalid={!!errors.text?.message}>
+              <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
               <Input
-                placeholder="Type text"
-                {...register('targetStr')}
+                placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
+                {...register('text')}
               />
-              {errors.replaceStr?.message ?
-                <FormErrorMessage>{errors.targetStr?.message}</FormErrorMessage>
+              {errors.text?.message ?
+                <FormErrorMessage>{errors.text?.message}</FormErrorMessage>
                 : null
               }
             </FormControl>
-            <FormControl isInvalid={!!errors.replaceStr?.message}>
-              <FormLabel>{capitalizeFirstLetter(t('pages.renames.labels.replaceText'))}</FormLabel>
-              <Input
-                placeholder="Type text"
-                {...register('replaceStr')}
-              />
-              {errors.replaceStr?.message ?
-                <FormErrorMessage>{errors.replaceStr?.message}</FormErrorMessage>
-                : null
-              }
-            </FormControl>
-            <Checkbox
-              size="lg"
-              iconColor="white"
-              colorScheme="primary"
-              type="checkbox"
-              {...register('isReplaceAll')}
-            >
-              <span>{capitalizeFirstLetter(t('pages.renames.labels.replaceAllText'))}</span>
-            </Checkbox>
+            <Controller
+              name="methodType"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.text?.message}>
+                  <FormLabel>{capitalizeFirstLetter(t('labels.method'))}</FormLabel>
+                  <RadioGroup onChange={onChange} value={value}>
+                    <Stack direction='row'>
+                      {AddMethods.map(addMethodEl => (
+                        <Radio
+                          {...register('methodType')}
+                          key={addMethodEl}
+                          value={addMethodEl}
+                        >
+                          {capitalizeFirstLetter(t(`labels.${addMethodEl}`))}
+                        </Radio>
+                      ))}
+                    </Stack>
+                  </RadioGroup>
+                  {errors.methodType?.message ?
+                    <FormErrorMessage>{errors.methodType?.message}</FormErrorMessage>
+                    : null
+                  }
+                </FormControl>
+              )}
+            />
           </CardBody>
           <CardFooter className="p-3">
             <Button
@@ -188,4 +190,4 @@ function RenamesReplaceCard() {
   )
 }
 
-export default RenamesReplaceCard
+export default RenamesTextCard

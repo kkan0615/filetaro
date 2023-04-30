@@ -6,38 +6,42 @@ import {
   CardHeader, Collapse, Flex,
   FormControl, FormErrorMessage,
   FormLabel,
-  Heading, Input,
-  Spacer,
+  Heading, Input, Radio, RadioGroup,
+  Spacer, Stack,
   Text,
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RootState } from '@renderer/stores'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
-interface Props {
-  type: 'included' | 'prefix' | 'suffix'
-}
+const AddMethods = ['included', 'prefix', 'suffix'] as const
 
-const validationSchema = z.object({
-  text: z.string({
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field',
+function OrganizesTextCard() {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    text: z.string({
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.fileName')),
+      }),
+    methodType: z.enum(AddMethods, {
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
     }),
-})
-type ValidationSchema = z.infer<typeof validationSchema>
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
 
-function ByTextCard({ type } : Props) {
   const checkedTargetFiles = useSelector((state: RootState) => state.organizes.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const directoryPath = useSelector((state: RootState) => state.organizes.directoryPath)
   const setting = useSelector((state: RootState) => state.organizes.setting)
@@ -46,28 +50,17 @@ function ByTextCard({ type } : Props) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
+    defaultValues: {
+      methodType: 'included'
+    }
   })
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  /**
-   * Title of card
-   */
-  const title = useMemo(() => {
-    if (type === 'included') {
-      return 'Included text type'
-    } else if (type === 'prefix') {
-      return 'Prefix text type'
-    } else if (type === 'suffix') {
-      return 'Suffix text type'
-    }
-
-    return ''
-  }, [type])
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev)
@@ -91,12 +84,12 @@ function ByTextCard({ type } : Props) {
       setIsLoading(true)
 
       // Filter the files by type
-      let filteredFiles: TargetFiles[] = []
-      if (type === 'included') {
+      let filteredFiles: TargetFile[] = []
+      if (data.methodType === 'included') {
         filteredFiles = filterIncludedFiles(data.text)
-      } else if (type === 'prefix') {
+      } else if (data.methodType === 'prefix') {
         filteredFiles = filterPrefixFiles(data.text)
-      } else if (type === 'suffix') {
+      } else if (data.methodType === 'suffix') {
         filteredFiles = filterSuffixFiles(data.text)
       }
       // If no files including file name, return
@@ -116,22 +109,25 @@ function ByTextCard({ type } : Props) {
       })
       // Loop to move or copy file
       await Promise.all(filteredFiles.map(async (fileEl) => {
-        await moveOrCopyFile({
+        const isDone = await moveOrCopyFile({
           file: fileEl,
           directoryPath: fullDirectoryPath,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
           isCopy: setting.isKeepOriginal,
         })
-        // Remove from slice
-        dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+
+        if (isDone) {
+          // Remove from slice
+          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+        }
       }))
-      toast('Success to rename files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to organize files', {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
         type: 'error'
       })
     } finally {
@@ -148,14 +144,18 @@ function ByTextCard({ type } : Props) {
   }
 
   const filterSuffixFiles = (text: string) => {
-    return checkedTargetFiles.filter(checkedTargetFileEl => checkedTargetFileEl.name.endsWith(text))
+    return checkedTargetFiles.filter(checkedTargetFileEl => {
+      const splitName = checkedTargetFileEl.name.split('.')
+      splitName.pop()
+      return splitName.join('').endsWith(text)
+    })
   }
 
   return (
-    <Card>
-      <CardHeader onClick={toggleOpen} className="p-3">
+    <Card id="text-card">
+      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">{title}</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.text'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -167,9 +167,9 @@ function ByTextCard({ type } : Props) {
           <CardBody className="p-3">
             <div className="space-y-4">
               <FormControl isInvalid={!!errors.text?.message}>
-                <FormLabel>Text</FormLabel>
+                <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
                 <Input
-                  placeholder="Type here"
+                  placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
                   {...register('text')}
                 />
                 {errors.text?.message ?
@@ -177,6 +177,32 @@ function ByTextCard({ type } : Props) {
                   : null
                 }
               </FormControl>
+              <Controller
+                name="methodType"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <FormControl isInvalid={!!errors.text?.message}>
+                    <FormLabel>{capitalizeFirstLetter(t('labels.method'))}</FormLabel>
+                    <RadioGroup onChange={onChange} value={value}>
+                      <Stack direction='row'>
+                        {AddMethods.map(addMethodEl => (
+                          <Radio
+                            {...register('methodType')}
+                            key={addMethodEl}
+                            value={addMethodEl}
+                          >
+                            {capitalizeFirstLetter(t(`labels.${addMethodEl}`))}
+                          </Radio>
+                        ))}
+                      </Stack>
+                    </RadioGroup>
+                    {errors.methodType?.message ?
+                      <FormErrorMessage>{errors.methodType?.message}</FormErrorMessage>
+                      : null
+                    }
+                  </FormControl>
+                )}
+              />
             </div>
           </CardBody>
           <CardFooter className="p-3">
@@ -186,9 +212,9 @@ function ByTextCard({ type } : Props) {
               type="submit"
               colorScheme="primary"
               isLoading={isLoading}
-              loadingText='Organizing...'
+              loadingText={capitalizeFirstLetter(t('labels.organizing'))}
             >
-              Organize
+              {capitalizeFirstLetter(t('buttons.organize'))}
             </Button>
           </CardFooter>
         </form>
@@ -197,4 +223,4 @@ function ByTextCard({ type } : Props) {
   )
 }
 
-export default ByTextCard
+export default OrganizesTextCard

@@ -1,31 +1,30 @@
 import { Outlet } from 'react-router'
-import { Suspense, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { clearMoveSlice, setMoveSetting } from '@renderer/stores/slices/moves'
 import { settingStore } from '@renderer/stores/tauriStore'
-import { MoveSetting } from '@renderer/types/models/moveDirectory'
+import { MoveSetting } from '@renderer/types/models/move'
 import { SettingStoreKey } from '@renderer/types/store'
 import CLoading from '@renderer/components/commons/Loading'
+import { Box } from '@chakra-ui/react'
 
 function Move() {
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
 
   // Load Move Page Setting
   useEffect(() => {
-    const fn = async () => {
-      const settingVal = await settingStore.get<Partial<MoveSetting>>(SettingStoreKey.MoveSetting)
-      dispatch(setMoveSetting({
-        ...settingVal,
-      }))
-    }
-    fn()
+    setIsLoading(true)
+    settingStore.get<Partial<MoveSetting>>(SettingStoreKey.MoveSetting)
+      .then((value) => {
+        dispatch(setMoveSetting({
+          ...value,
+        }))
+        setIsLoading(false)
+      })
 
     return () => {
-      dispatch(setMoveSetting({
-        isAutoDuplicatedName: false,
-        isKeepOriginal: false,
-        isDefaultCheckedOnLoad: false,
-      }))
+      setIsLoading(true)
     }
   }, [])
 
@@ -39,11 +38,9 @@ function Move() {
   }, [])
 
   return (
-    <div>
-      <Suspense fallback={<CLoading />}>
-        <Outlet />
-      </Suspense>
-    </div>
+    <Box height="100vh">
+      { isLoading ? <CLoading /> : <Outlet /> }
+    </Box>
   )
 }
 

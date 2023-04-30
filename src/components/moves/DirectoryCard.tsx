@@ -1,5 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai'
-import { MoveDirectory } from '@renderer/types/models/moveDirectory'
+import { MoveDirectory } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
@@ -42,31 +42,33 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
       // -1 means it's not slideshow mode.
       if (slideIndex === -1) {
         await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-          await moveOrCopyFile({
+          const isDone = await moveOrCopyFile({
             file: checkedTargetFileEl,
             directoryPath: directory.path,
             isAutoDuplicatedName: setting.isAutoDuplicatedName,
             isCopy: setting.isKeepOriginal
           })
-          dispatch(removeTargetFile(checkedTargetFileEl.path))
+          if (isDone)
+            dispatch(removeTargetFile(checkedTargetFileEl.path))
         }))
       } else {
         // File by index
         const targetFileByIndex = targetFiles[slideIndex]
 
-        await moveOrCopyFile({
+        const isDone = await moveOrCopyFile({
           file: targetFileByIndex,
           directoryPath: directory.path,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
           isCopy: setting.isKeepOriginal
         })
-
-        // new index of slide
-        let newSlideIndex = 0
-        if (targetFiles.length === 1) newSlideIndex = -1
-        else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
-        dispatch(setMovesSlideIndex(newSlideIndex))
-        dispatch(removeTargetFile(targetFileByIndex.path))
+        if (isDone) {
+          // new index of slide
+          let newSlideIndex = 0
+          if (targetFiles.length === 1) newSlideIndex = -1
+          else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
+          dispatch(setMovesSlideIndex(newSlideIndex))
+          dispatch(removeTargetFile(targetFileByIndex.path))
+        }
       }
 
       toast('Success to move file', {
@@ -115,15 +117,15 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
             <div className="break-all">{directory.path}</div>
           </Flex>
         </div>
-        {directory.kbd ? (
-          <div className="flex">
-            {directory.kbd.map((kbdEl) => (
-              <div key={kbdEl} className="kbd">
-                {kbdEl}
-              </div>
-            ))}
-          </div>
-        ) : null}
+        {/*{directory.kbd ? (*/}
+        {/*  <div className="flex">*/}
+        {/*    {directory.kbd.map((kbdEl) => (*/}
+        {/*      <div key={kbdEl} className="kbd">*/}
+        {/*        {kbdEl}*/}
+        {/*      </div>*/}
+        {/*    ))}*/}
+        {/*  </div>*/}
+        {/*) : null}*/}
       </CardBody>
     </Card>
   )

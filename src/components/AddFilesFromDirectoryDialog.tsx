@@ -1,9 +1,7 @@
 import { AiOutlineFolderOpen } from 'react-icons/ai'
 import { useState } from 'react'
 import { open } from '@tauri-apps/api/dialog'
-import { FileEntry, readDir } from '@tauri-apps/api/fs'
-import { getTargetFileTypeByExt, TargetFiles } from '@renderer/types/models/targetFiles'
-import { path } from '@tauri-apps/api'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -18,39 +16,38 @@ import {
   ModalHeader,
   ModalOverlay, Tooltip
 } from '@chakra-ui/react'
-
-const validationSchema = z.object({
-  directoryPath: z.string({
-    // Not empty
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field'
-    }),
-  isRecursive: z.boolean()
-})
-type ValidationSchema = z.infer<typeof validationSchema>
+import { findAllFilesInDirectory } from '@renderer/utils/file'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 interface Props {
-  onAddFiles: (files: TargetFiles[]) => void
+  onAddFiles: (files: TargetFile[]) => void
 }
 
 function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    directoryPath: z.string({
+      // Not empty
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
+    })
+      // Not empty
+      .min(1, {
+        message: capitalizeFirstLetter(t('texts.validations.required')),
+      }),
+    isRecursive: z.boolean()
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
   const {
     register,
     handleSubmit,
-    getValues,
     setValue,
-    watch,
     reset,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
   const [isOpen, setIsOpen] = useState(false)
-  // const [directoryPath, setDirectoryPath] = useState('')
-  // const [isRecursive, setIsRecursive] = useState(false)
 
   const toggleOpen = () => {
     setIsOpen((prev) => !prev)
@@ -58,7 +55,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
 
   const selectDirectory = async () => {
     const directoryPath = await open({
-      title: 'Select Directory',
+      title: capitalizeFirstLetter(t('labels.selectDirectory')),
       directory: true,
     })
     setValue('directoryPath', (directoryPath as string) || '')
@@ -66,36 +63,12 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
-      const entries = (await readDir(data.directoryPath, { recursive: data.isRecursive }))
-      const files: TargetFiles[] = []
-      const recursive = async (innerEntries: FileEntry[]) => {
-        for (let i = 0; i < innerEntries.length; i++) {
-          const entryEl = innerEntries[i]
-          // Pass empty directory
-          if (entryEl.children !== undefined && entryEl.children.length === 0) {
-            continue
-          }
-          // Recursive folder
-          if (entryEl.children && entryEl.children.length) {
-            await recursive(entryEl.children)
-            continue
-          }
-
-          const ext = await path.extname(entryEl.path)
-          files.push({
-            name: entryEl.name || '',
-            type: getTargetFileTypeByExt(ext),
-            ext,
-            checked: false,
-            path: entryEl.path,
-          })
-
-          onAddFiles(files)
-        }
-      }
-
-      await recursive(entries)
-      toast(`Success to load (${files.length}) files`, {
+      const files = await findAllFilesInDirectory({
+        directoryPath: data.directoryPath,
+        isRecursive: data.isRecursive,
+      })
+      onAddFiles(files)
+      toast(capitalizeFirstLetter(t('texts.alerts.loadFilesSuccess', { count: files.length })), {
         type: 'success'
       })
       // toggle on-off
@@ -104,7 +77,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to load files', {
+      toast(capitalizeFirstLetter(t('texts.alerts.loadFilesError')), {
         type: 'error'
       })
     }
@@ -112,11 +85,12 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
 
   return (
     <>
-      <Tooltip label="Add files from directory">
+      <Tooltip label={capitalizeFirstLetter(t('tooltips.addFilesFromDirectory'))}>
         <IconButton
+          id="add-files-from-directory-button"
           onClick={toggleOpen}
           variant="ghost"
-          aria-label="home"
+          aria-label={capitalizeFirstLetter(t('tooltips.addFilesFromDirectory'))}
           icon={<AiOutlineFolderOpen className="text-2xl" />}
         />
       </Tooltip>
@@ -125,24 +99,24 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
         <ModalContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalHeader>
-              Add files from directories
+              {capitalizeFirstLetter(t('components.addFilesFromDirectoryDialog.title'))}
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <div className="space-y-4">
                 <FormControl isInvalid={!!errors.directoryPath?.message}>
-                  <FormLabel>Select or type directory path</FormLabel>
+                  <FormLabel>{capitalizeFirstLetter(t('labels.selectDirectoryPath'))}</FormLabel>
                   <InputGroup>
                     <Input
-                      placeholder="Type here"
+                      placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
                       {...register('directoryPath')}
                     />
                     <InputRightElement>
-                      <Tooltip label="select directory">
+                      <Tooltip label={capitalizeFirstLetter(t('tooltips.selectDirectory'))}>
                         <IconButton
                           variant="ghost"
                           onClick={selectDirectory}
-                          aria-label="select directory"
+                          aria-label={capitalizeFirstLetter(t('tooltips.selectDirectory'))}
                           icon={<AiOutlineFolderOpen className="text-2xl" />}
                         >
                         </IconButton>
@@ -160,13 +134,13 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
                   colorScheme="primary"
                   {...register('isRecursive')}
                 >
-                  <span>recursive</span>
+                  <span>{capitalizeFirstLetter(t('labels.recursive'))}</span>
                 </Checkbox>
               </div>
             </ModalBody>
             <ModalFooter>
               <Button type="submit" colorScheme="primary" color="text-white">
-                Load
+                {capitalizeFirstLetter(t('buttons.load'))}
               </Button>
             </ModalFooter>
           </form>

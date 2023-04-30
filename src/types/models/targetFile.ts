@@ -6,7 +6,7 @@ const PdfExts = ['pdf']
 const WordExts = ['doc', 'docm', 'docx', 'dot', 'dotm']
 const ExcelExts = ['xls', 'xlsb', 'xlsm', 'xlsx']
 
-const TargetFileTypes = ['image', 'video', 'audio', 'pdf', 'word', 'excel', 'file'] as const
+export const TargetFileTypes = ['image', 'video', 'audio', 'pdf', 'word', 'excel', 'file'] as const
 export type TargetFileType = typeof TargetFileTypes[number]
 export const getTargetFileTypeByExt = (ext: string): TargetFileType => {
   const lowerExt = ext.toLowerCase()
@@ -27,7 +27,7 @@ export const getTargetFileTypeByExt = (ext: string): TargetFileType => {
   }
 }
 
-export interface TargetFiles {
+export interface TargetFile {
   name: string
   path: string
   checked: boolean
@@ -37,5 +37,5 @@ export interface TargetFiles {
   // buffer: Buffer
 }
 
-export type ResFile = Omit<TargetFiles, 'checked' | 'path'>
-export type UpdateTargetFiles = Partial<TargetFiles>
+export type ResFile = Omit<TargetFile, 'checked' | 'path'>
+export type UpdateTargetFiles = Partial<TargetFile>

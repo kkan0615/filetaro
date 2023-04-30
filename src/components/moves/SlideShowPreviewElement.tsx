@@ -1,9 +1,9 @@
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { Image } from '@chakra-ui/react'
 import { AiOutlineFile } from 'react-icons/all'
 
 interface Props {
-  slideTargetFileByIndex: TargetFiles | null
+  slideTargetFileByIndex: TargetFile | null
   assetUrl: string
 }
 

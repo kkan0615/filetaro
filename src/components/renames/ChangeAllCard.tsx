@@ -1,3 +1,4 @@
+
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -5,42 +6,40 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
-import { renameTargetFile } from '@renderer/utils/file'
+import { renameOrCopyTargetFile } from '@renderer/utils/file'
 import { updateRenameTargetFile } from '@renderer/stores/slices/renames'
 import { checkSpecialCharsInName } from '@renderer/utils/validation'
 import {
   Button,
   Card,
-  CardBody,
+  CardBody, CardFooter,
   CardHeader,
-  Heading,
   Collapse,
-  CardFooter,
-  FormControl,
-  FormLabel, Input, FormErrorMessage, Flex, Text, Spacer
+  Flex,
+  FormControl, FormErrorMessage,
+  FormLabel,
+  Heading, Input,
+  Spacer,
+  Text,
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
-const validationSchema = z.object({
-  text: z.string({
-    required_error: 'Required field',
-  })
-    // Not empty
-    .min(1, {
-      message: 'Required field',
-    })
-    .refine(checkSpecialCharsInName, {
+function RenamesChangeAllTextCard() {
+  const { t } = useTranslation()
+  const validationSchema = z.object({
+    text: z.string({
+      required_error: 'Required field',
+    }).refine(checkSpecialCharsInName, {
       message: '\ / : * < > | are not allowed',
-    })
-  ,
-})
-type ValidationSchema = z.infer<typeof validationSchema>
-
-function RenamesPrefixCard() {
+    }),
+  })
+  type ValidationSchema = z.infer<typeof validationSchema>
   const checkedTargetFiles = useSelector((state: RootState) => state.renames.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.renames.setting)
-  const applicationSetting = useSelector((state: RootState) => state.applications.setting)
   const dispatch = useDispatch()
+
   const {
     register,
     handleSubmit,
@@ -49,6 +48,7 @@ function RenamesPrefixCard() {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
+
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -63,18 +63,23 @@ function RenamesPrefixCard() {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       if (!checkedTargetFiles.length) {
-        toast('Select any files', {
+        toast(capitalizeFirstLetter(t('texts.alerts.noSelectedFileWarning')), {
           type: 'warning'
         })
         return
       }
       setIsLoading(true)
+      for (let i = 0; i < checkedTargetFiles.length; i++) {
+        const checkedTargetFileEl = checkedTargetFiles[i]
+        const splitName = checkedTargetFileEl.name.split('.')
+        const ext = splitName.pop()
+        const tempFileName = `${data.text}.${ext}`
 
-      await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-        const { newFileNameWithPath, newFileName } = await renameTargetFile({
+        const { newFileNameWithPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
-          newFileName: `${data.text}${checkedTargetFileEl.name}`,
-          isAutoDuplicatedName: setting.isAutoDuplicatedName,
+          newFileName: tempFileName,
+          isAutoDuplicatedName: true,
+          isKeepOriginal: setting.isKeepOriginal,
         })
 
         dispatch(updateRenameTargetFile({
@@ -85,15 +90,17 @@ function RenamesPrefixCard() {
             name: newFileName,
           }
         }))
-      }))
+      }
+      // await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
+      // }))
 
-      toast('Success to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameSuccess')), {
         type: 'success'
       })
       reset()
     } catch (e) {
       console.error(e)
-      toast('Error to rename files', {
+      toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameError')), {
         type: 'error'
       })
     } finally {
@@ -101,11 +108,12 @@ function RenamesPrefixCard() {
     }
   }
 
+
   return (
-    <Card>
-      <CardHeader onClick={toggleOpen} className="p-3">
+    <Card id="add-card">
+      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Add prefix</Heading>
+          <Heading size="md">Change all</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -114,15 +122,15 @@ function RenamesPrefixCard() {
       </CardHeader>
       <Collapse in={isOpen} animateOpacity>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <CardBody className="p-3">
+          <CardBody className="p-3 space-y-4">
             <FormControl isInvalid={!!errors.text?.message}>
-              <FormLabel>Prefix Text</FormLabel>
+              <FormLabel>Text</FormLabel>
               <Input
                 placeholder="Type text"
                 {...register('text')}
               />
               {errors.text?.message ?
-                <FormErrorMessage>{errors.text.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.text?.message}</FormErrorMessage>
                 : null
               }
             </FormControl>
@@ -145,4 +153,4 @@ function RenamesPrefixCard() {
   )
 }
 
-export default RenamesPrefixCard
+export default RenamesChangeAllTextCard

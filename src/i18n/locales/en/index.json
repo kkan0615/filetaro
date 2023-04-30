@@ -1,3 +1,221 @@
 {
-  "hello": "Hello World"
+  "hello": "Hello World",
+  "i18n": {
+    "en": "English",
+    "ko": "한국어"
+  },
+  "SEO": {
+    "title": "Filetaro",
+    "description": "Filetaro - Easy File handler"
+  },
+  "labels": {
+    "language": "language",
+    "currentVersion": "current version",
+    "preview": "preview",
+    "name": "name",
+    "path": "path",
+    "type": "type",
+    "actions": "actions",
+    "setting": "setting",
+    "keepOriginal": "keep original",
+    "autoRenameFile": "auto renaming for same file name",
+    "checkLoadedFiles": "check for loaded files",
+    "selectDirectory": "select directory",
+    "selectDirectoryPath": "select or type directory path",
+    "recursive": "recursive",
+    "text": "text",
+    "method": "method",
+    "prefix": "prefix",
+    "suffix": "suffix",
+    "included": "included",
+    "submitting": "submitting",
+    "outputPath": "output path",
+    "organizing": "organizing...",
+    "extension": "extension",
+    "delete": "delete",
+    "deleting": "deleting...",
+    "menu": "menu",
+    "saving": "saving...",
+    "confirmDeleteTitle": "delete files permanently"
+  },
+  "buttons": {
+    "setting": "setting",
+    "save": "save",
+    "load": "load",
+    "submit": "submit",
+    "organize": "organize"
+  },
+  "tooltips": {
+    "home": "home",
+    "openSetting": "open setting",
+    "addDirectories": "add directories",
+    "addFiles": "add files",
+    "addFilesFromDirectory": "add files from directory",
+    "removeFilesFromList": "remove files from list",
+    "deleteFiles": "delete files permanently",
+    "keepOriginal": "keep original file before move",
+    "autoRenameFile": "automatically rename if there is same file name in directory",
+    "checkLoadedFiles": "Check for loaded files automatically",
+    "selectDirectory": "select directory"
+  },
+  "tours": {
+    "addFilesButton": "Click it to add files",
+    "addFilesFromDirectoryButton": "Or you can load files from directory",
+    "selectionCheckboxTh": "select the files that you would like to move",
+    "selectTargetDirectory": "select or type target directory"
+  },
+  "texts": {
+    "prompts": {
+      "duplicateName": "Same name is already exists",
+      "duplicatedNameAt": "file is already exists at {{ at }}, type new name of it",
+      "delete": "would like to delete files permanently?"
+    },
+    "alerts": {
+      "saveSettingSuccess": "success to save setting",
+      "loadFilesSuccess": "success to load {{ count }} files",
+      "addFilesError": "error to add files",
+      "saveSettingError": "error to save setting",
+      "loadFilesError": "error to load files",
+      "sameDirectoryWarning": "There is same directory {{ name }}",
+      "noSelectedFileWarning": "select any files",
+      "noOutputWarning": "select output directory",
+      "noTargetDirectoryWarning": "select target directory",
+      "cancelTypeNameWarning": "Cancel to type name {{ name }}"
+    },
+    "validations": {
+      "required": "required field",
+      "fileName": " / : * < > | are not allowed"
+    }
+  },
+  "placeholders": {
+    "typeHere": "type here"
+  },
+  "components": {
+    "addFilesFromDirectoryDialog": {
+      "title": "Add files from directory"
+    },
+    "popovers": {
+      "keyword": {
+        "tooltips": {
+          "help": "Keyword help"
+        },
+        "labels": {
+          "title": "keywords",
+          "subTitle": "replace keyword to specific words",
+          "keyword": "keyword",
+          "description": "description",
+          "todayDesc": "display today with predefined format",
+          "extDesc": "display file extension",
+          "typeDesc": "display file type"
+        }
+      }
+    },
+    "settings": {
+      "menus": {
+        "general": "general",
+        "program": "program"
+      },
+      "labels": {
+        "dateFormat": "date format",
+        "includeTime": "include time",
+        "timeFormat": "time format"}
+    }
+  },
+  "pages": {
+    "home": {
+      "moves": {
+        "title": "moves",
+        "description": "Move files to new folder easily!"
+      },
+      "renames": {
+        "title": "renames",
+        "description": "Rename files (change or add)"
+      },
+      "organizes": {
+        "title": "organizes",
+        "description": "Organize files by your preference!"
+      },
+      "deletes": {
+        "title": "deletes",
+        "description": "Delete files by your preference in folder"
+      }
+    },
+    "moves": {
+      "labels": {
+        "directories": "directories"
+      },
+      "tours": {
+        "addDirectoryButton": "Add Directories to move",
+        "startSlideShowButton": "Start slide show from first"
+      },
+      "tooltips": {
+        "startSlideShow": "start slide show"
+      }
+    },
+    "renames": {
+      "tours": {
+        "addCard": "add text to file name",
+        "replaceCard": "replace specific text to new text"
+      },
+      "labels": {
+        "functions": "functions",
+        "add": "add",
+        "replace": "replace",
+        "targetText": "target text",
+        "replaceText": "replace text",
+        "replaceAllText": "replace all text"
+      },
+      "texts": {
+        "alerts": {
+          "renameSuccess": "success to rename files",
+          "renameError": "error to rename files"
+        }
+      }
+    },
+    "organizes": {
+      "tours": {
+        "directoryPathCard": "select or type output path. Organized Folders will be here",
+        "typeCard": "organize files by file type",
+        "extensionCard": "organize files by file extension",
+        "textCard": "organize files by text"
+      },
+      "labels": {
+        "functions": "functions",
+        "add": "add",
+        "replace": "replace",
+        "targetText": "target text",
+        "replaceText": "replace text",
+        "replaceAllText": "replace all text",
+        "typeSubtitle": "organize files by file type",
+        "extensionSubtitle": "organize files by extension"
+      },
+      "texts": {
+        "alerts": {
+          "organizeSuccess": "success to rename files",
+          "organizeError": "error to rename files"
+        }
+      }
+    },
+    "deletes": {
+      "labels": {
+        "features": "features",
+        "recursive": "check all files in directories in directories"
+      },
+      "placeholders": {
+        "without": "extension without ."
+      },
+      "tours": {
+        "typeCard": "delete all files by file type",
+        "textCard": "delete all files by text",
+        "extensionCard": "delete all files by file extension"
+      },
+      "texts": {
+        "alerts": {
+          "deleteSuccess": "success to delete files",
+          "deleteError": "error to delete files",
+          "noFileBytWarning": "no files by {{ standard }} in directory"
+        }
+      }
+    }
+  }
 }

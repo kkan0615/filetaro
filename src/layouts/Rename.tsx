@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router'
-import { Suspense, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Box } from '@chakra-ui/react'
 import { settingStore } from '@renderer/stores/tauriStore'
 import { SettingStoreKey } from '@renderer/types/store'
 import { RenameSetting } from '@renderer/types/models/rename'
@@ -9,24 +10,21 @@ import CLoading from '@renderer/components/commons/Loading'
 
 function RenameLayout() {
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
 
   // Load Move Page Setting
   useEffect(() => {
-    const fn = async () => {
-      const settingVal = await settingStore.get<Partial<RenameSetting>>(SettingStoreKey.RenameSetting)
-      dispatch(setRenameSetting({
-        ...settingVal,
-      }))
-    }
-    fn()
+    setIsLoading(true)
+    settingStore.get<Partial<RenameSetting>>(SettingStoreKey.RenameSetting)
+      .then(value => {
+        dispatch(setRenameSetting({
+          ...value,
+        }))
+        setIsLoading(false)
+      })
 
     return () => {
-      dispatch(setRenameSetting({
-        isAutoDuplicatedName: false,
-        isKeepOriginal: false,
-        isDefaultOpenCard: false,
-        isDefaultCheckedOnLoad: false,
-      }))
+      setIsLoading(true)
     }
   }, [])
 
@@ -40,11 +38,9 @@ function RenameLayout() {
   }, [])
 
   return (
-    <div>
-      <Suspense fallback={<CLoading />}>
-        <Outlet />
-      </Suspense>
-    </div>
+    <Box height="100vh">
+      { isLoading ? <CLoading /> : <Outlet /> }
+    </Box>
   )
 }
 

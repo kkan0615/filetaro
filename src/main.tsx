@@ -10,14 +10,26 @@ import './index.scss'
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from '@renderer/utils/libs/Chakra'
 import App from './App'
+import { TourProvider } from '@reactour/tour'
+import TourCloseBtn from '@renderer/components/buttons/TourClose'
+
+const steps: any[] = []
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   <Provider store={store}>
     <ChakraProvider theme={theme}>
-      <HashRouter>
-        <App />
-      </HashRouter>
+      <TourProvider
+        className="text-black"
+        steps={steps}
+        components={{
+          Close: TourCloseBtn
+        }}
+      >
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </TourProvider>
     </ChakraProvider>
   </Provider>
   // </React.StrictMode>

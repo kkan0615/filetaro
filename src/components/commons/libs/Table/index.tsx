@@ -1,9 +1,9 @@
 import { flexRender, Table as TTable } from '@tanstack/react-table'
-import { TargetFiles } from '@renderer/types/models/targetFiles'
+import { TargetFile } from '@renderer/types/models/targetFile'
 import { TableContainer, Table, Thead, Tr, Tbody, Th, Td } from '@chakra-ui/react'
 
 interface Props {
-  table: TTable<TargetFiles>
+  table: TTable<TargetFile>
 }
 
 function CTable({ table }: Props) {

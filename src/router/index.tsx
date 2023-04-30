@@ -5,11 +5,13 @@ import Playgrounds from '@renderer/pages/playgrounds'
 import MoveLayout from '@renderer/layouts/Move'
 import RenameLayout from '@renderer/layouts/Rename'
 import OrganizeLayout from '@renderer/layouts/Organize'
+import DeleteLayout from '@renderer/layouts/Delete'
 import { lazy } from 'react'
 
 const Moves = lazy(() => import('@renderer/pages/moves'))
 const Renames = lazy(() => import('@renderer/pages/renames'))
 const Organizes = lazy(() => import('@renderer/pages/organizes'))
+const Deletes = lazy(() => import('@renderer/pages/deletes'))
 
 export default function MainRoutes() {
   return (
@@ -25,6 +27,9 @@ export default function MainRoutes() {
         </Route>
         <Route path="organizes" element={<OrganizeLayout />}>
           <Route index element={<Organizes />} />
+        </Route>
+        <Route path="deletes" element={<DeleteLayout />}>
+          <Route index element={<Deletes />} />
         </Route>
       </Route>
     </Routes>

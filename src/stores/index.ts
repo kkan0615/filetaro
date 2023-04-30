@@ -6,6 +6,7 @@ import applicationReducer from './slices/application'
 import movesReducer from './slices/moves'
 import renamesReducer from './slices/renames'
 import organizesReducer from './slices/organizes'
+import deletesReducer from './slices/deletes'
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     moves: movesReducer,
     renames: renamesReducer,
     organizes: organizesReducer,
+    deletes: deletesReducer
   },
   devTools: true,
 })
