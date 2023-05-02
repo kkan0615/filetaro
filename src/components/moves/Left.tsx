@@ -61,7 +61,7 @@ function IndeterminatePreview({
   }
 
   return (
-    <div className="tooltip tooltip-bottom" data-tip={fileType}>
+    <div className="flex justify-center">
       <AiOutlineFile />
     </div>
   )
@@ -143,6 +143,9 @@ function MovesLeft() {
           />
         </div>
       ),
+      meta: {
+        className: 'sticky left-0',
+      },
     }),
     columnHelper.accessor('path', {
       id: 'preview',
@@ -159,14 +162,25 @@ function MovesLeft() {
           }}
         />
       ),
+      meta: {
+        className: 'text-center',
+      },
     }),
     columnHelper.accessor('name', {
       header: t('labels.name').toString(),
       cell: (info) => info.getValue(),
+      meta: {
+        className: 'max-w-[240px]',
+        tooltip: true,
+      },
     }),
     columnHelper.accessor('path', {
       header: t('labels.path').toString(),
       cell: (info) => info.getValue(),
+      meta: {
+        className: 'max-w-[240px]',
+        tooltip: true,
+      },
     }),
     columnHelper.accessor('type', {
       header: t('labels.type').toString(),

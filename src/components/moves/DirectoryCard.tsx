@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react'
+import { path } from '@tauri-apps/api'
+import { toast } from 'react-toastify'
+import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { MoveDirectory } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
-import { useEffect, useState } from 'react'
-import { path } from '@tauri-apps/api'
-import { toast } from 'react-toastify'
-import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
 import { moveOrCopyFile } from '@renderer/utils/file'
+import { useTranslation } from 'react-i18next'
+import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 interface Props {
   directory: MoveDirectory
@@ -15,6 +17,8 @@ interface Props {
 }
 
 export function MovesDirectoryCard({ directory, onRemove }: Props) {
+  const { t } = useTranslation()
+
   const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
   const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
   const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
@@ -34,7 +38,7 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
   const handleCard = async () => {
     try {
       if (slideIndex === -1 && checkedTargetFiles.length === 0) {
-        toast('Select file or open slide show mode', {
+        toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.noSelectFileWarn')), {
           type: 'warning'
         })
         return
@@ -71,12 +75,12 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
         }
       }
 
-      toast('Success to move file', {
+      toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveSuccess')), {
         type: 'success'
       })
     } catch (e) {
       console.error(e)
-      toast('Error to move file', {
+      toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveError')), {
         type: 'error'
       })
     }
@@ -96,12 +100,13 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
       onClick={handleCard}
       className="relative cursor-pointer hover:scale-105 transition ease-in-out duration-300"
     >
-      <Tooltip label="Remove directory">
+      <Tooltip label={capitalizeFirstLetter(t('labels.removeDirectory'))}>
         <IconButton
           variant="solid"
           size="xs"
           className="rounded-full absolute -top-2 -right-2"
-          onClick={handleRemove} aria-label="remove"
+          aria-label={capitalizeFirstLetter(t('labels.removeDirectory'))}
+          onClick={handleRemove}
         >
           <AiOutlineClose className="text-md" />
         </IconButton>
@@ -109,11 +114,11 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
       <CardBody>
         <div className="space-y-2">
           <Flex alignItems="center">
-            <div className="w-3/12">Name:</div>
+            <div className="w-3/12">{capitalizeFirstLetter(t('labels.name'))}:</div>
             <div>{directoryName}</div>
           </Flex>
           <Flex alignItems="center">
-            <div className="w-3/12">Path:</div>
+            <div className="w-3/12">{capitalizeFirstLetter(t('labels.path'))}:</div>
             <div className="break-all">{directory.path}</div>
           </Flex>
         </div>
