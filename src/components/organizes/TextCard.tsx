@@ -107,20 +107,21 @@ function OrganizesTextCard() {
         isOverride: setting.isOverrideDirectory,
         isAutoDuplicatedName: setting.isAutoDuplicatedName,
       })
-      // Loop to move or copy file
-      await Promise.all(filteredFiles.map(async (fileEl) => {
-        const isDone = await moveOrCopyFile({
-          file: fileEl,
-          directoryPath: fullDirectoryPath,
-          isAutoDuplicatedName: setting.isAutoDuplicatedName,
-          isCopy: setting.isKeepOriginal,
-        })
-
-        if (isDone) {
-          // Remove from slice
-          dispatch(removeOrganizeTargetFileByPath(fileEl.path))
-        }
-      }))
+      if (fullDirectoryPath) {
+        // Loop to move or copy file
+        await Promise.all(filteredFiles.map(async (fileEl) => {
+          const isDone = await moveOrCopyFile({
+            file: fileEl,
+            directoryPath: fullDirectoryPath,
+            isAutoDuplicatedName: setting.isAutoDuplicatedName,
+            isCopy: setting.isKeepOriginal,
+          })
+          if (isDone) {
+            // Remove from slice
+            dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+          }
+        }))
+      }
       toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
         type: 'success'
       })
