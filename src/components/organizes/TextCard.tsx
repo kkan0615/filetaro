@@ -23,6 +23,7 @@ import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { TargetFile } from '@renderer/types/models/targetFile'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { exists } from '@tauri-apps/api/fs'
 
 const AddMethods = ['included', 'prefix', 'suffix'] as const
 
@@ -78,6 +79,13 @@ function OrganizesTextCard() {
       if (!directoryPath) {
         toast('Select output directory', {
           type: 'warning'
+        })
+        return
+      }
+      // Check directory is existed
+      if (!await exists(directoryPath)) {
+        toast(capitalizeFirstLetter(t('texts.alerts.noExDirectoryError')), {
+          type: 'error'
         })
         return
       }

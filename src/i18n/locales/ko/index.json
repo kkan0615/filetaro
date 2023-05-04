@@ -70,6 +70,7 @@
       "addFilesError": "파일을 추가하는데 문제가 발생했습니다.",
       "saveSettingError": "설정을 저장하는데 문제가 발생했습니다.",
       "loadFilesError": "파일을 불러오는데 문제가 발생했습니다.",
+      "noExDirectoryError": "디렉토리가 존재하지 않습니다.",
       "sameDirectoryWarning": "동일 폴더가 존재합니다: {{ name }}",
       "noSelectedFileWarning": "파일을 먼저 선택해주세요.",
       "noOutputWarning": "출력할 폴더를 선택해주세요.",

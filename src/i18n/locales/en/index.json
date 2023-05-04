@@ -77,6 +77,7 @@
       "addFilesError": "error to add files",
       "saveSettingError": "error to save setting",
       "loadFilesError": "error to load files",
+      "noExDirectoryError": "error to find directory by path",
       "sameDirectoryWarning": "There is same directory {{ name }}",
       "noSelectedFileWarning": "select any files",
       "noOutputWarning": "select output directory",

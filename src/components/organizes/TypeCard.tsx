@@ -18,6 +18,7 @@ import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { exists } from '@tauri-apps/api/fs'
 
 function OrganizesTypeCard() {
   const { t } = useTranslation()
@@ -46,6 +47,13 @@ function OrganizesTypeCard() {
       if (!directoryPath) {
         toast(capitalizeFirstLetter(t('texts.alerts.noOutputWarning')), {
           type: 'warning'
+        })
+        return
+      }
+      // Check directory is existed
+      if (!await exists(directoryPath)) {
+        toast(capitalizeFirstLetter(t('texts.alerts.noExDirectoryError')), {
+          type: 'error'
         })
         return
       }
