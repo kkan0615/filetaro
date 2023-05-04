@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { getVersion } from '@tauri-apps/api/app'
+import { AiOutlineGithub } from 'react-icons/all'
+import { open } from '@tauri-apps/api/shell'
+import { useTranslation } from 'react-i18next'
 import { checkUpdate, installUpdate } from '@tauri-apps/api/updater'
 import { ask } from '@tauri-apps/api/dialog'
 import { relaunch } from '@tauri-apps/api/process'
 import { toast } from 'react-toastify'
 import CDisplayLabel from '@renderer/components/commons/labels/Display'
 import LanguageSelect from '@renderer/components/forms/LanguageSelect'
-import { FormControl, FormLabel } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Button, FormControl, FormLabel } from '@chakra-ui/react'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+
 
 function SettingDialogProgram() {
   const { t } = useTranslation()
@@ -42,6 +45,10 @@ function SettingDialogProgram() {
   //   }
   // }
 
+  const handleGitHubCLick = () => {
+    open('https://github.com/kkan0615/filetaro')
+  }
+
   return (
     <div>
       <FormControl className="mb-4">
@@ -62,6 +69,16 @@ function SettingDialogProgram() {
         {/*  </button>*/}
         {/*</div>*/}
       </div>
+      <Button
+        onClick={handleGitHubCLick}
+        mt={2}
+        leftIcon={<AiOutlineGithub className="text-xl" />}
+        colorScheme='primary'
+        textColor="white"
+        variant='solid'
+      >
+        GitHub
+      </Button>
     </div>
   )
 }
