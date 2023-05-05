@@ -75,24 +75,24 @@ function RenamesChangeAllTextCard() {
         const ext = splitName.pop()
         const tempFileName = `${data.text}.${ext}`
 
-        const { newFileNameWithPath, newFileName } = await renameOrCopyTargetFile({
+        const { newPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
           newFileName: tempFileName,
           isAutoDuplicatedName: true,
           isKeepOriginal: setting.isKeepOriginal,
         })
 
-        dispatch(updateRenameTargetFile({
-          path: checkedTargetFileEl.path,
-          newData: {
-            ...checkedTargetFileEl,
-            path: newFileNameWithPath,
-            name: newFileName,
-          }
-        }))
+        if (newPath && newFileName) {
+          dispatch(updateRenameTargetFile({
+            path: checkedTargetFileEl.path,
+            newData: {
+              ...checkedTargetFileEl,
+              path: newPath,
+              name: newFileName,
+            }
+          }))
+        }
       }
-      // await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-      // }))
 
       toast(capitalizeFirstLetter(t('pages.renames.texts.alerts.renameSuccess')), {
         type: 'success'

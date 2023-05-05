@@ -48,6 +48,102 @@ export const findAllFilesInDirectory = async ({ directoryPath ,isRecursive }: {
 }
 
 /**
+ * Generate file name
+ * @param fileName
+ * @param directoryPath
+ * @param isPassPrompt
+ */
+export const generateFileName = async ({
+  fileName,
+  directoryPath,
+  isPassPrompt,
+}: {
+  fileName: string
+  directoryPath: string
+  isPassPrompt: boolean
+}) => {
+  try {
+    let newPath = `${directoryPath}/${fileName}`
+    // Check duplicated file name
+    // Number of increment
+    let i = 1
+    // Get file extension
+    const splitName = fileName.split('.')
+    const ext = splitName.pop()
+    // Loop for check whether file name exists
+    while (await exists(newPath)) {
+      // New file name
+      let newFileName = ''
+      // Automatically set the file name
+      if (isPassPrompt) {
+        newFileName = `${splitName.join('').replace(` (${i - 1})`, '')} (${i++}).${ext}`
+      } else {
+        newFileName = prompt(capitalizeFirstLetter(i18n.t('texts.prompts.duplicatedNameAt', { at: newPath })),
+          `${splitName.join('')} (${i++}).${ext}`) || ''
+      }
+      // If user cancel to prompt
+      if (!newFileName) {
+        toast(capitalizeFirstLetter(i18n.t('texts.alerts.cancelTypeNameWarning', { name: fileName })), {
+          type: 'warning'
+        })
+        return ''
+      }
+      // Set new path
+      newPath = `${directoryPath}/${newFileName}`
+    }
+
+    return newPath
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+/**
+ * Generate file name
+ * @param fileName
+ * @param directoryPath
+ * @param isPassPrompt
+ */
+export const generateDirectoryName = async ({
+  directoryPath,
+  isPassPrompt,
+}: {
+  directoryPath: string
+  isPassPrompt: boolean
+}) => {
+  try {
+    let newName = directoryPath
+    // Check duplicated file name
+    // Number of increment
+    let i = 1
+    // Get file extension
+    // Loop for check whether file name exists
+    while (await exists(newName)) {
+      // Automatically set the file name
+      if (isPassPrompt) {
+        newName = `${newName.replace(` (${i - 1})`, '')} (${i++})`
+      } else {
+        newName = prompt(capitalizeFirstLetter(i18n.t('texts.prompts.duplicateName')),
+          `${newName} (${i++})`) || ''
+      }
+      // If user cancel to prompt
+      if (!newName) {
+        toast(capitalizeFirstLetter(i18n.t('texts.alerts.cancelTypeNameWarning', { name: newName })), {
+          type: 'warning'
+        })
+        return ''
+      }
+    }
+
+    return newName
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+/**
  * If directory in the path exists, create directory or Override based on isOverride parameter.
  * @param directoryPath
  * @param isOverride - Use existed directory
@@ -60,89 +156,21 @@ export const overrideOrCreateDirectory = async ({ directoryPath, isOverride, isA
   isAutoDuplicatedName: boolean
 }) => {
   try {
-    const dirExists = await exists(directoryPath)
-    if (dirExists) {
-      if (!isOverride) {
-        let newDirectoryPath = directoryPath
-        // Check duplicated file name
-        // Number of increment
-        let i = 1
-        while (await exists(newDirectoryPath)) {
-          // remove (number) name
-          newDirectoryPath = newDirectoryPath.replace(` (${i - 1})`, '')
-          // Automatically set the file name
-          if (isAutoDuplicatedName) {
-            newDirectoryPath = `${directoryPath} (${i++})`
-          } else {
-            newDirectoryPath = prompt(capitalizeFirstLetter(i18n.t('texts.prompts.duplicatedNameAt')),
-              `${newDirectoryPath} (${i++})`) || ''
-          }
+    if (await exists(directoryPath) && isOverride) return directoryPath
 
-          // If user cancel to prompt
-          if (!newDirectoryPath) {
-            toast('Cancel to create directory name', {
-              type: 'warning'
-            })
-            return ''
-          }
-        }
-        await createDir(newDirectoryPath)
-        return newDirectoryPath
-      }
+    const newDirectoryPath = await generateDirectoryName({
+      directoryPath,
+      isPassPrompt: isAutoDuplicatedName,
+    })
 
-      return directoryPath
-    }
+    if (!newDirectoryPath) return ''
 
-    await createDir(directoryPath)
-    return directoryPath
+    await createDir(newDirectoryPath)
+    return newDirectoryPath
   } catch (e) {
     console.error(e)
     throw e
   }
-}
-
-/**
- * Check the file name. If the file name is existed, prompt file name.
- * @param targetFile: File
- * @param directoryPath - Directory path
- * @param isAutoDuplicatedName - true, no prompt
- */
-export const checkAndPromptFileName = async ({ file, directoryPath, isAutoDuplicatedName } : {
-  file: TargetFile
-  directoryPath: string
-  isAutoDuplicatedName: boolean
-}) => {
-  let newPath = `${directoryPath}/${file.name}`
-  // Check duplicated file name
-  // Number of increment
-  let i = 1
-  // Get file extension
-  const splitName = file.name.split('.')
-  splitName.pop()
-  // Loop for check whether file name exists
-  while (await exists(newPath)) {
-    // New file name
-    let newFileName = ''
-    // Automatically set the file name
-    if (isAutoDuplicatedName) {
-      // remove (number) name
-      newFileName = `${splitName.join('').replace(` (${i - 1})`, '')} (${i++}).${file.ext}`
-    } else {
-      newFileName = prompt(capitalizeFirstLetter(i18n.t('texts.prompts.duplicatedNameAt', { at: newPath })),
-        `${splitName.join('')} (${i++}).${file.ext}`) || ''
-    }
-    // If user cancel to prompt
-    if (!newFileName) {
-      toast(capitalizeFirstLetter(i18n.t('texts.alerts.cancelTypeNameWarning', { name: file.name })), {
-        type: 'warning'
-      })
-      return ''
-    }
-    // Set new path
-    newPath = `${directoryPath}/${newFileName}`
-  }
-
-  return newPath
 }
 
 /**
@@ -160,12 +188,12 @@ export const moveOrCopyFile = async ({ file, directoryPath, isCopy = false, isAu
   isAutoDuplicatedName: boolean
 }) => {
   try {
-    const newPath = await checkAndPromptFileName({
-      file: file,
+    const newPath = await generateFileName({
+      fileName: file.name,
       directoryPath,
-      isAutoDuplicatedName,
+      isPassPrompt: isAutoDuplicatedName,
     })
-    if (!newPath) return false
+    if (!newPath) return ''
 
     if (isCopy) {
       // Copy file to new path
@@ -175,7 +203,7 @@ export const moveOrCopyFile = async ({ file, directoryPath, isCopy = false, isAu
       await renameFile(file.path, newPath)
     }
 
-    return true
+    return newPath
   }
   catch (e) {
     console.error(e)
@@ -197,35 +225,28 @@ export const renameOrCopyTargetFile = async ({ file, newFileName, isKeepOriginal
   isKeepOriginal: boolean
 }) => {
   try {
-    const path = file.path.replace(file.name, '')
     newFileName = parseKeywords({
       ...file,
       name: newFileName,
     })
-    let newFileNameWithPath = `${path}${newFileName}`
+    const newPath = await generateFileName({
+      fileName: newFileName,
+      directoryPath: file.path,
+      isPassPrompt: isAutoDuplicatedName,
+    })
+    if (!newPath) return {
+      newPath: '',
+      newFileName,
+    }
 
-    let i = 1
-    // Get file extension
-    const replacedName = newFileName.replace(`.${file.ext}`, '')
-    while (await exists(newFileNameWithPath)) {
-      console.log('test?', file.path, newFileNameWithPath)
-      // New file name
-      // Automatically set the file name
-      if (isAutoDuplicatedName) {
-        newFileName = `${replacedName.replace(` (${i - 1})`, '')} (${i++}).${file.ext}`
-        newFileNameWithPath = `${path}${newFileName}`
-      } else {
-        newFileName = prompt(capitalizeFirstLetter(i18n.t('texts.prompts.duplicatedNameAt', { name: newFileName })),
-          `${replacedName} (${i++}).${file.ext}`) || ''
-        newFileNameWithPath = `${path}${newFileName}`
-      }
-    }
+    // Keep the original file
     if (isKeepOriginal) {
-      await copyFile(file.path, newFileNameWithPath)
+      await copyFile(file.path, newPath)
     } else {
-      await renameFile(file.path, newFileNameWithPath)
+      // just rename it.
+      await renameFile(file.path, newPath)
     }
-    return { newFileNameWithPath, newFileName }
+    return { newPath, newFileName }
   } catch (e) {
     console.error(e)
     throw e

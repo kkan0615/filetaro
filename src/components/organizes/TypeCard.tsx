@@ -18,6 +18,7 @@ import { moveOrCopyFile, overrideOrCreateDirectory } from '@renderer/utils/file'
 import { removeOrganizeTargetFileByPath } from '@renderer/stores/slices/organizes'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { exists } from '@tauri-apps/api/fs'
 
 function OrganizesTypeCard() {
   const { t } = useTranslation()
@@ -49,6 +50,13 @@ function OrganizesTypeCard() {
         })
         return
       }
+      // Check directory is existed
+      if (!await exists(directoryPath)) {
+        toast(capitalizeFirstLetter(t('texts.alerts.noExDirectoryError')), {
+          type: 'error'
+        })
+        return
+      }
       setIsLoading(true)
 
       // File type map
@@ -67,19 +75,21 @@ function OrganizesTypeCard() {
           isOverride: setting.isOverrideDirectory,
           isAutoDuplicatedName: setting.isAutoDuplicatedName,
         })
-        // Move or Copy files
-        await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
-          const isDone = await moveOrCopyFile({
-            file: fileEl,
-            directoryPath: fullDirectoryPath,
-            isAutoDuplicatedName: setting.isAutoDuplicatedName,
-            isCopy: setting.isKeepOriginal
-          })
-          if (isDone) {
-            // Remove from slice
-            dispatch(removeOrganizeTargetFileByPath(fileEl.path))
-          }
-        }))
+        if (fullDirectoryPath) {
+          // Move or Copy files
+          await Promise.all(fileTypeMap[keyEl].map(async (fileEl) => {
+            const isDone = await moveOrCopyFile({
+              file: fileEl,
+              directoryPath: fullDirectoryPath,
+              isAutoDuplicatedName: setting.isAutoDuplicatedName,
+              isCopy: setting.isKeepOriginal
+            })
+            if (isDone) {
+              // Remove from slice
+              dispatch(removeOrganizeTargetFileByPath(fileEl.path))
+            }
+          }))
+        }
       }))
 
       toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {

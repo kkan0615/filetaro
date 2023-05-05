@@ -1,3 +1,17 @@
+## 0.0.3
+- add i18n 
+- updated table
+  - Moves
+  - Renames
+  - Organizes
+  - components
+- Refactors
+  - generate names
+  - generate directories
+  - renameOrCopyTargetFile function
+  - moveOrCopyFile function
+- Github button
+
 ## 0.0.2
 - Added tour
   - Move page

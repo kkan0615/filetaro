@@ -118,14 +118,14 @@ The program is using following packages.
   - [@hookform/resolvers](https://github.com/react-hook-form/resolvers)
 - [react-router-dom](https://www.npmjs.com/package/react-router-dom)
   - [react-router](https://reactrouter.com/en/main)
-- [react-i18next]()
-  - [i18next]()
-  - [i18next-browser-languagedetector]()
-- [@chakra-ui/react]()
+- [react-i18next](https://react.i18next.com/)
+  - [i18next](https://react.i18next.com/)
+  - [i18next-browser-languagedetector](https://www.npmjs.com/package/i18next-browser-languagedetector)
+- [@chakra-ui/react](https://www.npmjs.com/package/@chakra-ui/react)
 - [@emotion/react](https://emotion.sh/docs/introduction): Simple styling in React.
   - [@emotion/styled](https://emotion.sh/docs/styled)
 - [framer-motion](https://github.com/framer/motion): An open source motion library for React, made by Framer.
-- [tailwindcss]()
+- [tailwindcss](https://tailwindcss.com/)
   - [daisyui](https://daisyui.com/)
 - [react-icons](https://react-icons.github.io/react-icons): Include popular icons in your React projects easily with react-icons, which utilizes ES6 imports that allows you to include only the icons that your project is using.
 - [react-redux](https://github.com/reduxjs/react-redux): Official React bindings for Redux

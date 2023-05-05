@@ -36,7 +36,8 @@
     "deleting": "deleting...",
     "menu": "menu",
     "saving": "saving...",
-    "confirmDeleteTitle": "delete files permanently"
+    "confirmDeleteTitle": "delete files permanently",
+    "removeDirectory": "remove directory"
   },
   "buttons": {
     "setting": "setting",
@@ -76,6 +77,7 @@
       "addFilesError": "error to add files",
       "saveSettingError": "error to save setting",
       "loadFilesError": "error to load files",
+      "noExDirectoryError": "error to find directory by path",
       "sameDirectoryWarning": "There is same directory {{ name }}",
       "noSelectedFileWarning": "select any files",
       "noOutputWarning": "select output directory",
@@ -150,6 +152,13 @@
       },
       "tooltips": {
         "startSlideShow": "start slide show"
+      },
+      "texts": {
+        "alerts": {
+          "moveSuccess": "success to move",
+          "moveError": "error to move",
+          "noSelectFileWarn": "select any file or open slide show mode"
+        }
       }
     },
     "renames": {
