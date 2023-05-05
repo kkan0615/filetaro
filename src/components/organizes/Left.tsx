@@ -65,10 +65,18 @@ function OrganizeLeft() {
     columnHelper.accessor('name', {
       header: t('labels.name').toString(),
       cell: (info) => info.getValue(),
+      meta: {
+        className: 'max-w-[240px]',
+        tooltip: true,
+      },
     }),
     columnHelper.accessor('path', {
       header: t('labels.path').toString(),
       cell: (info) => info.getValue(),
+      meta: {
+        className: 'max-w-[240px]',
+        tooltip: true,
+      },
     }),
     columnHelper.accessor('type', {
       header: t('labels.type').toString(),
