@@ -10,6 +10,7 @@
   - generate directories
   - renameOrCopyTargetFile function
   - moveOrCopyFile function
+- Github button
 
 ## 0.0.2
 - Added tour

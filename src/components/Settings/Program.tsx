@@ -73,7 +73,9 @@ function SettingDialogProgram() {
         onClick={handleGitHubCLick}
         mt={2}
         leftIcon={<AiOutlineGithub className="text-xl" />}
-        colorScheme='primary'
+        style={{
+          background: '#333'
+        }}
         textColor="white"
         variant='solid'
       >

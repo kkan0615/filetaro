@@ -28,6 +28,7 @@ import { Card, CardBody, Flex, IconButton, Tooltip } from '@chakra-ui/react'
 import AddFileBtn from '@renderer/components/buttons/AddFile'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { TableMeta } from '@renderer/types/libs/table'
 
 function IndeterminatePreview({
   path,
@@ -172,7 +173,7 @@ function MovesLeft() {
       meta: {
         className: 'max-w-[240px]',
         tooltip: true,
-      },
+      } as TableMeta,
     }),
     columnHelper.accessor('path', {
       header: t('labels.path').toString(),
@@ -180,7 +181,7 @@ function MovesLeft() {
       meta: {
         className: 'max-w-[240px]',
         tooltip: true,
-      },
+      } as TableMeta,
     }),
     columnHelper.accessor('type', {
       header: t('labels.type').toString(),
