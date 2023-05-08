@@ -91,7 +91,6 @@ export const generateFileName = async ({
       // Set new path
       newPath = `${directoryPath}/${newFileName}`
     }
-
     return newPath
   } catch (e) {
     console.error(e)
@@ -229,9 +228,10 @@ export const renameOrCopyTargetFile = async ({ file, newFileName, isKeepOriginal
       ...file,
       name: newFileName,
     })
+    const directoryPath = await path.dirname(file.path)
     const newPath = await generateFileName({
       fileName: newFileName,
-      directoryPath: file.path,
+      directoryPath,
       isPassPrompt: isAutoDuplicatedName,
     })
     if (!newPath) return {
@@ -241,6 +241,7 @@ export const renameOrCopyTargetFile = async ({ file, newFileName, isKeepOriginal
 
     // Keep the original file
     if (isKeepOriginal) {
+      console.log(file.path, newPath)
       await copyFile(file.path, newPath)
     } else {
       // just rename it.
