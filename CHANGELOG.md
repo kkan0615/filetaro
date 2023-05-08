@@ -1,3 +1,5 @@
+## 0.0.5
+
 ## 0.0.4
 - Added funding.yml
 - Improve i18n
