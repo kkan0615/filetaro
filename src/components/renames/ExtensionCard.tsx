@@ -25,8 +25,10 @@ import {
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import { ask } from '@tauri-apps/api/dialog'
+import i18n from '@renderer/i18n'
 
-function RenamesChangeAllTextCard() {
+function RenamesExtensionCard() {
   const { t } = useTranslation()
   const validationSchema = z.object({
     text: z.string({
@@ -68,12 +70,21 @@ function RenamesChangeAllTextCard() {
         })
         return
       }
+
       setIsLoading(true)
+      const yes = await ask(capitalizeFirstLetter(i18n.t('pages.renames.texts.prompts.forceExtension')), {
+        title: capitalizeFirstLetter(i18n.t('labels.warning')),
+        type: 'warning'
+      })
+      if (!yes) return
+
       for (let i = 0; i < checkedTargetFiles.length; i++) {
         const checkedTargetFileEl = checkedTargetFiles[i]
         const splitName = checkedTargetFileEl.name.split('.')
-        const ext = splitName.pop()
-        const tempFileName = `${data.text}.${ext}`
+        // Remove extension
+        splitName.pop()
+        const tempFileName = `${splitName.join('.')}.${data.text}`
+        console.log(tempFileName)
 
         const { newPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
@@ -113,7 +124,7 @@ function RenamesChangeAllTextCard() {
     <Card id="add-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.batchAll'))}</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('labels.extension'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -153,4 +164,4 @@ function RenamesChangeAllTextCard() {
   )
 }
 
-export default RenamesChangeAllTextCard
+export default RenamesExtensionCard

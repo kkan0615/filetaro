@@ -1,5 +1,10 @@
+## 0.0.4
+- Added funding.yml
+- Improve i18n
+- Fixed path error
+
 ## 0.0.3
-- add i18n 
+- added i18n 
 - updated table
   - Moves
   - Renames
@@ -10,7 +15,7 @@
   - generate directories
   - renameOrCopyTargetFile function
   - moveOrCopyFile function
-- Github button
+- GitHub button
 
 ## 0.0.2
 - Added tour

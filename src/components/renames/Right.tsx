@@ -7,6 +7,7 @@ import RenamesSettingModal from '@renderer/components/renames/SettingDialog'
 import RenamesTextCard from '@renderer/components/renames/TextCard'
 import KeywordPopover from '@renderer/components/popovers/Keyword'
 import RenamesChangeAllTextCard from '@renderer/components/renames/ChangeAllCard'
+import RenamesExtensionCard from '@renderer/components/renames/ExtensionCard'
 
 function RenamesRight() {
   const { t } = useTranslation()
@@ -38,6 +39,7 @@ function RenamesRight() {
           <RenamesTextCard />
           <RenamesReplaceCard />
           <RenamesChangeAllTextCard />
+          <RenamesExtensionCard />
         </List>
       </Box>
     </div>
