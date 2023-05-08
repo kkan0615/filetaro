@@ -30,9 +30,9 @@ function RenamesChangeAllTextCard() {
   const { t } = useTranslation()
   const validationSchema = z.object({
     text: z.string({
-      required_error: 'Required field',
+      required_error: capitalizeFirstLetter(t('texts.validations.required')),
     }).refine(checkSpecialCharsInName, {
-      message: '\ / : * < > | are not allowed',
+      message: capitalizeFirstLetter(t('texts.validations.fileName')),
     }),
   })
   type ValidationSchema = z.infer<typeof validationSchema>
@@ -113,7 +113,7 @@ function RenamesChangeAllTextCard() {
     <Card id="add-card">
       <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
         <Flex alignItems="center">
-          <Heading size="md">Change all</Heading>
+          <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.batchAll'))}</Heading>
           <Spacer />
           <Text fontSize="2xl">
             {isOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -124,9 +124,9 @@ function RenamesChangeAllTextCard() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardBody className="p-3 space-y-4">
             <FormControl isInvalid={!!errors.text?.message}>
-              <FormLabel>Text</FormLabel>
+              <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
               <Input
-                placeholder="Type text"
+                placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
                 {...register('text')}
               />
               {errors.text?.message ?
@@ -142,9 +142,9 @@ function RenamesChangeAllTextCard() {
               colorScheme="primary"
               type="submit"
               isLoading={isLoading}
-              loadingText='Submitting'
+              loadingText={capitalizeFirstLetter(t('labels.submitting'))}
             >
-              Submit
+              {capitalizeFirstLetter(t('buttons.submit'))}
             </Button>
           </CardFooter>
         </form>
