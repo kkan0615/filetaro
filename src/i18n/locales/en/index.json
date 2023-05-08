@@ -37,7 +37,8 @@
     "menu": "menu",
     "saving": "saving...",
     "confirmDeleteTitle": "delete files permanently",
-    "removeDirectory": "remove directory"
+    "removeDirectory": "remove directory",
+    "warning": "warning"
   },
   "buttons": {
     "setting": "setting",
@@ -172,9 +173,13 @@
         "replace": "replace",
         "targetText": "target text",
         "replaceText": "replace text",
-        "replaceAllText": "replace all text"
+        "replaceAllText": "replace all text",
+        "batchAll": "batch all"
       },
       "texts": {
+        "prompts": {
+          "forceExtension": "Some files can be broken. Would like to change extension?"
+        },
         "alerts": {
           "renameSuccess": "success to rename files",
           "renameError": "error to rename files"
