@@ -35,7 +35,10 @@
     "delete": "삭제",
     "deleting": "삭제 중...",
     "menu": "메뉴",
-    "saving": "저장중 ..."
+    "saving": "저장중 ...",
+    "confirmDeleteTitle": "파일 영구적으로 삭제",
+    "removeDirectory": "디렉토리 제거",
+    "warning": "경고"
   },
   "buttons": {
     "setting": "설정",
@@ -64,6 +67,11 @@
     "selectTargetDirectory": "폴더 선택 혹은 입력하세요."
   },
   "texts": {
+    "prompts": {
+      "duplicateName": "동일 파일명이 존재합니다.",
+      "duplicatedNameAt": "동일파일명이 {{ at }} 에 존재합니다. 새로 입력해주세요.",
+      "delete": "파일을 영구적으로 삭제하시겠습니까?"
+    },
     "alerts": {
       "saveSettingSuccess": "성공적으로 설정을 저장했습니다.",
       "loadFilesSuccess": "성공적으로 {{ count }}개의 파일을 불러왔습니다.",
@@ -100,7 +108,7 @@
           "keyword": "키워드",
           "description": "설명",
           "todayDesc": "오늘날짜를 설정된 형식으로 보여집니다.",
-          "extDesc": "파일 확장자를 보여줍니다. display file extension",
+          "extDesc": "파일 확장자를 보여줍니다.",
           "typeDesc": "파일 타입을 보여줍니다."
         }
       }
@@ -158,12 +166,12 @@
         "replace": "치환",
         "targetText": "치환활 문자",
         "replaceText": "변경할 text",
-        "replaceAllText": "모든 문자 변경"
+        "replaceAllText": "모든 문자 변경",
+        "changeAll": "파일명 일괄변경"
       },
       "texts": {
         "prompts": {
-          "duplicatedName": "{{ at }}에 같은 파일명이 이미 존재합니다. 새로운 이름을 입력해주세요.",
-          "delete": "would like to delete files permanently?"
+          "forceExtension": "Some files can be broken. Would like to change extension?"
         },
         "alerts": {
           "renameSuccess": "성공적으로 이름을 변경했습니다.",
