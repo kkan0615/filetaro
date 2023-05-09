@@ -1,3 +1,6 @@
+## 0.0.6
+- Update tauri version
+
 ## 0.0.5
 - Renamed chakra.ts to chakra.ts
 - Changed some designs
