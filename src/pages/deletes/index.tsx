@@ -117,7 +117,7 @@ function Deletes() {
         <Box className="max-w-xl mx-auto pt-24 pb-12">
           <DeletesDirectoryBox />
         </Box>
-        <div className="p-4 pt-12">
+        <div className="p-4">
           <Flex onClick={toggleOpen} className="cursor-pointer">
             <Heading size="md" mb={4}>{capitalizeFirstLetter(t('pages.deletes.labels.features'))}</Heading>
             <Spacer />
