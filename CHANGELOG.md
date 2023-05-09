@@ -3,6 +3,7 @@
 - Changed some designs
 - Removed dev statement on delete
 - Removed some comments
+- Update tauri version
 
 ## 0.0.4
 - Added funding.yml
