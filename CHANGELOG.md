@@ -1,3 +1,9 @@
+## 0.0.5
+- Renamed chakra.ts to chakra.ts
+- Changed some designs
+- Removed dev statement on delete
+- Removed some comments
+
 ## 0.0.4
 - Added funding.yml
 - Improve i18n
