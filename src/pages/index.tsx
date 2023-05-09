@@ -56,17 +56,15 @@ function Home() {
               </CardBody>
             </Card>
           </Link>
-          {isDev &&
-            <Link className="w-full" to="/deletes">
-              <Card className="text-base-content card-bg-effect p-4">
-                <CardBody className="flex flex-col items-center">
-                  <AiOutlineDelete className="text-4xl mb-2" />
-                  <Heading size='md' className="mb-0.5 capitalize">{t('pages.home.deletes.title')}</Heading>
-                  <Text>{t('pages.home.deletes.description')}</Text>
-                </CardBody>
-              </Card>
-            </Link>
-          }
+          <Link className="w-full" to="/deletes">
+            <Card className="text-base-content card-bg-effect p-4">
+              <CardBody className="flex flex-col items-center">
+                <AiOutlineDelete className="text-4xl mb-2" />
+                <Heading size='md' className="mb-0.5 capitalize">{t('pages.home.deletes.title')}</Heading>
+                <Text>{t('pages.home.deletes.description')}</Text>
+              </CardBody>
+            </Card>
+          </Link>
           {isDev &&
             <Link className="w-full" to="/playgrounds">
               <Card className="text-base-content card-bg-effect p-4">
