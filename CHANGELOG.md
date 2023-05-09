@@ -1,3 +1,6 @@
+## 0.0.6
+- Added GitHub issue template
+
 ## 0.0.5
 - Renamed chakra.ts to chakra.ts
 - Changed some designs
