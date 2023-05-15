@@ -23,7 +23,6 @@ function Moves() {
    * Start to tour once user enter page.
    */
   useEffect(() => {
-    console.log(setting)
     // Only run if it is first time to enter the page
     if (setting.isNotFirstPage) return
 
