@@ -84,7 +84,6 @@ function RenamesExtensionCard() {
         // Remove extension
         splitName.pop()
         const tempFileName = `${splitName.join('.')}.${data.text}`
-        console.log(tempFileName)
 
         const { newPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
