@@ -38,7 +38,8 @@
     "saving": "saving...",
     "confirmDeleteTitle": "delete files permanently",
     "removeDirectory": "remove directory",
-    "warning": "warning"
+    "warning": "warning",
+    "noData": "No data"
   },
   "buttons": {
     "setting": "setting",
