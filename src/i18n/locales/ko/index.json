@@ -153,7 +153,8 @@
         "startSlideShowButton": "처음부터 슬라이드 쇼를 시작합니다."
       },
       "tooltips": {
-        "startSlideShow": "슬라이드 쇼 시작"
+        "startSlideShow": "슬라이드 쇼 시작",
+        "isAutoPlay": "슬라이드쇼에서 비디오 및 음악 자동 재생"
       }
     },
     "renames": {
