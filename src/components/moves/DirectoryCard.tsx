@@ -3,7 +3,7 @@ import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
 import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
-import { MoveDirectory } from '@renderer/types/models/move'
+import { MoveDirectory, NO_SLIDE_INDEX } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
@@ -37,14 +37,14 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
    */
   const handleCard = async () => {
     try {
-      if (slideIndex === -1 && checkedTargetFiles.length === 0) {
+      if (slideIndex === NO_SLIDE_INDEX && checkedTargetFiles.length === 0) {
         toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.noSelectFileWarn')), {
           type: 'warning'
         })
         return
       }
       // -1 means it's not slideshow mode.
-      if (slideIndex === -1) {
+      if (slideIndex === NO_SLIDE_INDEX) {
         await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
           const isDone = await moveOrCopyFile({
             file: checkedTargetFileEl,

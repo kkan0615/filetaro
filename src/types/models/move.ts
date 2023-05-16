@@ -20,4 +20,5 @@ export interface MoveSetting {
   isAutoPlay: boolean
 }
 
-export type MoveSettingUpdate = Partial<MoveSetting>
+
+export const NO_SLIDE_INDEX = -1

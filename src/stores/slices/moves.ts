@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TargetFile } from '@renderer/types/models/targetFile'
-import { MoveDirectory, MoveSetting, MoveSettingUpdate } from '@renderer/types/models/move'
+import { MoveDirectory, MoveSetting } from '@renderer/types/models/move'
 
 const name = 'moves'
 
@@ -29,7 +29,7 @@ export const moveSlice = createSlice({
   name,
   initialState,
   reducers: {
-    setMoveSetting: (state, action: PayloadAction<MoveSettingUpdate>) => {
+    setMoveSetting: (state, action: PayloadAction<Partial<MoveSetting>>) => {
       state.setting = {
         ...state.setting,
         ...action.payload
