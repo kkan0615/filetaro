@@ -20,7 +20,7 @@ import {
   FormLabel,
   Heading, Input, Radio, RadioGroup,
   Spacer, Stack,
-  Text,
+  Text, useBoolean,
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { useTranslation } from 'react-i18next'
@@ -57,16 +57,13 @@ function RenamesTextCard() {
       methodType: 'prefix'
     }
   })
-  const [isOpen, setIsOpen] = useState(false)
+
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    setIsOpen(setting.isDefaultOpenCard)
+    if (setting.isDefaultOpenCard) setIsOpen.toggle()
   }, [setting.isDefaultOpenCard])
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -124,7 +121,7 @@ function RenamesTextCard() {
 
   return (
     <Card id="add-card">
-      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
+      <CardHeader onClick={setIsOpen.toggle} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">{capitalizeFirstLetter(t('pages.renames.labels.add'))}</Heading>
           <Spacer />

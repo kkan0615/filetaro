@@ -4,7 +4,6 @@
 - Added auto play feature
 - Updated audio element in slide show
 - Update toggle hook (useState -> useBoolean hook in Chakra UI)
-  - setting dialogs
 
 ## 0.0.5
 - Renamed chakra.ts to chakra.ts
