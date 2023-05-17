@@ -38,6 +38,15 @@ export const moveSlice = createSlice({
     addMoveDirectory: (state, action: PayloadAction<MoveDirectory>) => {
       state.moveDirectories = [...state.moveDirectories, action.payload]
     },
+    updateMoveDirectoryByPath: (state, action: PayloadAction<MoveDirectory>) => {
+      state.moveDirectories = state.moveDirectories.map(moveDirectoryEl => {
+        if (moveDirectoryEl.path === action.payload.path) {
+          return action.payload
+        }
+
+        return moveDirectoryEl
+      })
+    },
     removeMoveDirectory: (state, action: PayloadAction<MoveDirectory>) => {
       state.moveDirectories = state.moveDirectories.filter(
         (directoryEl) => directoryEl.path !== action.payload.path
@@ -87,6 +96,7 @@ export const moveSlice = createSlice({
 export const {
   setMoveSetting,
   addMoveDirectory,
+  updateMoveDirectoryByPath,
   removeMoveDirectory,
   addTargetFile,
   removeTargetFile,

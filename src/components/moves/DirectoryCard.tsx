@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
-import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
+import { Card, Tooltip, IconButton, CardBody, Flex, Kbd } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { MoveDirectory, NO_SLIDE_INDEX } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,7 @@ import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/mo
 import { moveOrCopyFile } from '@renderer/utils/file'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import DirectoryCardKbdDialog from '@renderer/components/moves/DirectoryCardKbdDialog'
 
 interface Props {
   directory: MoveDirectory
@@ -121,16 +122,17 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
             <div className="w-3/12">{capitalizeFirstLetter(t('labels.path'))}:</div>
             <div className="break-all">{directory.path}</div>
           </Flex>
+          <div className="flex">
+            <div className="flex gap-x-2">
+              {directory.kbd?.map((kbdEl) => (
+                <Kbd key={kbdEl}>
+                  {kbdEl}
+                </Kbd>
+              ))}
+            </div>
+            <DirectoryCardKbdDialog directory={directory} />
+          </div>
         </div>
-        {/*{directory.kbd ? (*/}
-        {/*  <div className="flex">*/}
-        {/*    {directory.kbd.map((kbdEl) => (*/}
-        {/*      <div key={kbdEl} className="kbd">*/}
-        {/*        {kbdEl}*/}
-        {/*      </div>*/}
-        {/*    ))}*/}
-        {/*  </div>*/}
-        {/*) : null}*/}
       </CardBody>
     </Card>
   )

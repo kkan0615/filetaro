@@ -10,6 +10,7 @@ import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading, Box }
 import { toast } from 'react-toastify'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
 
 function MovesRight() {
   const { t } = useTranslation()
@@ -23,7 +24,10 @@ function MovesRight() {
       multiple: true,
     })
     if (directoryPaths && directoryPaths.length) {
-      (directoryPaths as string[]).map((directoryPathEl) => {
+      // let metaKey = 'ctrl'
+      // let num = 2;
+
+      (directoryPaths as string[]).map((directoryPathEl, index) => {
         const foundIndex = directories.findIndex((directoryEl) => directoryEl.path === directoryPathEl)
         if (foundIndex !== -1) {
           toast(capitalizeFirstLetter(t('texts.alerts.sameDirectoryWarning', { name: directories[foundIndex].path })), {
@@ -32,9 +36,45 @@ function MovesRight() {
           return
         }
 
+        console.log('test?')
+        // Set kbd
+        // let kbd = [metaKey, (num - 1).toString()]
+        // while (kbd.length >= 0 &&
+        // directories.findIndex(directoryEl => directoryEl.kbd?.join('+') === kbd.join('+')) !== -1) {
+        //   // 65 = a, 90 = z
+        //   if (num === 10) num = 0
+        //   if (num === 0) num = 11
+        //   if (num >= 11 && metaKey === 'ctrl') {
+        //     metaKey = 'alt'
+        //     num = 1
+        //     kbd = [metaKey, (num++).toString()]
+        //   } else if (num >= 11 && metaKey === 'alt') {
+        //     metaKey = 'shift'
+        //     num = 1
+        //     kbd = [metaKey, (num++).toString()]
+        //   } else if(num >= 11 && metaKey === 'shift') {
+        //     metaKey = 'ctrl'
+        //     num = 65
+        //     kbd = [metaKey, String.fromCharCode(num++)]
+        //   } else if (num >= 91 && metaKey === 'ctrl') {
+        //     metaKey = 'alt'
+        //     num = 65
+        //     kbd = [metaKey, String.fromCharCode(num++)]
+        //   } else if (num >= 91 && metaKey === 'alt') {
+        //     metaKey = 'shift'
+        //     num = 65
+        //     kbd = [metaKey, String.fromCharCode(num++)]
+        //   } else {
+        //     kbd = []
+        //   }
+        // }
+        // metaKey = 'ctrl'
+        // num = 2 + index + 1
+
         dispatch(
           addMoveDirectory({
             path: directoryPathEl,
+            // kbd,
           })
         )
       })
