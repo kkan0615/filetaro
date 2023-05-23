@@ -92,7 +92,8 @@
     }
   },
   "placeholders": {
-    "typeHere": "type here"
+    "typeHere": "type here",
+    "listeningKBD": "Press any keys"
   },
   "components": {
     "addFilesFromDirectoryDialog": {

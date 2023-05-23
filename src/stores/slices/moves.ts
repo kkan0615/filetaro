@@ -9,6 +9,7 @@ export interface MoveState {
   moveDirectories: MoveDirectory[]
   targetFiles: TargetFile[]
   movesSlideIndex: number
+  isBlockKey: boolean // block to listen keyup
 }
 
 const initialState: MoveState = {
@@ -23,6 +24,7 @@ const initialState: MoveState = {
   moveDirectories: [],
   targetFiles: [],
   movesSlideIndex: -1,
+  isBlockKey: false
 }
 
 export const moveSlice = createSlice({
@@ -34,6 +36,9 @@ export const moveSlice = createSlice({
         ...state.setting,
         ...action.payload
       }
+    },
+    setMoveIsBlockKey: (state, action: PayloadAction<boolean>) => {
+      state.isBlockKey = action.payload
     },
     addMoveDirectory: (state, action: PayloadAction<MoveDirectory>) => {
       state.moveDirectories = [...state.moveDirectories, action.payload]
@@ -88,6 +93,7 @@ export const moveSlice = createSlice({
       state.moveDirectories = []
       state. targetFiles = []
       state.movesSlideIndex= -1
+      state.isBlockKey = false
     }
   },
 })
@@ -95,6 +101,7 @@ export const moveSlice = createSlice({
 // this is for dispatch
 export const {
   setMoveSetting,
+  setMoveIsBlockKey,
   addMoveDirectory,
   updateMoveDirectoryByPath,
   removeMoveDirectory,

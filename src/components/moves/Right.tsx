@@ -10,7 +10,7 @@ import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading, Box }
 import { toast } from 'react-toastify'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import _ from 'lodash'
 
 function MovesRight() {
   const { t } = useTranslation()
@@ -24,7 +24,7 @@ function MovesRight() {
       multiple: true,
     })
     if (directoryPaths && directoryPaths.length) {
-      let metaKey = 'ctrl'
+      let metaKey = 'control'
       let num = 1
       let isLast = false
       const kbdList = directories
@@ -42,11 +42,11 @@ function MovesRight() {
 
         /** Check existed */
         const isEx = () => {
-          return kbdList.findIndex(kbdEl => JSON.stringify(kbdEl) === JSON.stringify([metaKey, (num % 10).toString()])) >= 0
+          return kbdList.findIndex(kbdEl => _.isEqual(kbdEl, [metaKey, (num % 10).toString()])) >= 0
         }
         while(isEx()) {
           if (num === 10) {
-            if (metaKey === 'ctrl') metaKey = 'alt'
+            if (metaKey === 'control') metaKey = 'alt'
             else if (metaKey === 'alt') metaKey = 'shift'
             else if (metaKey === 'shift') isLast = true
 

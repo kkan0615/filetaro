@@ -11,6 +11,8 @@ import { moveOrCopyFile } from '@renderer/utils/file'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import DirectoryCardKbdDialog from '@renderer/components/moves/DirectoryCardKbdDialog'
+import _ from 'lodash'
+import { getKBD } from '@renderer/utils/keyboard'
 
 interface Props {
   directory: MoveDirectory
@@ -24,6 +26,7 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
   const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
   const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.moves.setting)
+  const isBlockKey = useSelector((state: RootState) => state.moves.isBlockKey)
   const dispatch = useDispatch()
 
   const [directoryName, setDirectoryName] = useState('')
@@ -33,11 +36,29 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
       .then(value => setDirectoryName(value))
   }, [directory])
 
+  useEffect(() => {
+    if (!isBlockKey) window.addEventListener('keyup', handleKeyup)
+    return () => {
+      window.removeEventListener('keyup', handleKeyup)
+    }
+  }, [directory, checkedTargetFiles, isBlockKey])
+
+  const handleKeyup = async (event: KeyboardEvent) => {
+    const kbd = getKBD(event)
+    if (!kbd.length) return
+
+    console.log(kbd, _.isEqual(directory.kbd ,kbd), checkedTargetFiles.length)
+    if (_.isEqual(directory.kbd ,kbd) && checkedTargetFiles.length) {
+      await handleCard()
+    }
+  }
+
   /**
    * Click event for Card
    */
   const handleCard = async () => {
     try {
+      console.log('why?')
       if (slideIndex === NO_SLIDE_INDEX && checkedTargetFiles.length === 0) {
         toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.noSelectFileWarn')), {
           type: 'warning'

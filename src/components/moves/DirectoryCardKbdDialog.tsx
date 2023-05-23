@@ -18,10 +18,11 @@ import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { MoveDirectory } from '@renderer/types/models/move'
-import { updateMoveDirectoryByPath } from '@renderer/stores/slices/moves'
+import { setMoveIsBlockKey, setMoveSetting, updateMoveDirectoryByPath } from '@renderer/stores/slices/moves'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
-import { FaKeyboard } from 'react-icons/fa'
 import { ask } from '@tauri-apps/api/dialog'
+import { getKBD } from '@renderer/utils/keyboard'
+// import R from 'remeda'
 
 interface Props {
   directory: MoveDirectory
@@ -67,20 +68,18 @@ function DirectoryCardKbdDialog({ directory } :Props) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress)
+    window.addEventListener('keydown', handleKeydown)
+    dispatch(setMoveIsBlockKey(isOpen))
     return () => {
-      window.removeEventListener('keydown', handleKeyPress)
+      window.removeEventListener('keydown', handleKeydown)
+      dispatch(setMoveIsBlockKey(false))
     }
   }, [isOpen])
 
-  const handleKeyPress = (event: KeyboardEvent) => {
-    const kbds: string[] = []
-    if (event.ctrlKey) kbds.push('ctrl')
-    if (event.altKey) kbds.push('alt')
-    if (event.shiftKey) kbds.push('shift')
-    if (!['Control', 'Alt', 'Shift'].includes(event.key)) kbds.push(event.key)
+  const handleKeydown = (event: KeyboardEvent) => {
+    const kbd = getKBD(event)
 
-    setValue('text', kbds.join('+'))
+    setValue('text', kbd.join('+'))
   }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
@@ -91,6 +90,7 @@ function DirectoryCardKbdDialog({ directory } :Props) {
       const found = directories
         .filter(directoryEl => directoryEl.kbd)
         .find(directoryEl => JSON.stringify(directoryEl.kbd?.slice().sort()) === JSON.stringify(kbd.slice().sort()))
+        // .find(directoryEl => R.equals(directoryEl.kbd?.slice().sort()), kbd.slice().sort())
       if (found && found.path !== directory.path) {
         const yes = await ask(capitalizeFirstLetter(t('pages.moves.texts.prompts.duplicatedKBD')), {
           title: capitalizeFirstLetter(t('labels.warning')),
@@ -136,14 +136,6 @@ function DirectoryCardKbdDialog({ directory } :Props) {
   return (
     <>
       <Tooltip placement="auto" label={capitalizeFirstLetter(t('labels.selectDirectory'))}>
-        {/*<Button*/}
-        {/*    size="xs"*/}
-        {/*    ml="auto"*/}
-        {/*    aria-label={capitalizeFirstLetter(t('labels.removeDirectory'))}*/}
-        {/*    onClick={handleToggleClick}*/}
-        {/*  >*/}
-        {/*    KBD*/}
-        {/*  </Button>*/}
         <IconButton
           variant="solid"
           size="xs"
@@ -168,7 +160,7 @@ function DirectoryCardKbdDialog({ directory } :Props) {
                   <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
                   {/*@TODO: Add placeholder */}
                   <Input
-                    placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
+                    placeholder={capitalizeFirstLetter(t('placeholders.listeningKBD'))}
                     readOnly={true}
                     {...register('text')}
                   />

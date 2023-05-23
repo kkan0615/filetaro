@@ -92,7 +92,8 @@
     }
   },
   "placeholders": {
-    "typeHere": "입력주해주세요."
+    "typeHere": "입력주해주세요.",
+    "listeningKBD": "키를 눌러주세요."
   },
   "components": {
     "addFilesFromDirectoryDialog": {
