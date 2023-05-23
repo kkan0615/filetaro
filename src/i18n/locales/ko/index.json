@@ -155,6 +155,17 @@
       "tooltips": {
         "startSlideShow": "슬라이드 쇼 시작",
         "isAutoPlay": "슬라이드쇼에서 비디오 및 음악 자동 재생"
+      },
+      "texts": {
+        "alerts": {
+          "moveSuccess": "성공적으로 이동했습니다.",
+          "moveError": "이동중에 문제가 발생했습니다.",
+          "noSelectFileWarn": "슬라이드 쇼 모드 혹은 파일을 선택해주세요.",
+          "replaceKBDWarn": "KBD 변경을 취소했습니다."
+        },
+        "prompts": {
+          "duplicatedKBD": "동일한 kbd 가 존재합니다. 변경하시겠습니까?"
+        }
       }
     },
     "renames": {

@@ -1,6 +1,6 @@
 import {
   Button,
-  FormControl, FormErrorMessage, FormLabel, IconButton, Input, Modal,
+  FormControl, FormErrorMessage, FormLabel, IconButton, Input, InputGroup, InputRightElement, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent, ModalFooter,
@@ -20,6 +20,8 @@ import { RootState } from '@renderer/stores'
 import { MoveDirectory } from '@renderer/types/models/move'
 import { updateMoveDirectoryByPath } from '@renderer/stores/slices/moves'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
+import { FaKeyboard } from 'react-icons/fa'
+import { ask } from '@tauri-apps/api/dialog'
 
 interface Props {
   directory: MoveDirectory
@@ -40,6 +42,16 @@ function DirectoryCardKbdDialog({ directory } :Props) {
         message: capitalizeFirstLetter(t('texts.validations.fileName')),
       }),
   })
+  //   .refine(arg => {
+  //   const kbd = arg.text.split('+')
+  //   if (directories.findIndex(directoryEl => directoryEl.kbd === kbd) === -1) {
+  //     return true
+  //   }
+  //
+  //   return false
+  // }, {
+  //   message: 'Same kdb Directory is existed'
+  // })
   type ValidationSchema = z.infer<typeof validationSchema>
   const {
     register,
@@ -55,8 +67,10 @@ function DirectoryCardKbdDialog({ directory } :Props) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (isOpen) window.addEventListener('keydown', handleKeyPress)
-    else window.removeEventListener('keydown', handleKeyPress)
+    window.addEventListener('keydown', handleKeyPress)
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress)
+    }
   }, [isOpen])
 
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -72,11 +86,32 @@ function DirectoryCardKbdDialog({ directory } :Props) {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
       setIsLoading(true)
-      const kdbs = data.text.split('+')
-
+      const kbd = data.text.split('+')
+      // Check duplicated KBD
+      const found = directories
+        .filter(directoryEl => directoryEl.kbd)
+        .find(directoryEl => JSON.stringify(directoryEl.kbd?.slice().sort()) === JSON.stringify(kbd.slice().sort()))
+      if (found && found.path !== directory.path) {
+        const yes = await ask(capitalizeFirstLetter(t('pages.moves.texts.prompts.duplicatedKBD')), {
+          title: capitalizeFirstLetter(t('labels.warning')),
+          type: 'warning'
+        })
+        if (!yes) {
+          toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.replaceKBDWarn')), {
+            type: 'warning'
+          })
+          return
+        }
+        // remove kbd
+        dispatch(updateMoveDirectoryByPath({
+          path: found.path,
+          kbd: undefined,
+        }))
+      }
+      // Change KBD
       dispatch(updateMoveDirectoryByPath({
         ...directory,
-        kbd: kdbs
+        kbd,
       }))
 
       toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
@@ -131,8 +166,10 @@ function DirectoryCardKbdDialog({ directory } :Props) {
               <div className="space-y-4">
                 <FormControl isInvalid={!!errors.text?.message}>
                   <FormLabel>{capitalizeFirstLetter(t('labels.text'))}</FormLabel>
+                  {/*@TODO: Add placeholder */}
                   <Input
                     placeholder={capitalizeFirstLetter(t('placeholders.typeHere'))}
+                    readOnly={true}
                     {...register('text')}
                   />
                   {errors.text?.message ?

@@ -24,10 +24,14 @@ function MovesRight() {
       multiple: true,
     })
     if (directoryPaths && directoryPaths.length) {
-      // let metaKey = 'ctrl'
-      // let num = 2;
+      let metaKey = 'ctrl'
+      let num = 1
+      let isLast = false
+      const kbdList = directories
+        .filter(directoryEl => !!directoryEl.kbd)
+        .map(directoryEl => directoryEl.kbd)
 
-      (directoryPaths as string[]).map((directoryPathEl, index) => {
+      await Promise.all((directoryPaths as string[]).map(async (directoryPathEl, index) => {
         const foundIndex = directories.findIndex((directoryEl) => directoryEl.path === directoryPathEl)
         if (foundIndex !== -1) {
           toast(capitalizeFirstLetter(t('texts.alerts.sameDirectoryWarning', { name: directories[foundIndex].path })), {
@@ -36,48 +40,38 @@ function MovesRight() {
           return
         }
 
-        console.log('test?')
-        // Set kbd
-        // let kbd = [metaKey, (num - 1).toString()]
-        // while (kbd.length >= 0 &&
-        // directories.findIndex(directoryEl => directoryEl.kbd?.join('+') === kbd.join('+')) !== -1) {
-        //   // 65 = a, 90 = z
-        //   if (num === 10) num = 0
-        //   if (num === 0) num = 11
-        //   if (num >= 11 && metaKey === 'ctrl') {
-        //     metaKey = 'alt'
-        //     num = 1
-        //     kbd = [metaKey, (num++).toString()]
-        //   } else if (num >= 11 && metaKey === 'alt') {
-        //     metaKey = 'shift'
-        //     num = 1
-        //     kbd = [metaKey, (num++).toString()]
-        //   } else if(num >= 11 && metaKey === 'shift') {
-        //     metaKey = 'ctrl'
-        //     num = 65
-        //     kbd = [metaKey, String.fromCharCode(num++)]
-        //   } else if (num >= 91 && metaKey === 'ctrl') {
-        //     metaKey = 'alt'
-        //     num = 65
-        //     kbd = [metaKey, String.fromCharCode(num++)]
-        //   } else if (num >= 91 && metaKey === 'alt') {
-        //     metaKey = 'shift'
-        //     num = 65
-        //     kbd = [metaKey, String.fromCharCode(num++)]
-        //   } else {
-        //     kbd = []
-        //   }
-        // }
-        // metaKey = 'ctrl'
-        // num = 2 + index + 1
+        /** Check existed */
+        const isEx = () => {
+          return kbdList.findIndex(kbdEl => JSON.stringify(kbdEl) === JSON.stringify([metaKey, (num % 10).toString()])) >= 0
+        }
+        while(isEx()) {
+          if (num === 10) {
+            if (metaKey === 'ctrl') metaKey = 'alt'
+            else if (metaKey === 'alt') metaKey = 'shift'
+            else if (metaKey === 'shift') isLast = true
 
+            num = 0
+          }
+          ++num
+        }
         dispatch(
           addMoveDirectory({
             path: directoryPathEl,
-            // kbd,
+            kbd: isLast ? undefined : [metaKey, (num % 10).toString()]
           })
         )
-      })
+
+        if (!isLast) {
+          if (num === 10) {
+            if (metaKey === 'ctrl') metaKey = 'alt'
+            else if (metaKey === 'alt') metaKey = 'shift'
+            else if (metaKey === 'shift') isLast = true
+
+            num = 0
+          }
+          ++num
+        }
+      }))
     }
   }
 

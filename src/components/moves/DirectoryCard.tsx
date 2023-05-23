@@ -92,10 +92,6 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
     onRemove(directory)
   }
 
-  const handleChangeKbd = () => {
-    //
-  }
-
   return (
     <Card
       onClick={handleCard}

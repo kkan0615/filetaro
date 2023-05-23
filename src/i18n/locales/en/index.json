@@ -161,7 +161,11 @@
         "alerts": {
           "moveSuccess": "success to move",
           "moveError": "error to move",
-          "noSelectFileWarn": "select any file or open slide show mode"
+          "noSelectFileWarn": "select any file or open slide show mode",
+          "replaceKBDWarn": "cancel to replace KBD"
+        },
+        "prompts": {
+          "duplicatedKBD": "There are same KBD. Would like to replace?"
         }
       }
     },
