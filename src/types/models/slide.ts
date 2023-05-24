@@ -1,8 +1,3 @@
-export interface MoveDirectory {
-  path: string
-  kbd?: string[]
-}
-
 /**
  * isAutoDuplicatedName: Automatically set duplicated file name
  * isKeepOriginal: Keep original file (same as copy file)
@@ -11,7 +6,7 @@ export interface MoveDirectory {
  * isNotFirstLoad: It's the first time to load files, for tour feature
  * isAutoPlay: Automatically play audio and video
  */
-export interface MoveSetting {
+export interface SlideSetting {
   isAutoDuplicatedName: boolean
   isKeepOriginal: boolean
   isDefaultCheckedOnLoad: boolean
@@ -19,3 +14,6 @@ export interface MoveSetting {
   isNotFirstLoad: boolean
   isAutoPlay: boolean
 }
+
+
+export const NO_SLIDE_INDEX = -1

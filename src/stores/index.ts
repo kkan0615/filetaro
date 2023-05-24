@@ -7,6 +7,7 @@ import movesReducer from './slices/moves'
 import renamesReducer from './slices/renames'
 import organizesReducer from './slices/organizes'
 import deletesReducer from './slices/deletes'
+import slidesReducer from './slices/slides'
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
     moves: movesReducer,
     renames: renamesReducer,
     organizes: organizesReducer,
-    deletes: deletesReducer
+    deletes: deletesReducer,
+    slides: slidesReducer,
   },
   devTools: true,
 })

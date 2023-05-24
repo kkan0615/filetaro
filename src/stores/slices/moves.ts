@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TargetFile } from '@renderer/types/models/targetFile'
 import { MoveDirectory, MoveSetting } from '@renderer/types/models/move'
+import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 
 const name = 'moves'
 
@@ -23,7 +24,7 @@ const initialState: MoveState = {
   },
   moveDirectories: [],
   targetFiles: [],
-  movesSlideIndex: -1,
+  movesSlideIndex: NO_SLIDE_INDEX,
   isBlockKey: false
 }
 

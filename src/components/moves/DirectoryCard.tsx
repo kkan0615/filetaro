@@ -3,7 +3,7 @@ import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
 import { Card, Tooltip, IconButton, CardBody, Flex, Kbd } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
-import { MoveDirectory, NO_SLIDE_INDEX } from '@renderer/types/models/move'
+import { MoveDirectory } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
@@ -13,6 +13,7 @@ import { capitalizeFirstLetter } from '@renderer/utils/text'
 import DirectoryCardKbdDialog from '@renderer/components/moves/DirectoryCardKbdDialog'
 import _ from 'lodash'
 import { getKBD } from '@renderer/utils/keyboard'
+import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 
 interface Props {
   directory: MoveDirectory

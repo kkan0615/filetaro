@@ -7,7 +7,7 @@ import { Fade, Card, CardBody, Heading, Tooltip, IconButton, Flex, Spacer, CardH
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
 import MovesSlideShowPreviewElement from '@renderer/components/moves/SlideShowPreviewElement'
-import { NO_SLIDE_INDEX } from '@renderer/types/models/move'
+import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 
 interface Props {
   isOpen: boolean
