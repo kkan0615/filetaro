@@ -241,7 +241,6 @@ export const renameOrCopyTargetFile = async ({ file, newFileName, isKeepOriginal
 
     // Keep the original file
     if (isKeepOriginal) {
-      console.log(file.path, newPath)
       await copyFile(file.path, newPath)
     } else {
       // just rename it.

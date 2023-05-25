@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { AiOutlineSetting, BiRename, ImLab, MdDriveFileMoveOutline, VscFileSubmodule } from 'react-icons/all'
+import { AiOutlineSetting, BiRename, BiSlideshow, ImLab, MdDriveFileMoveOutline, VscFileSubmodule } from 'react-icons/all'
 import SettingDialog from '@renderer/components/Settings/SettingDialog'
 import { Card, CardBody, Heading, IconButton, Text, Tooltip } from '@chakra-ui/react'
 import { AiOutlineDelete } from 'react-icons/ai'
@@ -72,6 +72,17 @@ function Home() {
                   <ImLab className="text-4xl mb-2" />
                   <Heading size='md' className="mb-0.5">Playgrounds</Heading>
                   <Text>test code in here!</Text>
+                </CardBody>
+              </Card>
+            </Link>
+          }
+          {isDev &&
+            <Link className="w-full" to="/slides">
+              <Card className="text-base-content card-bg-effect p-4">
+                <CardBody className="flex flex-col items-center">
+                  <BiSlideshow className="text-4xl mb-2" />
+                  <Heading size='md' className="mb-0.5">Slide</Heading>
+                  <Text>Move or delete files via slide</Text>
                 </CardBody>
               </Card>
             </Link>

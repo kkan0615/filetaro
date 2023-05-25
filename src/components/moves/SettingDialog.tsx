@@ -17,7 +17,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Button, Checkbox, Spacer, Tooltip,
+  Button, Checkbox, Spacer, Tooltip, useBoolean,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
@@ -26,6 +26,7 @@ const validationSchema = z.object({
   isKeepOriginal: z.boolean(),
   isAutoDuplicatedName: z.boolean(),
   isDefaultCheckedOnLoad: z.boolean(),
+  isAutoPlay: z.boolean(),
 })
 type ValidationSchema = z.infer<typeof validationSchema>
 
@@ -35,28 +36,25 @@ interface Props {
 
 function MovesSettingModal({ children }: Props) {
   const { t } = useTranslation()
+
   const setting = useSelector((state: RootState) => state.moves.setting)
   const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setValue('isAutoDuplicatedName', setting.isAutoDuplicatedName)
     setValue('isKeepOriginal', setting.isKeepOriginal)
     setValue('isDefaultCheckedOnLoad', setting.isDefaultCheckedOnLoad)
+    setValue('isAutoPlay', setting.isAutoPlay)
   }, [isOpen])
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -65,19 +63,21 @@ function MovesSettingModal({ children }: Props) {
         ...setting,
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
-        isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad
+        isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad,
+        isAutoPlay: data.isAutoPlay,
       } as MoveSetting)
 
       dispatch(setMoveSetting({
         isAutoDuplicatedName: data.isAutoDuplicatedName,
         isKeepOriginal: data.isKeepOriginal,
-        isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad
+        isDefaultCheckedOnLoad: data.isDefaultCheckedOnLoad,
+        isAutoPlay: data.isAutoPlay,
       }))
 
       toast(capitalizeFirstLetter(t('texts.alerts.saveSettingSuccess')), {
         type: 'success'
       })
-      toggleOpen()
+      setIsOpen.toggle()
     } catch (e) {
       console.error(e)
       toast(capitalizeFirstLetter(t('texts.alerts.saveSettingError')), {
@@ -90,8 +90,8 @@ function MovesSettingModal({ children }: Props) {
 
   return (
     <>
-      <div onClick={toggleOpen}>{children}</div>
-      <Modal isOpen={isOpen} onClose={toggleOpen} isCentered>
+      <div onClick={setIsOpen.toggle}>{children}</div>
+      <Modal isOpen={isOpen} onClose={setIsOpen.toggle} isCentered>
         <ModalOverlay />
         <ModalContent>
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
@@ -130,6 +130,17 @@ function MovesSettingModal({ children }: Props) {
                 >
                   <Tooltip label={capitalizeFirstLetter(t('tooltips.checkLoadedFiles'))} placement='auto'>
                     <span>{capitalizeFirstLetter(t('labels.checkLoadedFiles'))}</span>
+                  </Tooltip>
+                </Checkbox>
+                <Checkbox
+                  size="lg"
+                  iconColor="white"
+                  colorScheme="primary"
+                  type="checkbox"
+                  {...register('isAutoPlay')}
+                >
+                  <Tooltip label={capitalizeFirstLetter(t('pages.moves.tooltips.isAutoPlay'))} placement='auto'>
+                    <span>{capitalizeFirstLetter(t('pages.moves.labels.isAutoPlay'))}</span>
                   </Tooltip>
                 </Checkbox>
               </div>

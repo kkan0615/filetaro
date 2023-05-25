@@ -134,6 +134,8 @@ The program is using following packages.
 - [react-toastify](https://fkhadra.github.io/react-toastify/introduction)
 - [sass](https://sass-lang.com/): CSS with superpowers
 - [reactour/tour](https://www.npmjs.com/package/@reactour/tour): Tourist Guide into your React Components
+- [lodash](https://lodash.com/): A modern JavaScript utility library delivering modularity, performance & extras.
+  - [@types/lodash](https://www.npmjs.com/package/@types/lodash)
  
 ### Backend
 - [tauri-plugin-store](https://github.com/tauri-apps/tauri-plugin-store): Simple, persistent key-value store.

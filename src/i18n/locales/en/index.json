@@ -38,7 +38,17 @@
     "saving": "saving...",
     "confirmDeleteTitle": "delete files permanently",
     "removeDirectory": "remove directory",
-    "warning": "warning"
+    "warning": "warning",
+    "noData": "No data",
+    "changeKBD": "Change shortcut",
+    "sorts": {
+      "+createdAt":  "createdAt ascending ",
+      "-createdAt":  "createdAt descending",
+      "+name":  "name ascending ",
+      "-name":  "name descending",
+      "+path":  "path ascending ",
+      "-path":  "path descending"
+    }
   },
   "buttons": {
     "setting": "setting",
@@ -91,7 +101,8 @@
     }
   },
   "placeholders": {
-    "typeHere": "type here"
+    "typeHere": "type here",
+    "listeningKBD": "Press any keys"
   },
   "components": {
     "addFilesFromDirectoryDialog": {
@@ -145,20 +156,28 @@
     },
     "moves": {
       "labels": {
-        "directories": "directories"
+        "directories": "directories",
+        "isAutoPlay": "Automatically play in slide show"
       },
       "tours": {
         "addDirectoryButton": "Add Directories to move",
         "startSlideShowButton": "Start slide show from first"
       },
       "tooltips": {
-        "startSlideShow": "start slide show"
+        "startSlideShow": "start slide show",
+        "isAutoPlay": "Automatically play audios and videos in slide show"
       },
       "texts": {
         "alerts": {
           "moveSuccess": "success to move",
           "moveError": "error to move",
-          "noSelectFileWarn": "select any file or open slide show mode"
+          "noSelectFileWarn": "select any file or open slide show mode",
+          "replaceKBDWarn": "cancel to replace KBD",
+          "updateKBDSuccess": "Successfully update KBD",
+          "updateKBDError": "Fail to update"
+        },
+        "prompts": {
+          "duplicatedKBD": "There are same KBD. Would like to replace?"
         }
       }
     },

@@ -14,7 +14,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay, Tooltip
+  ModalOverlay, Tooltip, useBoolean
 } from '@chakra-ui/react'
 import { findAllFilesInDirectory } from '@renderer/utils/file'
 import { useTranslation } from 'react-i18next'
@@ -47,11 +47,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
-  const [isOpen, setIsOpen] = useState(false)
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
+  const [isOpen, setIsOpen] = useBoolean()
 
   const selectDirectory = async () => {
     const directoryPath = await open({
@@ -72,7 +68,7 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
         type: 'success'
       })
       // toggle on-off
-      toggleOpen()
+      setIsOpen.toggle()
       // Reset state
       reset()
     } catch (e) {
@@ -88,13 +84,13 @@ function AddFilesFromDirectoryDialog({ onAddFiles }: Props) {
       <Tooltip label={capitalizeFirstLetter(t('tooltips.addFilesFromDirectory'))}>
         <IconButton
           id="add-files-from-directory-button"
-          onClick={toggleOpen}
+          onClick={setIsOpen.toggle}
           variant="ghost"
           aria-label={capitalizeFirstLetter(t('tooltips.addFilesFromDirectory'))}
           icon={<AiOutlineFolderOpen className="text-2xl" />}
         />
       </Tooltip>
-      <Modal isOpen={isOpen} onClose={toggleOpen} isCentered>
+      <Modal isOpen={isOpen} onClose={setIsOpen.toggle} isCentered>
         <ModalOverlay />
         <ModalContent>
           <form onSubmit={handleSubmit(onSubmit)}>

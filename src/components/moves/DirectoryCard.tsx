@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { path } from '@tauri-apps/api'
 import { toast } from 'react-toastify'
-import { Card, Tooltip, IconButton, CardBody, Flex } from '@chakra-ui/react'
+import { Card, Tooltip, IconButton, CardBody, Flex, Kbd } from '@chakra-ui/react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { MoveDirectory } from '@renderer/types/models/move'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,10 @@ import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/mo
 import { moveOrCopyFile } from '@renderer/utils/file'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
+import DirectoryCardKbdDialog from '@renderer/components/moves/DirectoryCardKbdDialog'
+import _ from 'lodash'
+import { getKBD } from '@renderer/utils/keyboard'
+import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 
 interface Props {
   directory: MoveDirectory
@@ -23,6 +27,7 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
   const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
   const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
   const setting = useSelector((state: RootState) => state.moves.setting)
+  const isBlockKey = useSelector((state: RootState) => state.moves.isBlockKey)
   const dispatch = useDispatch()
 
   const [directoryName, setDirectoryName] = useState('')
@@ -32,19 +37,35 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
       .then(value => setDirectoryName(value))
   }, [directory])
 
+  useEffect(() => {
+    if (!isBlockKey) window.addEventListener('keyup', handleKeyup)
+    return () => {
+      window.removeEventListener('keyup', handleKeyup)
+    }
+  }, [directory, checkedTargetFiles, isBlockKey])
+
+  const handleKeyup = async (event: KeyboardEvent) => {
+    const kbd = getKBD(event)
+    if (!kbd.length) return
+
+    if (_.isEqual(directory.kbd ,kbd) && checkedTargetFiles.length) {
+      await handleCard()
+    }
+  }
+
   /**
    * Click event for Card
    */
   const handleCard = async () => {
     try {
-      if (slideIndex === -1 && checkedTargetFiles.length === 0) {
+      if (slideIndex === NO_SLIDE_INDEX && checkedTargetFiles.length === 0) {
         toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.noSelectFileWarn')), {
           type: 'warning'
         })
         return
       }
       // -1 means it's not slideshow mode.
-      if (slideIndex === -1) {
+      if (slideIndex === NO_SLIDE_INDEX) {
         await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
           const isDone = await moveOrCopyFile({
             file: checkedTargetFileEl,
@@ -91,10 +112,6 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
     onRemove(directory)
   }
 
-  const handleChangeKbd = () => {
-    //
-  }
-
   return (
     <Card
       onClick={handleCard}
@@ -121,16 +138,17 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
             <div className="w-3/12">{capitalizeFirstLetter(t('labels.path'))}:</div>
             <div className="break-all">{directory.path}</div>
           </Flex>
+          <div className="flex">
+            <div className="flex gap-x-2">
+              {directory.kbd?.map((kbdEl) => (
+                <Kbd key={kbdEl}>
+                  {kbdEl}
+                </Kbd>
+              ))}
+            </div>
+            <DirectoryCardKbdDialog directory={directory} />
+          </div>
         </div>
-        {/*{directory.kbd ? (*/}
-        {/*  <div className="flex">*/}
-        {/*    {directory.kbd.map((kbdEl) => (*/}
-        {/*      <div key={kbdEl} className="kbd">*/}
-        {/*        {kbdEl}*/}
-        {/*      </div>*/}
-        {/*    ))}*/}
-        {/*  </div>*/}
-        {/*) : null}*/}
       </CardBody>
     </Card>
   )

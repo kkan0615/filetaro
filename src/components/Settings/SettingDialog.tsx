@@ -21,7 +21,7 @@ import {
   FormLabel,
   FormErrorMessage,
   Select,
-  Checkbox
+  Checkbox, useBoolean
 } from '@chakra-ui/react'
 import {
   ApplicationSetting,
@@ -74,7 +74,7 @@ function SettingDialog({ children }: Props) {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
   const [currMenu, setCurrMenu ] = useState(0)
   const [isShowTimeInput, setIsShowTimeInput] = useState(false)
@@ -89,16 +89,15 @@ function SettingDialog({ children }: Props) {
     setIsShowTimeInput(isIncludeTime)
   }, [watch('isIncludeTime')])
 
-  const toggleOpen = () => {
-    if (!isOpen) {
+  useEffect(() => {
+    if (isOpen) {
       setValue('dateFormat', setting.dateFormat)
       setValue('isIncludeTime', !!setting.timeFormat)
       setValue('timeFormat', setting.timeFormat || null)
     } else {
       reset()
     }
-    setIsOpen((prev) => !prev)
-  }
+  }, [isOpen])
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -115,7 +114,7 @@ function SettingDialog({ children }: Props) {
         type: 'success'
       })
       // toggle on-off
-      toggleOpen()
+      setIsOpen.toggle()
       // Reset state
       reset()
     } catch (e) {
@@ -130,8 +129,8 @@ function SettingDialog({ children }: Props) {
 
   return (
     <>
-      <div onClick={toggleOpen}>{children}</div>
-      <Modal isOpen={isOpen} onClose={toggleOpen} isCentered>
+      <div onClick={setIsOpen.toggle}>{children}</div>
+      <Modal isOpen={isOpen} onClose={setIsOpen.toggle} isCentered>
         <ModalOverlay />
         <ModalContent height="80%" className="max-w-3xl">
           <Flex height="100%">

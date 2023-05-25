@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AiOutlineClose, AiOutlineDelete, AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@renderer/stores'
-import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
 import { toast } from 'react-toastify'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { Fade, Card, CardBody, Heading, Tooltip, IconButton, Flex, Spacer, CardHeader } from '@chakra-ui/react'
+import { RootState } from '@renderer/stores'
+import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
 import MovesSlideShowPreviewElement from '@renderer/components/moves/SlideShowPreviewElement'
+import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 
 interface Props {
   isOpen: boolean
@@ -19,7 +20,7 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
   const dispatch = useDispatch()
 
   const targetFileByIndex = useMemo(() => {
-    if (slideIndex === -1 || targetFiles.length <= slideIndex) {
+    if (slideIndex === NO_SLIDE_INDEX || targetFiles.length <= slideIndex) {
       return null
     }
 
