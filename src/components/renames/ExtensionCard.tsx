@@ -20,7 +20,7 @@ import {
   FormLabel,
   Heading, Input,
   Spacer,
-  Text,
+  Text, useBoolean,
 } from '@chakra-ui/react'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
 import { useTranslation } from 'react-i18next'
@@ -51,16 +51,12 @@ function RenamesExtensionCard() {
     resolver: zodResolver(validationSchema),
   })
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    setIsOpen(setting.isDefaultOpenCard)
+    if (setting.isDefaultOpenCard) setIsOpen.toggle()
   }, [setting.isDefaultOpenCard])
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -84,7 +80,6 @@ function RenamesExtensionCard() {
         // Remove extension
         splitName.pop()
         const tempFileName = `${splitName.join('.')}.${data.text}`
-        console.log(tempFileName)
 
         const { newPath, newFileName } = await renameOrCopyTargetFile({
           file: checkedTargetFileEl,
@@ -122,7 +117,7 @@ function RenamesExtensionCard() {
 
   return (
     <Card id="add-card">
-      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
+      <CardHeader onClick={setIsOpen.toggle} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">{capitalizeFirstLetter(t('labels.extension'))}</Heading>
           <Spacer />

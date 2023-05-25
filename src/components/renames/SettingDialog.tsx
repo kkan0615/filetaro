@@ -18,7 +18,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  Spacer, Checkbox, Tooltip
+  Spacer, Checkbox, Tooltip, useBoolean
 } from '@chakra-ui/react'
 
 const validationSchema = z.object({
@@ -45,7 +45,7 @@ function RenamesSettingModal({ children }: Props) {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -54,10 +54,6 @@ function RenamesSettingModal({ children }: Props) {
     setValue('isDefaultOpenCard', setting.isDefaultOpenCard)
     setValue('isDefaultCheckedOnLoad', setting.isDefaultCheckedOnLoad)
   }, [isOpen])
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -80,7 +76,7 @@ function RenamesSettingModal({ children }: Props) {
       toast('Success to save setting', {
         type: 'success'
       })
-      toggleOpen()
+      setIsOpen.toggle()
     } catch (e) {
       console.error(e)
       toast('Error to save setting', {
@@ -93,8 +89,8 @@ function RenamesSettingModal({ children }: Props) {
 
   return (
     <>
-      <div onClick={toggleOpen}>{children}</div>
-      <Modal isOpen={isOpen} onClose={toggleOpen} isCentered>
+      <div onClick={setIsOpen.toggle}>{children}</div>
+      <Modal isOpen={isOpen} onClose={setIsOpen.toggle} isCentered>
         <ModalOverlay />
         <ModalContent>
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>

@@ -1,11 +1,3 @@
-import dayjs from 'dayjs'
-
-export interface MoveDirectory {
-  path: string
-  kbd?: string[]
-  createdAt: string
-}
-
 /**
  * isAutoDuplicatedName: Automatically set duplicated file name
  * isKeepOriginal: Keep original file (same as copy file)
@@ -14,7 +6,7 @@ export interface MoveDirectory {
  * isNotFirstLoad: It's the first time to load files, for tour feature
  * isAutoPlay: Automatically play audio and video
  */
-export interface MoveSetting {
+export interface SlideSetting {
   isAutoDuplicatedName: boolean
   isKeepOriginal: boolean
   isDefaultCheckedOnLoad: boolean
@@ -23,5 +15,5 @@ export interface MoveSetting {
   isAutoPlay: boolean
 }
 
-export const MoveSorts = ['+createdAt', '-createdAt', '+name', '-name', '+path', '-path'] as const
-export type MoveSortType = typeof MoveSorts[number]
+
+export const NO_SLIDE_INDEX = -1

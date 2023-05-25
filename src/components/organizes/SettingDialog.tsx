@@ -16,7 +16,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  Spacer, Checkbox, Tooltip
+  Spacer, Checkbox, Tooltip, useBoolean
 } from '@chakra-ui/react'
 import { setOrganizeSetting } from '@renderer/stores/slices/organizes'
 import { OrganizeSetting } from '@renderer/types/models/organize'
@@ -41,11 +41,10 @@ function OrganizesSettingModal({ children }: Props) {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   })
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -55,10 +54,6 @@ function OrganizesSettingModal({ children }: Props) {
     setValue('isDefaultOpenCard', setting.isDefaultOpenCard)
     setValue('isDefaultCheckedOnLoad', setting.isDefaultCheckedOnLoad)
   }, [isOpen])
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -83,7 +78,7 @@ function OrganizesSettingModal({ children }: Props) {
       toast('Success to save setting', {
         type: 'success'
       })
-      toggleOpen()
+      setIsOpen.toggle()
     } catch (e) {
       console.error(e)
       toast('Error to save setting', {
@@ -96,8 +91,8 @@ function OrganizesSettingModal({ children }: Props) {
 
   return (
     <>
-      <div onClick={toggleOpen}>{children}</div>
-      <Modal isOpen={isOpen} onClose={toggleOpen} isCentered>
+      <div onClick={setIsOpen.toggle}>{children}</div>
+      <Modal isOpen={isOpen} onClose={setIsOpen.toggle} isCentered>
         <ModalOverlay />
         <ModalContent>
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>

@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TargetFile } from '@renderer/types/models/targetFile'
-import { MoveDirectory, MoveSetting, MoveSettingUpdate } from '@renderer/types/models/move'
+import { MoveDirectory, MoveSetting, MoveSortType } from '@renderer/types/models/move'
+import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 
 const name = 'moves'
 
@@ -9,6 +12,7 @@ export interface MoveState {
   moveDirectories: MoveDirectory[]
   targetFiles: TargetFile[]
   movesSlideIndex: number
+  isBlockKey: boolean // block to listen keyup
 }
 
 const initialState: MoveState = {
@@ -18,29 +22,73 @@ const initialState: MoveState = {
     isDefaultCheckedOnLoad: false,
     isNotFirstPage: false,
     isNotFirstLoad: false,
+    isAutoPlay: false,
   },
   moveDirectories: [],
   targetFiles: [],
-  movesSlideIndex: -1,
+  movesSlideIndex: NO_SLIDE_INDEX,
+  isBlockKey: false
 }
 
 export const moveSlice = createSlice({
   name,
   initialState,
   reducers: {
-    setMoveSetting: (state, action: PayloadAction<MoveSettingUpdate>) => {
+    setMoveSetting: (state, action: PayloadAction<Partial<MoveSetting>>) => {
       state.setting = {
         ...state.setting,
         ...action.payload
       }
     },
+    setMoveIsBlockKey: (state, action: PayloadAction<boolean>) => {
+      state.isBlockKey = action.payload
+    },
     addMoveDirectory: (state, action: PayloadAction<MoveDirectory>) => {
       state.moveDirectories = [...state.moveDirectories, action.payload]
+    },
+    updateMoveDirectoryByPath: (state, action: PayloadAction<MoveDirectory>) => {
+      state.moveDirectories = state.moveDirectories.map(moveDirectoryEl => {
+        if (moveDirectoryEl.path === action.payload.path) {
+          return action.payload
+        }
+
+        return moveDirectoryEl
+      })
     },
     removeMoveDirectory: (state, action: PayloadAction<MoveDirectory>) => {
       state.moveDirectories = state.moveDirectories.filter(
         (directoryEl) => directoryEl.path !== action.payload.path
       )
+    },
+    sortMoveDirectories: (state, action: PayloadAction<MoveSortType>) => {
+      const option = action.payload.slice(1)
+      const sort = action.payload.charAt(0) as '+' | '-'
+      if (!sort || !option) return
+
+      if (option === 'createdAt') {
+        state.moveDirectories.sort((a, b) => {
+          const dayjsA = dayjs(a.createdAt)
+          const dayjsB = dayjs(b.createdAt)
+          if (sort === '+') return (dayjsA.isSameOrAfter(dayjsB) ? 1 : -1)
+
+          return (dayjsA.isSameOrAfter(dayjsB) ? -1 : 1)
+        })
+      } else if (option === 'name') {
+        state.moveDirectories.sort((a, b) => {
+          const aName = a.path.split('\\').at(-1)
+          const bName = b.path.split('\\').at(-1)
+          if (!aName || !bName) return 0
+          if (sort === '+') return aName.localeCompare(bName)
+
+          return bName.localeCompare(aName)
+        })
+      } else if (option === 'path') {
+        state.moveDirectories.sort((a, b) => {
+          if (sort === '+') return a.path.localeCompare(b.path)
+
+          return b.path.localeCompare(a.path)
+        })
+      }
     },
     addTargetFile: (state, action: PayloadAction<TargetFile>) => {
       if (
@@ -72,11 +120,13 @@ export const moveSlice = createSlice({
         isKeepOriginal: false,
         isDefaultCheckedOnLoad: false,
         isNotFirstPage: false,
-        isNotFirstLoad: false
+        isNotFirstLoad: false,
+        isAutoPlay: false,
       }
       state.moveDirectories = []
       state. targetFiles = []
       state.movesSlideIndex= -1
+      state.isBlockKey = false
     }
   },
 })
@@ -84,8 +134,11 @@ export const moveSlice = createSlice({
 // this is for dispatch
 export const {
   setMoveSetting,
+  setMoveIsBlockKey,
   addMoveDirectory,
+  updateMoveDirectoryByPath,
   removeMoveDirectory,
+  sortMoveDirectories,
   addTargetFile,
   removeTargetFile,
   updateTargetFileCheckByIndex,

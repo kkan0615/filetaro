@@ -6,7 +6,7 @@ import {
   CardHeader, Collapse, Flex,
   Heading,
   Spacer,
-  Text
+  Text, useBoolean
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,12 +28,8 @@ function OrganizesExtensionCard() {
   const setting = useSelector((state: RootState) => state.organizes.setting)
   const dispatch = useDispatch()
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const handleClick = async () => {
     try {
@@ -108,7 +104,7 @@ function OrganizesExtensionCard() {
 
   return (
     <Card id="extension-card">
-      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
+      <CardHeader onClick={setIsOpen.toggle} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">{capitalizeFirstLetter(t('labels.extension'))}</Heading>
           <Spacer />

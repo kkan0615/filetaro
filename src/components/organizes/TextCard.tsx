@@ -8,7 +8,7 @@ import {
   FormLabel,
   Heading, Input, Radio, RadioGroup,
   Spacer, Stack,
-  Text,
+  Text, useBoolean,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -60,12 +60,8 @@ function OrganizesTextCard() {
     }
   })
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
-
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev)
-  }
 
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     try {
@@ -162,7 +158,7 @@ function OrganizesTextCard() {
 
   return (
     <Card id="text-card">
-      <CardHeader onClick={toggleOpen} className="p-3 cursor-pointer">
+      <CardHeader onClick={setIsOpen.toggle} className="p-3 cursor-pointer">
         <Flex alignItems="center">
           <Heading size="md">{capitalizeFirstLetter(t('labels.text'))}</Heading>
           <Spacer />

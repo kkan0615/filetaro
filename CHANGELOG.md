@@ -1,5 +1,10 @@
 ## 0.0.6
 - Added GitHub issue template
+- Added more i18n
+- Added auto-play feature
+- Added lodash package
+- Updated audio element in slide show
+- Update toggle hook (useState -> useBoolean hook in Chakra UI)
 
 ## 0.0.5
 - Renamed chakra.ts to chakra.ts
