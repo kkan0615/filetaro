@@ -48,7 +48,6 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
     const kbd = getKBD(event)
     if (!kbd.length) return
 
-    console.log(kbd, _.isEqual(directory.kbd ,kbd), checkedTargetFiles.length)
     if (_.isEqual(directory.kbd ,kbd) && checkedTargetFiles.length) {
       await handleCard()
     }
@@ -59,7 +58,6 @@ export function MovesDirectoryCard({ directory, onRemove }: Props) {
    */
   const handleCard = async () => {
     try {
-      console.log('why?')
       if (slideIndex === NO_SLIDE_INDEX && checkedTargetFiles.length === 0) {
         toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.noSelectFileWarn')), {
           type: 'warning'

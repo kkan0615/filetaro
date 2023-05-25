@@ -39,7 +39,16 @@
     "confirmDeleteTitle": "delete files permanently",
     "removeDirectory": "remove directory",
     "warning": "warning",
-    "noData": "No data"
+    "noData": "No data",
+    "changeKBD": "Change shortcut",
+    "sorts": {
+      "+createdAt":  "createdAt ascending ",
+      "-createdAt":  "createdAt descending",
+      "+name":  "name ascending ",
+      "-name":  "name descending",
+      "+path":  "path ascending ",
+      "-path":  "path descending"
+    }
   },
   "buttons": {
     "setting": "setting",
@@ -163,7 +172,9 @@
           "moveSuccess": "success to move",
           "moveError": "error to move",
           "noSelectFileWarn": "select any file or open slide show mode",
-          "replaceKBDWarn": "cancel to replace KBD"
+          "replaceKBDWarn": "cancel to replace KBD",
+          "updateKBDSuccess": "Successfully update KBD",
+          "updateKBDError": "Fail to update"
         },
         "prompts": {
           "duplicatedKBD": "There are same KBD. Would like to replace?"

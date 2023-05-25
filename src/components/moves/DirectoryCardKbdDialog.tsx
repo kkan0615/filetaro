@@ -16,13 +16,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
+import { AiOutlinePlus } from 'react-icons/ai'
+import { ask } from '@tauri-apps/api/dialog'
 import { RootState } from '@renderer/stores'
 import { MoveDirectory } from '@renderer/types/models/move'
-import { setMoveIsBlockKey, setMoveSetting, updateMoveDirectoryByPath } from '@renderer/stores/slices/moves'
-import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
-import { ask } from '@tauri-apps/api/dialog'
+import { setMoveIsBlockKey, updateMoveDirectoryByPath } from '@renderer/stores/slices/moves'
 import { getKBD } from '@renderer/utils/keyboard'
-// import R from 'remeda'
 
 interface Props {
   directory: MoveDirectory
@@ -43,22 +42,11 @@ function DirectoryCardKbdDialog({ directory } :Props) {
         message: capitalizeFirstLetter(t('texts.validations.fileName')),
       }),
   })
-  //   .refine(arg => {
-  //   const kbd = arg.text.split('+')
-  //   if (directories.findIndex(directoryEl => directoryEl.kbd === kbd) === -1) {
-  //     return true
-  //   }
-  //
-  //   return false
-  // }, {
-  //   message: 'Same kdb Directory is existed'
-  // })
   type ValidationSchema = z.infer<typeof validationSchema>
   const {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -67,6 +55,9 @@ function DirectoryCardKbdDialog({ directory } :Props) {
   const [isOpen, setIsOpen] = useBoolean()
   const [isLoading, setIsLoading] = useState(false)
 
+  /**
+   * Keydown event Effect
+   */
   useEffect(() => {
     window.addEventListener('keydown', handleKeydown)
     dispatch(setMoveIsBlockKey(isOpen))
@@ -76,6 +67,10 @@ function DirectoryCardKbdDialog({ directory } :Props) {
     }
   }, [isOpen])
 
+  /**
+   * window Keydown handler
+   * @param event
+   */
   const handleKeydown = (event: KeyboardEvent) => {
     const kbd = getKBD(event)
 
@@ -104,7 +99,7 @@ function DirectoryCardKbdDialog({ directory } :Props) {
         }
         // remove kbd
         dispatch(updateMoveDirectoryByPath({
-          path: found.path,
+          ...found,
           kbd: undefined,
         }))
       }
@@ -114,14 +109,14 @@ function DirectoryCardKbdDialog({ directory } :Props) {
         kbd,
       }))
 
-      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeSuccess')), {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.updateKBDSuccess')), {
         type: 'success'
       })
 
       setIsOpen.off()
     } catch (e) {
       console.error(e)
-      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.organizeError')), {
+      toast(capitalizeFirstLetter(t('pages.organizes.texts.alerts.updateKBDError')), {
         type: 'error'
       })
     } finally {
@@ -135,12 +130,12 @@ function DirectoryCardKbdDialog({ directory } :Props) {
 
   return (
     <>
-      <Tooltip placement="auto" label={capitalizeFirstLetter(t('labels.selectDirectory'))}>
+      <Tooltip placement="auto" label={capitalizeFirstLetter(t('labels.changeKBD'))}>
         <IconButton
           variant="solid"
           size="xs"
           ml="auto"
-          aria-label={capitalizeFirstLetter(t('labels.removeDirectory'))}
+          aria-label={capitalizeFirstLetter(t('labels.changeKBD'))}
           onClick={handleToggleClick}
         >
           <AiOutlinePlus className="text-md" />
@@ -151,7 +146,7 @@ function DirectoryCardKbdDialog({ directory } :Props) {
         <ModalContent>
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
             <ModalHeader>
-              {capitalizeFirstLetter(t('labels.setting'))}
+              {capitalizeFirstLetter(t('labels.changeKBD'))}
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>

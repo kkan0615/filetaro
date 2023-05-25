@@ -39,7 +39,16 @@
     "confirmDeleteTitle": "파일 영구적으로 삭제",
     "removeDirectory": "디렉토리 제거",
     "warning": "경고",
-    "noData": "데이터 없음"
+    "noData": "데이터 없음",
+    "changeKBD": "단축키 변경",
+    "sorts": {
+      "+createdAt":  "생성일 오름차순 ",
+      "-createdAt":  "생성일 내림차순",
+      "+name":  "파일명 오름차순 ",
+      "-name":  "파일명 내림차순",
+      "+path":  "경로 오름차순 ",
+      "-path":  "경로 내림차순"
+    }
   },
   "buttons": {
     "setting": "설정",
@@ -162,7 +171,9 @@
           "moveSuccess": "성공적으로 이동했습니다.",
           "moveError": "이동중에 문제가 발생했습니다.",
           "noSelectFileWarn": "슬라이드 쇼 모드 혹은 파일을 선택해주세요.",
-          "replaceKBDWarn": "KBD 변경을 취소했습니다."
+          "replaceKBDWarn": "KBD 변경을 취소했습니다.",
+          "updateKBDSuccess": "성공적으로 변경했습니다.",
+          "updateKBDError": "변경하는데 실패했습니다."
         },
         "prompts": {
           "duplicatedKBD": "동일한 kbd 가 존재합니다. 변경하시겠습니까?"
