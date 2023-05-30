@@ -55,7 +55,8 @@
     "save": "save",
     "load": "load",
     "submit": "submit",
-    "organize": "organize"
+    "organize": "organize",
+    "sponsors": "sponsors"
   },
   "tooltips": {
     "home": "home",
@@ -68,7 +69,8 @@
     "keepOriginal": "keep original file before move",
     "autoRenameFile": "automatically rename if there is same file name in directory",
     "checkLoadedFiles": "Check for loaded files automatically",
-    "selectDirectory": "select directory"
+    "selectDirectory": "select directory",
+    "sponsors": "Thank you for support"
   },
   "tours": {
     "addFilesButton": "Click it to add files",
@@ -107,6 +109,9 @@
   "components": {
     "addFilesFromDirectoryDialog": {
       "title": "Add files from directory"
+    },
+    "sponsorsDialog": {
+      "title": "Sponsors"
     },
     "popovers": {
       "keyword": {

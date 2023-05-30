@@ -17,7 +17,7 @@ import {
   removeTargetFile, setMovesSlideIndex,
   updateTargetFileCheckByIndex
 } from '@renderer/stores/slices/moves'
-import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
+import AddFilesFromDirectoryDialog from '@renderer/components/dialogs/AddFilesFromDirectory'
 import { RootState } from '@renderer/stores'
 import MovesSlideShow from '@renderer/components/moves/SlideShow'
 import IndeterminateCheckbox from '@renderer/components/forms/IndeterminateCheckbox'

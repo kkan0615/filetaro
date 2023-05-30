@@ -4,6 +4,7 @@ import SettingDialog from '@renderer/components/Settings/SettingDialog'
 import { Card, CardBody, Heading, IconButton, Text, Tooltip } from '@chakra-ui/react'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { useTranslation } from 'react-i18next'
+import SponsorsDialog from '@renderer/components/dialogs/Sponsors'
 
 function Home() {
   const { t } = useTranslation()
@@ -17,6 +18,7 @@ function Home() {
           {t('SEO.description')}
         </Text>
         <div className="flex mb-4">
+          <SponsorsDialog />
           <div className="mx-auto" />
           <SettingDialog>
             <Tooltip label={t('tooltips.openSetting')}>
