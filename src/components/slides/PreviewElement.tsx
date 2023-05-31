@@ -6,17 +6,17 @@ import { TargetFile } from '@renderer/types/models/targetFile'
 import { RootState } from '@renderer/stores'
 
 interface Props {
-  slideTargetFileByIndex: TargetFile | null
+  targetFile: TargetFile | null
   assetUrl: string
 }
 
-function MovesSlideShowPreviewElement({ slideTargetFileByIndex, assetUrl }: Props) {
+function SlidesPreviewElement({ targetFile, assetUrl }: Props) {
   const { t } = useTranslation()
 
   const setting = useSelector((state: RootState) => state.moves.setting)
 
   // No file
-  if (!slideTargetFileByIndex) {
+  if (!targetFile) {
     return (
       <div className="text-4xl">
         {t('labels.noData')}
@@ -24,19 +24,20 @@ function MovesSlideShowPreviewElement({ slideTargetFileByIndex, assetUrl }: Prop
     )
   }
   // Image
-  if (slideTargetFileByIndex.type === 'image') {
+  if (targetFile.type === 'image') {
     return (
-      <div className="text-center max-w-full max-h-full p-2">
+      <div className="text-center w-full h-full p-2">
         <Image
-          objectFit='cover'
+          className="w-full h-full"
+          fit="scale-down"
           src={assetUrl}
-          alt={slideTargetFileByIndex.name}
+          alt={targetFile.name}
         />
       </div>
     )
   }
   // Video
-  if (slideTargetFileByIndex.type === 'video') {
+  if (targetFile.type === 'video') {
     return (
       <div className="text-center max-w-full max-h-full p-2">
         <video src={assetUrl} controls autoPlay={setting.isAutoPlay}>
@@ -45,7 +46,7 @@ function MovesSlideShowPreviewElement({ slideTargetFileByIndex, assetUrl }: Prop
       </div>
     )
   }
-  if (slideTargetFileByIndex.type === 'audio') {
+  if (targetFile.type === 'audio') {
     return (
       <div className="text-center max-w-full max-h-full p-2">
         <audio src={assetUrl} controls autoPlay={setting.isAutoPlay}>
@@ -61,10 +62,10 @@ function MovesSlideShowPreviewElement({ slideTargetFileByIndex, assetUrl }: Prop
         <AiOutlineFile className="text-4xl"/>
       </div>
       <div className="text-xl">
-        {slideTargetFileByIndex.name}
+        {targetFile.name}
       </div>
     </div>
   )
 }
 
-export default MovesSlideShowPreviewElement
+export default SlidesPreviewElement

@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TargetFile, UpdateTargetFiles } from '@renderer/types/models/targetFile'
-import { SlideSetting } from '@renderer/types/models/slide'
+import { NO_SLIDE_INDEX, SlideSetting } from '@renderer/types/models/slide'
 
 const name = 'slides'
 
 export interface SlideState {
-  setting: SlideSetting
-  targetFiles: TargetFile[]
+  setting: SlideSetting,
+  targetFiles: TargetFile[],
+  slideIndex: number
 }
 
 const initialState: SlideState = {
@@ -18,6 +19,7 @@ const initialState: SlideState = {
     isNotFirstLoad: false,
     isAutoPlay: false,
   },
+  slideIndex: NO_SLIDE_INDEX,
   targetFiles: [],
 }
 
@@ -60,6 +62,9 @@ export const slideSlice = createSlice({
         (targetFileEl) => targetFileEl.path !== action.payload
       )
     },
+    setSlidesIndex: (state, action: PayloadAction<number>) => {
+      state.slideIndex = action.payload
+    },
     clearSlideSlice: (state) => {
       state.setting = {
         isAutoDuplicatedName: false,
@@ -70,6 +75,7 @@ export const slideSlice = createSlice({
         isAutoPlay: false,
       }
       state.targetFiles = []
+      state.slideIndex = NO_SLIDE_INDEX
     }
   },
 })
@@ -81,6 +87,7 @@ export const {
   updateSlideTargetFile,
   updateSlideTargetFileCheckByIndex,
   removeSlideTargetFileByPath,
+  setSlidesIndex,
   clearSlideSlice,
 } = slideSlice.actions
 
