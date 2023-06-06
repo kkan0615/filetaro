@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Flex, Heading, IconButton, Text, Tooltip } from '@chakra-ui/react'
+import { Button, Card, CardBody, Flex, Heading, IconButton, Spacer, Text, Tooltip } from '@chakra-ui/react'
 import { BiArrowBack } from 'react-icons/bi'
 import { AiOutlineHome, BiSlideshow, MdDeleteForever, MdDriveFileMoveOutline } from 'react-icons/all'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +17,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import { deleteTargetFiles } from '@renderer/utils/file'
+import { removeTargetFile } from '@renderer/stores/slices/moves'
 
 function SlidesLeft() {
   const { t } = useTranslation()
@@ -128,6 +130,18 @@ function SlidesLeft() {
     setAssetUrl(assetUrl)
   }
 
+  /**
+   * Delete (move to garbage) current file
+   */
+  const deleteCurrentFile = async () => {
+    try {
+      if (!targetFileByIndex) return
+      await deleteTargetFiles([targetFileByIndex])
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   return (
     <div
       className="h-full flex flex-col relative"
@@ -137,7 +151,7 @@ function SlidesLeft() {
     >
       {targetFiles.length ?
         <>
-          <div className="min-h-0  shrink p-2">
+          <div className="min-h-0 shrink p-2">
             <Card className="p-0">
               <CardBody padding={0} className="px-2 py-1">
                 <Flex alignItems="center">
@@ -185,6 +199,25 @@ function SlidesLeft() {
                 icon={<AiOutlineRight className="text-xl" />}
               />
             </Tooltip>
+          </div>
+          <div className="min-h-0 shrink px-2 py-1">
+            <Flex alignItems="center">
+              <Text>
+                {slideIndex + 1} / {targetFiles.length} - {targetFileByIndex?.name}
+              </Text>
+              <Spacer />
+              {slideIndex !== NO_SLIDE_INDEX &&
+                <Tooltip label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}>
+                  <IconButton
+                    colorScheme="error"
+                    id="delete-file-button"
+                    onClick={deleteCurrentFile}
+                    variant="ghost"
+                    aria-label={capitalizeFirstLetter(t('tooltips.deleteFiles'))}
+                    icon={<MdDeleteForever className="text-2xl" />}
+                  />
+                </Tooltip>}
+            </Flex>
           </div>
         </> :
         <div className="h-full flex items-center justify-center">
