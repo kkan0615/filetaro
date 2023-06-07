@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Flex, Heading, IconButton, Spacer, Text, Tooltip } from '@chakra-ui/react'
+import { Button, Card, CardBody, Center, Flex, Heading, IconButton, Spacer, Text, Tooltip } from '@chakra-ui/react'
 import { BiArrowBack } from 'react-icons/bi'
 import { AiOutlineHome, BiSlideshow, MdDeleteForever, MdDriveFileMoveOutline } from 'react-icons/all'
 import { useTranslation } from 'react-i18next'
@@ -151,32 +151,40 @@ function SlidesLeft() {
     >
       {targetFiles.length ?
         <>
-          <div className="min-h-0 shrink p-2">
-            <Card className="p-0">
-              <CardBody padding={0} className="px-2 py-1">
-                <Flex alignItems="center">
-                  <Link to="/">
-                    <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
-                      <IconButton
-                        variant="ghost"
-                        aria-label={t('tooltips.home')}
-                        icon={<AiOutlineHome className="text-2xl" />}
-                      />
-                    </Tooltip>
-                  </Link>
-                  <AddFileBtn onSelected={addFiles} />
-                  <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
-                </Flex>
-              </CardBody>
-            </Card>
+          <div className="min-h-0 shrink px-2 py-1 relative">
+            {/*<Card padding={0}>*/}
+            {/*  <CardBody paddingX={2} paddingY={1}>*/}
+            <Flex alignItems="center" justifyContent='space-between'>
+              <Flex style={{ flex: 1 }}>
+                <Link to="/">
+                  <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t('tooltips.home')}
+                      icon={<AiOutlineHome className="text-2xl" />}
+                    />
+                  </Tooltip>
+                </Link>
+                <AddFileBtn onSelected={addFiles} />
+                <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
+              </Flex>
+              <Flex style={{ flex: 1 }} justifyContent='center'>
+                <span className="truncate">{targetFileByIndex?.name}</span>
+              </Flex>
+              <Flex style={{ flex: 1 }}>
+                {/*right*/}
+              </Flex>
+            </Flex>
+            {/*</CardBody>*/}
+            {/*</Card>*/}
           </div>
           <div className="grow h-1 overflow-auto relative">
-            <Tooltip label="Prev">
+            <Tooltip label={capitalizeFirstLetter(t('tooltips.prev'))}>
               <IconButton
                 onClick={handlePrev}
                 textColor="white"
                 colorScheme="primary"
-                className="absolute top-[40%] left-4 z-20"
+                className="absolute top-1/2 left-4 z-20"
                 aria-label="prev"
                 isDisabled={slideIndex === 0}
                 icon={<AiOutlineLeft className="text-xl" />}
@@ -188,12 +196,12 @@ function SlidesLeft() {
                 assetUrl={assetUrl}
               />
             </div>
-            <Tooltip label="Next">
+            <Tooltip label={capitalizeFirstLetter(t('tooltips.next'))}>
               <IconButton
                 onClick={handleNext}
                 textColor="white"
                 colorScheme="primary"
-                className="absolute top-[40%] right-4 z-20"
+                className="absolute top-1/2 right-4 z-20"
                 aria-label="home"
                 isDisabled={slideIndex === targetFiles.length - 1}
                 icon={<AiOutlineRight className="text-xl" />}
@@ -202,8 +210,8 @@ function SlidesLeft() {
           </div>
           <div className="min-h-0 shrink px-2 py-1">
             <Flex alignItems="center">
-              <Text>
-                {slideIndex + 1} / {targetFiles.length} - {targetFileByIndex?.name}
+              <Text className="truncate">
+                {slideIndex + 1} / {targetFiles.length} - {targetFileByIndex?.path}
               </Text>
               <Spacer />
               {slideIndex !== NO_SLIDE_INDEX &&

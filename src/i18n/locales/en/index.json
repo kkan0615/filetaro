@@ -70,7 +70,9 @@
     "autoRenameFile": "automatically rename if there is same file name in directory",
     "checkLoadedFiles": "Check for loaded files automatically",
     "selectDirectory": "select directory",
-    "sponsors": "Thank you for support"
+    "sponsors": "Thank you for support",
+    "next": "next",
+    "prev": "prev"
   },
   "tours": {
     "addFilesButton": "Click it to add files",

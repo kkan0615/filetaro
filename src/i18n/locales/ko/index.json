@@ -70,7 +70,9 @@
     "autoRenameFile": "폴더내에 동일파일 존재시 자동으로 이름 변경",
     "checkLoadedFiles": "불러온 파일들 자동적으로 선택하기",
     "selectDirectory": "폴더 선택하기",
-    "sponsors": "도와주셔서 감사합니다."
+    "sponsors": "도와주셔서 감사합니다.",
+    "next": "다음",
+    "prev": "이전"
   },
   "tours": {
     "addFilesButton": "이것을 선택하여 파일을 추가할 수 있습니다.",

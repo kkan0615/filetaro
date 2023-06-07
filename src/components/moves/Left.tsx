@@ -368,8 +368,8 @@ function MovesLeft() {
     >
       {isSlideOpen && <MovesSlideShow isOpen={isSlideOpen} toggleOpen={toggleOpen} />}
       <div className="min-h-0 mb-2 shrink p-2">
-        <Card className="p-0">
-          <CardBody padding={0} className="px-2 py-1">
+        <Card padding={0}>
+          <CardBody paddingX={2} paddingY={1}>
             <Flex alignItems="center">
               <Link to="/">
                 <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>
