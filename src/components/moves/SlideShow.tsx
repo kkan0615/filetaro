@@ -6,8 +6,8 @@ import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { Fade, Card, CardBody, Heading, Tooltip, IconButton, Flex, Spacer, CardHeader } from '@chakra-ui/react'
 import { RootState } from '@renderer/stores'
 import { removeTargetFile, setMovesSlideIndex } from '@renderer/stores/slices/moves'
-import MovesSlideShowPreviewElement from '@renderer/components/moves/SlideShowPreviewElement'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
+import SlidesPreviewElement from '@renderer/components/slides/PreviewElement'
 
 interface Props {
   isOpen: boolean
@@ -133,8 +133,8 @@ function MovesSlideShow({ toggleOpen, isOpen }: Props) {
               </Tooltip>
               <div className="flex items-center justify-center h-full w-full z-20">
                 {targetFileByIndex ?
-                  <MovesSlideShowPreviewElement
-                    slideTargetFileByIndex={targetFileByIndex}
+                  <SlidesPreviewElement
+                    targetFile={targetFileByIndex}
                     assetUrl={assetUrl}
                   /> : null
                 }

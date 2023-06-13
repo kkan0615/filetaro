@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 export interface MoveDirectory {
   path: string
   kbd?: string[]
@@ -22,6 +20,3 @@ export interface MoveSetting {
   isNotFirstLoad: boolean
   isAutoPlay: boolean
 }
-
-export const MoveSorts = ['+createdAt', '-createdAt', '+name', '-name', '+path', '-path'] as const
-export type MoveSortType = typeof MoveSorts[number]

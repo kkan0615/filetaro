@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TargetFile } from '@renderer/types/models/targetFile'
-import { MoveDirectory, MoveSetting, MoveSortType } from '@renderer/types/models/move'
+import { MoveDirectory, MoveSetting } from '@renderer/types/models/move'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import dayjs from 'dayjs'
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import { MoveSortType } from '@renderer/types/models/directory'
 
 const name = 'moves'
 

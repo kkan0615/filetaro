@@ -1,11 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { RootState } from '@renderer/stores'
+import { useDispatch } from 'react-redux'
 import { useTour } from '@reactour/tour'
 import Splitter from '@renderer/components/Splitter'
-import RenamesLeft from '@renderer/components/renames/Left'
-import RenamesRight from '@renderer/components/renames/Right'
 import { useTranslation } from 'react-i18next'
+import SlidesLeft from '@renderer/components/slides/Left'
+import SlidesRight from '@renderer/components/slides/Right'
 // import { capitalizeFirstLetter } from '@renderer/utils/text'
 
 function Slides() {
@@ -16,9 +14,7 @@ function Slides() {
   const dispatch = useDispatch()
 
   return (
-    <div>
-      Slides
-    </div>
+    <Splitter left={<SlidesLeft />} right={<SlidesRight />} />
   )
 }
 

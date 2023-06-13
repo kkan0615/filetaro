@@ -1,12 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import dayjs from 'dayjs'
 import { TargetFile, UpdateTargetFiles } from '@renderer/types/models/targetFile'
-import { SlideSetting } from '@renderer/types/models/slide'
+import { NO_SLIDE_INDEX, SlideSetting } from '@renderer/types/models/slide'
+import { MoveDirectory } from '@renderer/types/models/move'
+import { MoveSortType } from '@renderer/types/models/directory'
 
 const name = 'slides'
 
 export interface SlideState {
-  setting: SlideSetting
-  targetFiles: TargetFile[]
+  setting: SlideSetting,
+  targetFiles: TargetFile[],
+  slideIndex: number
+  directories: MoveDirectory[]
+
 }
 
 const initialState: SlideState = {
@@ -19,6 +25,8 @@ const initialState: SlideState = {
     isAutoPlay: false,
   },
   targetFiles: [],
+  slideIndex: NO_SLIDE_INDEX,
+  directories: []
 }
 
 export const slideSlice = createSlice({
@@ -29,6 +37,56 @@ export const slideSlice = createSlice({
       state.setting = {
         ...state.setting,
         ...action.payload
+      }
+    },
+    // setMoveIsBlockKey: (state, action: PayloadAction<boolean>) => {
+    //   state.isBlockKey = action.payload
+    // },
+    addSlideDirectory: (state, action: PayloadAction<MoveDirectory>) => {
+      state.directories = [...state.directories, action.payload]
+    },
+    updateMoveDirectoryByPath: (state, action: PayloadAction<MoveDirectory>) => {
+      state.directories = state.directories.map(moveDirectoryEl => {
+        if (moveDirectoryEl.path === action.payload.path) {
+          return action.payload
+        }
+
+        return moveDirectoryEl
+      })
+    },
+    removeSlideDirectory: (state, action: PayloadAction<MoveDirectory>) => {
+      state.directories = state.directories.filter(
+        (directoryEl) => directoryEl.path !== action.payload.path
+      )
+    },
+    sortSlideDirectories: (state, action: PayloadAction<MoveSortType>) => {
+      const option = action.payload.slice(1)
+      const sort = action.payload.charAt(0) as '+' | '-'
+      if (!sort || !option) return
+
+      if (option === 'createdAt') {
+        state.directories.sort((a, b) => {
+          const dayjsA = dayjs(a.createdAt)
+          const dayjsB = dayjs(b.createdAt)
+          if (sort === '+') return (dayjsA.isSameOrAfter(dayjsB) ? 1 : -1)
+
+          return (dayjsA.isSameOrAfter(dayjsB) ? -1 : 1)
+        })
+      } else if (option === 'name') {
+        state.directories.sort((a, b) => {
+          const aName = a.path.split('\\').at(-1)
+          const bName = b.path.split('\\').at(-1)
+          if (!aName || !bName) return 0
+          if (sort === '+') return aName.localeCompare(bName)
+
+          return bName.localeCompare(aName)
+        })
+      } else if (option === 'path') {
+        state.directories.sort((a, b) => {
+          if (sort === '+') return a.path.localeCompare(b.path)
+
+          return b.path.localeCompare(a.path)
+        })
       }
     },
     addSlideTargetFile: (state, action: PayloadAction<TargetFile>) => {
@@ -47,18 +105,13 @@ export const slideSlice = createSlice({
         return targetFileEl
       })
     },
-    updateSlideTargetFileCheckByIndex(
-      state,
-      action: PayloadAction<{ index: number; isCheck: boolean }>
-    ) {
-      const newTargetFiles = [...state.targetFiles]
-      newTargetFiles[action.payload.index].checked = action.payload.isCheck
-      state.targetFiles = newTargetFiles
-    },
     removeSlideTargetFileByPath: (state, action: PayloadAction<string>) => {
       state.targetFiles = state.targetFiles.filter(
         (targetFileEl) => targetFileEl.path !== action.payload
       )
+    },
+    setSlidesIndex: (state, action: PayloadAction<number>) => {
+      state.slideIndex = action.payload
     },
     clearSlideSlice: (state) => {
       state.setting = {
@@ -70,6 +123,7 @@ export const slideSlice = createSlice({
         isAutoPlay: false,
       }
       state.targetFiles = []
+      state.slideIndex = NO_SLIDE_INDEX
     }
   },
 })
@@ -77,10 +131,14 @@ export const slideSlice = createSlice({
 // this is for dispatch
 export const {
   setSlideSetting,
+  addSlideDirectory,
+  sortSlideDirectories,
+  removeSlideDirectory,
+  updateMoveDirectoryByPath,
   addSlideTargetFile,
   updateSlideTargetFile,
-  updateSlideTargetFileCheckByIndex,
   removeSlideTargetFileByPath,
+  setSlidesIndex,
   clearSlideSlice,
 } = slideSlice.actions
 
