@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-table'
 import { HTMLProps, useEffect, useMemo, useState } from 'react'
 import { path } from '@tauri-apps/api'
-import { AiOutlineFile, AiOutlineHome, BiSlideshow, MdDeleteForever } from 'react-icons/all'
+import { AiOutlineFile, AiOutlineHome } from 'react-icons/ai'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineDelete } from 'react-icons/ai'
@@ -29,6 +29,8 @@ import AddFileBtn from '@renderer/components/buttons/AddFile'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { TableMeta } from '@renderer/types/libs/table'
+import { MdDeleteForever } from 'react-icons/md'
+import { BiSlideshow } from 'react-icons/bi'
 
 function IndeterminatePreview({
   path,

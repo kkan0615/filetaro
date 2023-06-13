@@ -22,7 +22,7 @@ import {
   Spacer,
   Text, useBoolean,
 } from '@chakra-ui/react'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/all'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { ask } from '@tauri-apps/api/dialog'

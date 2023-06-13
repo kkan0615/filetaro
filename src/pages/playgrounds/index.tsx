@@ -1,7 +1,7 @@
 // import { OpenDialogOptions, OpenDialogReturnValue } from 'electron'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
-import { AiOutlineHome } from 'react-icons/all'
+import { AiOutlineHome } from 'react-icons/ai'
 import { settingStore } from '@renderer/stores/tauriStore'
 
 function Playgrounds() {

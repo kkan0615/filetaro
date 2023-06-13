@@ -1,4 +1,4 @@
-import { FaSpinner } from 'react-icons/all'
+import { FaSpinner } from 'react-icons/fa'
 
 function CLoading() {
   return (

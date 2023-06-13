@@ -1,6 +1,7 @@
-import { Button, Card, CardBody, Center, Flex, Heading, IconButton, Spacer, Text, Tooltip } from '@chakra-ui/react'
+import { Button, Card, CardBody, CardFooter, Flex, IconButton, Spacer, Text, Tooltip } from '@chakra-ui/react'
 import { BiArrowBack } from 'react-icons/bi'
-import { AiOutlineHome, BiSlideshow, MdDeleteForever, MdDriveFileMoveOutline } from 'react-icons/all'
+import { AiOutlineHome } from 'react-icons/ai'
+import { MdDeleteForever } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import AddFilesFromDirectoryDialog from '@renderer/components/dialogs/AddFilesFromDirectory'
 import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targetFile'
@@ -18,7 +19,6 @@ import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { deleteTargetFiles } from '@renderer/utils/file'
-import { removeTargetFile } from '@renderer/stores/slices/moves'
 
 function SlidesLeft() {
   const { t } = useTranslation()
@@ -152,8 +152,6 @@ function SlidesLeft() {
       {targetFiles.length ?
         <>
           <div className="min-h-0 shrink px-2 py-1 relative">
-            {/*<Card padding={0}>*/}
-            {/*  <CardBody paddingX={2} paddingY={1}>*/}
             <Flex alignItems="center" justifyContent='space-between'>
               <Flex style={{ flex: 1 }}>
                 <Link to="/">
@@ -175,8 +173,6 @@ function SlidesLeft() {
                 {/*right*/}
               </Flex>
             </Flex>
-            {/*</CardBody>*/}
-            {/*</Card>*/}
           </div>
           <div className="grow h-1 overflow-auto relative">
             <Tooltip label={capitalizeFirstLetter(t('tooltips.prev'))}>
@@ -230,14 +226,14 @@ function SlidesLeft() {
         </> :
         <div className="h-full flex items-center justify-center">
           <div>
-            <Card className="text-base-content">
+            <Card className="text-base-content" paddingBottom={1}>
               <CardBody className="text-center">
-                <Text>Add files before start</Text>
-                <div className="mt-4">
-                  <AddFileBtn onSelected={addFiles} />
-                  <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
-                </div>
+                <Text className='text-xl'>{capitalizeFirstLetter(t('pages.slides.labels.beforeStart'))}</Text>
               </CardBody>
+              <CardFooter justifyContent='center' paddingTop={1}>
+                <AddFileBtn onSelected={addFiles} />
+                <AddFilesFromDirectoryDialog onAddFiles={loadFiles} />
+              </CardFooter>
             </Card>
             <Link to="/">
               <Button
@@ -245,7 +241,7 @@ function SlidesLeft() {
                 leftIcon={<BiArrowBack />}
                 variant="ghost"
               >
-                Back
+                {capitalizeFirstLetter(t('labels.back'))}
               </Button>
             </Link>
           </div>

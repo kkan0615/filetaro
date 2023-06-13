@@ -15,7 +15,7 @@ import { getTargetFileTypeByExt, TargetFile } from '@renderer/types/models/targe
 import IndeterminateCheckbox from '@renderer/components/forms/IndeterminateCheckbox'
 import { RootState } from '@renderer/stores'
 import CTable from '@renderer/components/commons/libs/Table'
-import { MdDeleteForever } from 'react-icons/all'
+import { MdDeleteForever } from 'react-icons/md'
 import { deleteTargetFiles } from '@renderer/utils/file'
 import AddFilesFromDirectoryDialog from '@renderer/components/dialogs/AddFilesFromDirectory'
 import AddFileBtn from '@renderer/components/buttons/AddFile'

@@ -9,38 +9,39 @@
     "description": "Filetaro - 쉬운 파일 핸들러"
   },
   "labels": {
-    "language": "언어",
-    "currentVersion": "현재 버전",
-    "preview": "미리보기",
-    "name": "파일명",
-    "path": "경로",
-    "type": "타입",
     "actions": "액션",
-    "setting": "설정",
-    "keepOriginal": "원본 나두기",
     "autoRenameFile": "동일 파일명 자동 변경",
+    "back": "back",
+    "changeKBD": "단축키 변경",
     "checkLoadedFiles": "불러온 파일 항상 선택",
+    "confirmDeleteTitle": "파일 영구적으로 삭제",
+    "currentVersion": "현재 버전",
+    "delete": "삭제",
+    "deleting": "삭제 중...",
+    "extension": "확장자",
+    "included": "포함",
+    "keepOriginal": "원본 나두기",
+    "language": "언어",
+    "name": "파일명",
+    "noData": "데이터 없음",
+    "path": "경로",
+    "preview": "미리보기",
+    "type": "타입",
+    "setting": "설정",
     "selectDirectory": "폴더 선택",
     "selectDirectoryPath": "파일경로를 입력 혹은 선택해주세요.",
-    "recursive": "재귀",
     "text": "문자",
     "method": "방법",
     "prefix": "접두사",
     "suffix": "접미사",
-    "included": "포함",
     "submitting": "제출 중..",
     "outputPath": "출력 경로",
     "organizing": "분류 중...",
-    "extension": "확장자",
-    "delete": "삭제",
-    "deleting": "삭제 중...",
     "menu": "메뉴",
     "saving": "저장중 ...",
-    "confirmDeleteTitle": "파일 영구적으로 삭제",
+    "recursive": "재귀",
     "removeDirectory": "디렉토리 제거",
     "warning": "경고",
-    "noData": "데이터 없음",
-    "changeKBD": "단축키 변경",
     "sorts": {
       "+createdAt":  "생성일 오름차순 ",
       "-createdAt":  "생성일 내림차순",
@@ -51,11 +52,11 @@
     }
   },
   "buttons": {
-    "setting": "설정",
-    "save": "저장",
     "load": "불러오기",
-    "submit": "제출",
     "organize": "분류",
+    "save": "저장",
+    "setting": "설정",
+    "submit": "제출",
     "sponsors": "후원하기"
   },
   "tooltips": {
@@ -144,6 +145,10 @@
   },
   "pages": {
     "home": {
+      "slides": {
+        "title": "슬라이드모드",
+        "description": "슬다이드 쇼 모드로 쉽게 파일을 옮겨보세요!"
+      },
       "moves": {
         "title": "이동",
         "description": "파일들을 새로운 폴더로 이동시킵니다."
@@ -159,6 +164,11 @@
       "deletes": {
         "title": "삭제",
         "description": "폴더내 파일을 삭제합니다."
+      }
+    },
+    "slides": {
+      "labels": {
+        "beforeStart": "파일을 먼저 추가해주세요."
       }
     },
     "moves": {

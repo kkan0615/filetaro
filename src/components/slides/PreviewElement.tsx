@@ -1,9 +1,11 @@
 import { Image } from '@chakra-ui/react'
-import { AiOutlineFile } from 'react-icons/all'
+import { AiOutlineFile } from 'react-icons/ai'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { TargetFile } from '@renderer/types/models/targetFile'
 import { RootState } from '@renderer/stores'
+import { open } from '@tauri-apps/api/shell'
+
 
 interface Props {
   targetFile: TargetFile | null
@@ -14,6 +16,15 @@ function SlidesPreviewElement({ targetFile, assetUrl }: Props) {
   const { t } = useTranslation()
 
   const setting = useSelector((state: RootState) => state.moves.setting)
+
+  /**
+   * Click file handler
+   * @TODO: There is error to open file currently. Please update it later.
+   */
+  const handleClick = async () => {
+    if (!targetFile) return
+    await open(targetFile.path)
+  }
 
   // No file
   if (!targetFile) {
@@ -57,7 +68,7 @@ function SlidesPreviewElement({ targetFile, assetUrl }: Props) {
   }
   // Just file
   return (
-    <div>
+    <div onClick={handleClick}>
       <div className="flex justify-center mb-2">
         <AiOutlineFile className="text-4xl"/>
       </div>
