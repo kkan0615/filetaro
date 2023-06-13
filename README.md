@@ -31,6 +31,8 @@ Thank you for making program better.
 ## Supports
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/youngjinkwak)
 
+<img src="./public/sponsors/paypal.png" alt="paypal" width="250" height="250" />
+
 # Development
 Tauri(Rust) + React(Typescript)
 ## Commands
@@ -136,6 +138,8 @@ The program is using following packages.
 - [reactour/tour](https://www.npmjs.com/package/@reactour/tour): Tourist Guide into your React Components
 - [lodash](https://lodash.com/): A modern JavaScript utility library delivering modularity, performance & extras.
   - [@types/lodash](https://www.npmjs.com/package/@types/lodash)
+- [react-helmet](https://github.com/nfl/react-helmet): This reusable React component will manage all of your changes to the document head.
+  - [@types/react-helmet](https://www.npmjs.com/package/@types/react-helmet)
  
 ### Backend
 - [tauri-plugin-store](https://github.com/tauri-apps/tauri-plugin-store): Simple, persistent key-value store.

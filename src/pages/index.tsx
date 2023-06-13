@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
-import { AiOutlineSetting, BiRename, BiSlideshow, ImLab, MdDriveFileMoveOutline, VscFileSubmodule } from 'react-icons/all'
 import SettingDialog from '@renderer/components/Settings/SettingDialog'
 import { Card, CardBody, Heading, IconButton, Text, Tooltip } from '@chakra-ui/react'
-import { AiOutlineDelete } from 'react-icons/ai'
+import { AiOutlineDelete, AiOutlineSetting } from 'react-icons/ai'
 import { useTranslation } from 'react-i18next'
+import SponsorsDialog from '@renderer/components/dialogs/Sponsors'
+import { MdDriveFileMoveOutline } from 'react-icons/md'
+import { BiRename, BiSlideshow } from 'react-icons/bi'
+import { VscFileSubmodule } from 'react-icons/vsc'
+import { ImLab } from 'react-icons/im'
 
 function Home() {
   const { t } = useTranslation()
@@ -17,6 +21,7 @@ function Home() {
           {t('SEO.description')}
         </Text>
         <div className="flex mb-4">
+          <SponsorsDialog />
           <div className="mx-auto" />
           <SettingDialog>
             <Tooltip label={t('tooltips.openSetting')}>
@@ -29,6 +34,15 @@ function Home() {
           </SettingDialog>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
+          <Link className="w-full" to="/slides">
+            <Card className="text-base-content card-bg-effect p-4">
+              <CardBody className="flex flex-col items-center">
+                <BiSlideshow className="text-4xl mb-2" />
+                <Heading size='md' className="mb-0.5">Slide</Heading>
+                <Text>Move or delete files via slide</Text>
+              </CardBody>
+            </Card>
+          </Link>
           <Link className="w-full" to="/moves">
             <Card className="text-base-content card-bg-effect p-4">
               <CardBody className="flex flex-col items-center">
@@ -72,17 +86,6 @@ function Home() {
                   <ImLab className="text-4xl mb-2" />
                   <Heading size='md' className="mb-0.5">Playgrounds</Heading>
                   <Text>test code in here!</Text>
-                </CardBody>
-              </Card>
-            </Link>
-          }
-          {isDev &&
-            <Link className="w-full" to="/slides">
-              <Card className="text-base-content card-bg-effect p-4">
-                <CardBody className="flex flex-col items-center">
-                  <BiSlideshow className="text-4xl mb-2" />
-                  <Heading size='md' className="mb-0.5">Slide</Heading>
-                  <Text>Move or delete files via slide</Text>
                 </CardBody>
               </Card>
             </Link>

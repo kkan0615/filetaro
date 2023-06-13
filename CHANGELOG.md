@@ -1,3 +1,8 @@
+## 0.0.7
+- Added sponsors dialog
+- Added slideshow page
+- Updated package versions
+- 
 ## 0.0.6
 - Added GitHub issue template
 - Added more i18n

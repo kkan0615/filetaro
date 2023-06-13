@@ -9,38 +9,39 @@
     "description": "Filetaro - Easy File handler"
   },
   "labels": {
-    "language": "language",
-    "currentVersion": "current version",
-    "preview": "preview",
-    "name": "name",
-    "path": "path",
-    "type": "type",
     "actions": "actions",
-    "setting": "setting",
-    "keepOriginal": "keep original",
     "autoRenameFile": "auto renaming for same file name",
+    "back": "back",
+    "changeKBD": "Change shortcut",
     "checkLoadedFiles": "check for loaded files",
+    "confirmDeleteTitle": "delete files permanently",
+    "currentVersion": "current version",
+    "delete": "delete",
+    "deleting": "deleting...",
+    "extension": "extension",
+    "included": "included",
+    "keepOriginal": "keep original",
+    "language": "language",
+    "name": "name",
+    "noData": "No data",
+    "path": "path",
+    "preview": "preview",
+    "type": "type",
+    "setting": "setting",
     "selectDirectory": "select directory",
     "selectDirectoryPath": "select or type directory path",
-    "recursive": "recursive",
     "text": "text",
     "method": "method",
     "prefix": "prefix",
     "suffix": "suffix",
-    "included": "included",
     "submitting": "submitting",
     "outputPath": "output path",
     "organizing": "organizing...",
-    "extension": "extension",
-    "delete": "delete",
-    "deleting": "deleting...",
     "menu": "menu",
     "saving": "saving...",
-    "confirmDeleteTitle": "delete files permanently",
+    "recursive": "recursive",
     "removeDirectory": "remove directory",
     "warning": "warning",
-    "noData": "No data",
-    "changeKBD": "Change shortcut",
     "sorts": {
       "+createdAt":  "createdAt ascending ",
       "-createdAt":  "createdAt descending",
@@ -51,11 +52,12 @@
     }
   },
   "buttons": {
-    "setting": "setting",
-    "save": "save",
     "load": "load",
+    "organize": "organize",
+    "save": "save",
+    "setting": "setting",
     "submit": "submit",
-    "organize": "organize"
+    "sponsors": "sponsors"
   },
   "tooltips": {
     "home": "home",
@@ -68,7 +70,10 @@
     "keepOriginal": "keep original file before move",
     "autoRenameFile": "automatically rename if there is same file name in directory",
     "checkLoadedFiles": "Check for loaded files automatically",
-    "selectDirectory": "select directory"
+    "selectDirectory": "select directory",
+    "sponsors": "Thank you for support",
+    "next": "next",
+    "prev": "prev"
   },
   "tours": {
     "addFilesButton": "Click it to add files",
@@ -108,6 +113,9 @@
     "addFilesFromDirectoryDialog": {
       "title": "Add files from directory"
     },
+    "sponsorsDialog": {
+      "title": "Sponsors"
+    },
     "popovers": {
       "keyword": {
         "tooltips": {
@@ -137,6 +145,10 @@
   },
   "pages": {
     "home": {
+      "slides": {
+        "title": "slides",
+        "description": "Move files to new folder via slide show!"
+      },
       "moves": {
         "title": "moves",
         "description": "Move files to new folder easily!"
@@ -152,6 +164,11 @@
       "deletes": {
         "title": "deletes",
         "description": "Delete files by your preference in folder"
+      }
+    },
+    "slides": {
+      "labels": {
+        "beforeStart": "add files before start"
       }
     },
     "moves": {

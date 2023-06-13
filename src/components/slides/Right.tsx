@@ -1,37 +1,37 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { open } from '@tauri-apps/api/dialog'
-import { AiOutlineFolderAdd, AiOutlineSetting } from 'react-icons/ai'
-import { RootState } from '@renderer/stores'
-import {
-  addMoveDirectory,
-  removeMoveDirectory,
-  removeTargetFile, setMovesSlideIndex,
-  sortMoveDirectories
-} from '@renderer/stores/slices/moves'
-import { MoveDirectory } from '@renderer/types/models/move'
-import MovesSettingModal from '@renderer/components/moves/SettingDialog'
-import DirectoryCard from '@renderer/components/directories/Card'
-import { Card, CardBody, IconButton, Tooltip, Flex, Spacer, List, Heading, Box, Select } from '@chakra-ui/react'
 import { toast } from 'react-toastify'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
-import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@renderer/stores'
+import {
+  addSlideDirectory, removeSlideDirectory,
+  removeSlideTargetFileByPath,
+  setSlidesIndex,
+  sortSlideDirectories
+} from '@renderer/stores/slices/slides'
 import { useState } from 'react'
 import { MoveSorts, MoveSortType } from '@renderer/types/models/directory'
+import { MoveDirectory } from '@renderer/types/models/move'
+import { Box, Card, CardBody, Flex, Heading, IconButton, List, Select, Spacer, Tooltip } from '@chakra-ui/react'
+import { AiOutlineFolderAdd, AiOutlineSetting } from 'react-icons/ai'
+import MovesSettingModal from '@renderer/components/moves/SettingDialog'
+import DirectoryCard from '@renderer/components/directories/Card'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { moveOrCopyFile } from '@renderer/utils/file'
 
-function MovesRight() {
+function SlidesRight() {
   const { t } = useTranslation()
-  const directories = useSelector((state: RootState) => state.moves.moveDirectories)
-  const targetFiles = useSelector((state: RootState) => state.moves.targetFiles)
-  const slideIndex = useSelector((state: RootState) => state.moves.movesSlideIndex)
-  const checkedTargetFiles = useSelector((state: RootState) => state.moves.targetFiles.filter(targetFileEl => targetFileEl.checked))
-  const setting = useSelector((state: RootState) => state.moves.setting)
+  const directories = useSelector((state: RootState) => state.slides.directories)
+  const targetFiles = useSelector((state: RootState) => state.slides.targetFiles)
+  const slideIndex = useSelector((state: RootState) => state.slides.slideIndex)
+  const setting = useSelector((state: RootState) => state.slides.setting)
   const dispatch = useDispatch()
 
   const [sortOption, setSortOption] = useState<MoveSortType>('+createdAt')
+
 
   const addDirectories = async () => {
     const directoryPaths = await open({
@@ -71,7 +71,7 @@ function MovesRight() {
           ++num
         }
         dispatch(
-          addMoveDirectory({
+          addSlideDirectory({
             path: directoryPathEl,
             kbd: isLast ? undefined : [metaKey, (num % 10).toString()],
             createdAt: dayjs().toISOString(),
@@ -90,99 +90,41 @@ function MovesRight() {
         }
       }
 
-      // await Promise.all((directoryPaths as string[]).map(async (directoryPathEl) => {
-      //   const foundIndex = directories.findIndex((directoryEl) => directoryEl.path === directoryPathEl)
-      //   if (foundIndex !== -1) {
-      //     toast(capitalizeFirstLetter(t('texts.alerts.sameDirectoryWarning', { name: directories[foundIndex].path })), {
-      //       type: 'warning'
-      //     })
-      //     return
-      //   }
-      //
-      //   /** Check existed */
-      //   const isEx = () => {
-      //     return kbdList.findIndex(kbdEl => _.isEqual(kbdEl, [metaKey, (num % 10).toString()])) >= 0
-      //   }
-      //   while(isEx()) {
-      //     if (num === 10) {
-      //       if (metaKey === 'control') metaKey = 'alt'
-      //       else if (metaKey === 'alt') metaKey = 'shift'
-      //       else if (metaKey === 'shift') isLast = true
-      //
-      //       num = 0
-      //     }
-      //     ++num
-      //   }
-      //   dispatch(
-      //     addMoveDirectory({
-      //       path: directoryPathEl,
-      //       kbd: isLast ? undefined : [metaKey, (num % 10).toString()],
-      //       createdAt: dayjs().toISOString(),
-      //     })
-      //   )
-      //
-      //   if (!isLast) {
-      //     if (num === 10) {
-      //       if (metaKey === 'ctrl') metaKey = 'alt'
-      //       else if (metaKey === 'alt') metaKey = 'shift'
-      //       else if (metaKey === 'shift') isLast = true
-      //
-      //       num = 0
-      //     }
-      //     ++num
-      //   }
-      // }))
-
       await asyncSort()
     }
   }
 
   const asyncSort = async () => {
-    dispatch(sortMoveDirectories(sortOption))
+    dispatch(sortSlideDirectories(sortOption))
   }
 
   const removeDirectory = (directory: MoveDirectory) => {
-    dispatch(removeMoveDirectory(directory))
+    dispatch(removeSlideDirectory(directory))
   }
 
   const handleClickDirectory = async (directory: MoveDirectory) => {
     try {
-      if (slideIndex === NO_SLIDE_INDEX && checkedTargetFiles.length === 0) {
+      if (slideIndex === NO_SLIDE_INDEX) {
         toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.noSelectFileWarn')), {
           type: 'warning'
         })
         return
       }
-      // -1 means it's not slideshow mode.
-      if (slideIndex === NO_SLIDE_INDEX) {
-        await Promise.all(checkedTargetFiles.map(async (checkedTargetFileEl) => {
-          const isDone = await moveOrCopyFile({
-            file: checkedTargetFileEl,
-            directoryPath: directory.path,
-            isAutoDuplicatedName: setting.isAutoDuplicatedName,
-            isCopy: setting.isKeepOriginal
-          })
-          if (isDone)
-            dispatch(removeTargetFile(checkedTargetFileEl.path))
-        }))
-      } else {
-        // File by index
-        const targetFileByIndex = targetFiles[slideIndex]
-
-        const isDone = await moveOrCopyFile({
-          file: targetFileByIndex,
-          directoryPath: directory.path,
-          isAutoDuplicatedName: setting.isAutoDuplicatedName,
-          isCopy: setting.isKeepOriginal
-        })
-        if (isDone) {
-          // new index of slide
-          let newSlideIndex = 0
-          if (targetFiles.length === 1) newSlideIndex = -1
-          else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
-          dispatch(setMovesSlideIndex(newSlideIndex))
-          dispatch(removeTargetFile(targetFileByIndex.path))
-        }
+      // File by index
+      const targetFileByIndex = targetFiles[slideIndex]
+      const isDone = await moveOrCopyFile({
+        file: targetFileByIndex,
+        directoryPath: directory.path,
+        isAutoDuplicatedName: setting.isAutoDuplicatedName,
+        isCopy: setting.isKeepOriginal
+      })
+      if (isDone) {
+        // new index of slide
+        let newSlideIndex = 0
+        if (targetFiles.length === 1) newSlideIndex = -1
+        else if(slideIndex !== 0) newSlideIndex = slideIndex - 1
+        dispatch(setSlidesIndex(newSlideIndex))
+        dispatch(removeSlideTargetFileByPath(targetFileByIndex.path))
       }
 
       toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveSuccess')), {
@@ -199,7 +141,7 @@ function MovesRight() {
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newSort = event.target.value as MoveSortType
     setSortOption(newSort)
-    dispatch(sortMoveDirectories(newSort))
+    dispatch(sortSlideDirectories(newSort))
   }
 
   return (
@@ -259,4 +201,4 @@ function MovesRight() {
   )
 }
 
-export default MovesRight
+export default SlidesRight

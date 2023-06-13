@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-table'
 import { HTMLProps, useEffect, useMemo, useState } from 'react'
 import { path } from '@tauri-apps/api'
-import { AiOutlineFile, AiOutlineHome, BiSlideshow, MdDeleteForever } from 'react-icons/all'
+import { AiOutlineFile, AiOutlineHome } from 'react-icons/ai'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineDelete } from 'react-icons/ai'
@@ -17,7 +17,7 @@ import {
   removeTargetFile, setMovesSlideIndex,
   updateTargetFileCheckByIndex
 } from '@renderer/stores/slices/moves'
-import AddFilesFromDirectoryDialog from '@renderer/components/AddFilesFromDirectoryDialog'
+import AddFilesFromDirectoryDialog from '@renderer/components/dialogs/AddFilesFromDirectory'
 import { RootState } from '@renderer/stores'
 import MovesSlideShow from '@renderer/components/moves/SlideShow'
 import IndeterminateCheckbox from '@renderer/components/forms/IndeterminateCheckbox'
@@ -29,6 +29,8 @@ import AddFileBtn from '@renderer/components/buttons/AddFile'
 import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { TableMeta } from '@renderer/types/libs/table'
+import { MdDeleteForever } from 'react-icons/md'
+import { BiSlideshow } from 'react-icons/bi'
 
 function IndeterminatePreview({
   path,
@@ -368,8 +370,8 @@ function MovesLeft() {
     >
       {isSlideOpen && <MovesSlideShow isOpen={isSlideOpen} toggleOpen={toggleOpen} />}
       <div className="min-h-0 mb-2 shrink p-2">
-        <Card className="p-0">
-          <CardBody padding={0} className="px-2 py-1">
+        <Card padding={0}>
+          <CardBody paddingX={2} paddingY={1}>
             <Flex alignItems="center">
               <Link to="/">
                 <Tooltip label={capitalizeFirstLetter(t('tooltips.home'))}>

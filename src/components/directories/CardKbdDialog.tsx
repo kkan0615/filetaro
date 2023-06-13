@@ -1,6 +1,6 @@
 import {
   Button,
-  FormControl, FormErrorMessage, FormLabel, IconButton, Input, InputGroup, InputRightElement, Modal,
+  FormControl, FormErrorMessage, FormLabel, IconButton, Input, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent, ModalFooter,
