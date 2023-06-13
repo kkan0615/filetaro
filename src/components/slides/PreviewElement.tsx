@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { TargetFile } from '@renderer/types/models/targetFile'
 import { RootState } from '@renderer/stores'
-import { open } from '@tauri-apps/api/shell'
+import { Command, open } from '@tauri-apps/api/shell'
 
 
 interface Props {
@@ -23,8 +23,13 @@ function SlidesPreviewElement({ targetFile, assetUrl }: Props) {
    */
   const handleClick = async () => {
     if (!targetFile) return
-    await open(targetFile.path)
+    // await open(targetFile.path)
+    // const cmd = new Command('cmd') // May be easier to have an actual script file to execute here
+    // const child = await cmd.spawn()
+    // await child.write(`START ""  "${targetFile.path}"`)
+    // await child.kill()
   }
+
 
   // No file
   if (!targetFile) {
