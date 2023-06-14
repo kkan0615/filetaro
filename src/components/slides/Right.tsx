@@ -132,9 +132,15 @@ function SlidesRight() {
       })
     } catch (e) {
       console.error(e)
-      toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveError')), {
-        type: 'error'
-      })
+      if (typeof e === 'string' && e.includes('(os error 17)')) {
+        toast(e, {
+          type: 'error'
+        })
+      } else {
+        toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveError')), {
+          type: 'error'
+        })
+      }
     }
   }
 

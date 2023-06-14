@@ -1,6 +1,6 @@
 import { Button, Card, CardBody, CardFooter, Flex, IconButton, Spacer, Text, Tooltip } from '@chakra-ui/react'
 import { BiArrowBack } from 'react-icons/bi'
-import { AiOutlineHome } from 'react-icons/ai'
+import { AiOutlineDelete, AiOutlineHome } from 'react-icons/ai'
 import { MdDeleteForever } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import AddFilesFromDirectoryDialog from '@renderer/components/dialogs/AddFilesFromDirectory'
@@ -12,13 +12,14 @@ import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@renderer/stores'
-import { addSlideTargetFile, setSlidesIndex } from '@renderer/stores/slices/slides'
+import { addSlideTargetFile, removeSlideTargetFileByPath, setSlidesIndex } from '@renderer/stores/slices/slides'
 import SlidesPreviewElement from '@renderer/components/slides/PreviewElement'
 import { useEffect, useMemo, useState } from 'react'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { deleteTargetFiles } from '@renderer/utils/file'
+import { removeTargetFile } from '@renderer/stores/slices/moves'
 
 function SlidesLeft() {
   const { t } = useTranslation()
@@ -130,6 +131,11 @@ function SlidesLeft() {
     setAssetUrl(assetUrl)
   }
 
+  const removeFile = () => {
+    if (!targetFileByIndex) return
+    dispatch(removeSlideTargetFileByPath(targetFileByIndex.path))
+  }
+
   /**
    * Delete (move to garbage) current file
    */
@@ -169,8 +175,17 @@ function SlidesLeft() {
               <Flex style={{ flex: 1 }} justifyContent='center'>
                 <span className="truncate">{targetFileByIndex?.name}</span>
               </Flex>
-              <Flex style={{ flex: 1 }}>
-                {/*right*/}
+              <Flex style={{ flex: 1 }} justifyContent='end'>
+                {slideIndex !== NO_SLIDE_INDEX &&
+                  <Tooltip label={capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}>
+                    <IconButton
+                      id="remove-file-button"
+                      onClick={removeFile}
+                      variant="ghost"
+                      aria-label="{capitalizeFirstLetter(t('tooltips.removeFilesFromList'))}"
+                      icon={<AiOutlineDelete className="text-2xl" />}
+                    />
+                  </Tooltip>}
               </Flex>
             </Flex>
           </div>
