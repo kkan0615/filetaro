@@ -1,8 +1,12 @@
+##  0.0.8
+- Added specific error message for OS error 17
+- Added remove button on slide
+
 ## 0.0.7
 - Added sponsors dialog
 - Added slideshow page
 - Updated package versions
-- 
+
 ## 0.0.6
 - Added GitHub issue template
 - Added more i18n
