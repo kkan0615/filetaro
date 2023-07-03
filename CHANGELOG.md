@@ -1,8 +1,14 @@
+##  0.0.8
+- Added specific error message for OS error 17
+- Added remove button on slide
+- Added help modals to slides and moves features
+- Updated all packages to latest
+
 ## 0.0.7
 - Added sponsors dialog
 - Added slideshow page
-- Updated package versions
-- 
+- Updated all packages to latest
+
 ## 0.0.6
 - Added GitHub issue template
 - Added more i18n
@@ -16,7 +22,7 @@
 - Changed some designs
 - Removed dev statement on delete
 - Removed some comments
-- Update tauri version
+- Updated tauri version
 
 ## 0.0.4
 - Added funding.yml
@@ -52,7 +58,7 @@
 - Refactored name of components
 - Removed suspense and add isLoading to handle loading
 
-## 0.0.1 (2023-04-16)
+## 0.0.1
 - Added organize page
 - Added more keywords
 - Added more file types

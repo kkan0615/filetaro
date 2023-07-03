@@ -21,6 +21,7 @@ import { useState } from 'react'
 import { MoveSorts, MoveSortType } from '@renderer/types/models/directory'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { moveOrCopyFile } from '@renderer/utils/file'
+import MovesHelp from '@renderer/components/moves/Help'
 
 function MovesRight() {
   const { t } = useTranslation()
@@ -210,6 +211,7 @@ function MovesRight() {
             <Flex alignItems="center">
               <Heading size="md">{capitalizeFirstLetter(t('pages.moves.labels.directories'))}</Heading>
               <Spacer />
+              <MovesHelp />
               <Tooltip label={capitalizeFirstLetter(t('tooltips.addDirectories'))}>
                 <IconButton
                   id="add-directory-button"
