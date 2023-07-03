@@ -36,7 +36,7 @@ function RenamesTextCard() {
     }).refine(checkSpecialCharsInName, {
       message: capitalizeFirstLetter(t('texts.validations.fileName')),
     }),
-    methodType: z.enum({
+    methodType: z.string({
       required_error: capitalizeFirstLetter(t('texts.validations.required')),
     }),
   })
