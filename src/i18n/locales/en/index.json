@@ -19,6 +19,7 @@
     "delete": "delete",
     "deleting": "deleting...",
     "extension": "extension",
+    "help": "help",
     "included": "included",
     "keepOriginal": "keep original",
     "language": "language",
@@ -73,7 +74,8 @@
     "selectDirectory": "select directory",
     "sponsors": "Thank you for support",
     "next": "next",
-    "prev": "prev"
+    "prev": "prev",
+    "help": "help"
   },
   "tours": {
     "addFilesButton": "Click it to add files",
@@ -82,6 +84,7 @@
     "selectTargetDirectory": "select or type target directory"
   },
   "texts": {
+    "differentDisk": "Moving between Different disks is not allowed in system",
     "prompts": {
       "duplicateName": "Same name is already exists",
       "duplicatedNameAt": "file is already exists at {{ at }}, type new name of it",

@@ -15,12 +15,25 @@ import {
 import { useState } from 'react'
 import { MoveSorts, MoveSortType } from '@renderer/types/models/directory'
 import { MoveDirectory } from '@renderer/types/models/move'
-import { Box, Card, CardBody, Flex, Heading, IconButton, List, Select, Spacer, Tooltip } from '@chakra-ui/react'
-import { AiOutlineFolderAdd, AiOutlineSetting } from 'react-icons/ai'
+import {
+  Box,
+  Card,
+  CardBody,
+  Flex,
+  Heading,
+  IconButton,
+  List, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader,
+  PopoverTrigger,
+  Select,
+  Spacer, Table, TableContainer, Tbody, Td, Text, Th, Thead,
+  Tooltip, Tr
+} from '@chakra-ui/react'
+import { AiOutlineFolderAdd, AiOutlineQuestionCircle, AiOutlineSetting } from 'react-icons/ai'
 import MovesSettingModal from '@renderer/components/moves/SettingDialog'
 import DirectoryCard from '@renderer/components/directories/Card'
 import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { moveOrCopyFile } from '@renderer/utils/file'
+import SlidesHelp from '@renderer/components/slides/Help'
 
 function SlidesRight() {
   const { t } = useTranslation()
@@ -132,9 +145,15 @@ function SlidesRight() {
       })
     } catch (e) {
       console.error(e)
-      toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveError')), {
-        type: 'error'
-      })
+      if (typeof e === 'string' && e.includes('(os error 17)')) {
+        toast(e, {
+          type: 'error'
+        })
+      } else {
+        toast(capitalizeFirstLetter(t('pages.moves.texts.alerts.moveError')), {
+          type: 'error'
+        })
+      }
     }
   }
 
@@ -150,8 +169,9 @@ function SlidesRight() {
         <Card className="p-0">
           <CardBody padding={0} className="p-2 py-1">
             <Flex alignItems="center">
-              <Heading size="md">{capitalizeFirstLetter(t('pages.moves.labels.directories'))}</Heading>
+              <Heading size="dm">{capitalizeFirstLetter(t('pages.moves.labels.directories'))}</Heading>
               <Spacer />
+              <SlidesHelp />
               <Tooltip label={capitalizeFirstLetter(t('tooltips.addDirectories'))}>
                 <IconButton
                   id="add-directory-button"

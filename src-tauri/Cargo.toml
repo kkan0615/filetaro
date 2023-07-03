@@ -1,6 +1,6 @@
 [package]
 name = "filetaro"
-version = "0.0.7"
+version = "0.0.8"
 description = "File handler - File handler - Rename, Organize, or Delete files easily"
 authors = ["you"]
 license = ""
