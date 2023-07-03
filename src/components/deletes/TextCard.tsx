@@ -19,7 +19,7 @@ import { deleteTargetFiles, findAllFilesInDirectory } from '@renderer/utils/file
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { useTranslation } from 'react-i18next'
 
-const AddMethods = ['included', 'prefix', 'suffix'] as const
+const AddMethods = ['included', 'prefix', 'suffix']
 
 function DeletesTextCard() {
   const { t } = useTranslation()
@@ -31,7 +31,7 @@ function DeletesTextCard() {
       .min(1, {
         message: capitalizeFirstLetter(t('texts.validations.fileName')),
       }),
-    methodType: z.enum(AddMethods, {
+    methodType: z.string({
       required_error: capitalizeFirstLetter(t('texts.validations.required')),
     }),
   })
