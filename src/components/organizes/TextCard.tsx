@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { capitalizeFirstLetter } from '@renderer/utils/text'
 import { exists } from '@tauri-apps/api/fs'
 
-const AddMethods = ['included', 'prefix', 'suffix'] as const
+const AddMethods = ['included', 'prefix', 'suffix']
 
 function OrganizesTextCard() {
   const { t } = useTranslation()
@@ -37,7 +37,7 @@ function OrganizesTextCard() {
       .min(1, {
         message: capitalizeFirstLetter(t('texts.validations.fileName')),
       }),
-    methodType: z.enum(AddMethods, {
+    methodType: z.string({
       required_error: capitalizeFirstLetter(t('texts.validations.required')),
     }),
   })

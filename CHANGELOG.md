@@ -3,6 +3,7 @@
 - Added remove button on slide
 - Added help modals to slides and moves features
 - Updated all packages to latest
+- Fixed zod enum error 
 
 ## 0.0.7
 - Added sponsors dialog
