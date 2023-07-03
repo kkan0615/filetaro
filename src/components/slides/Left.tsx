@@ -19,7 +19,7 @@ import { NO_SLIDE_INDEX } from '@renderer/types/models/slide'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 import { deleteTargetFiles } from '@renderer/utils/file'
-import { removeTargetFile } from '@renderer/stores/slices/moves'
+
 
 function SlidesLeft() {
   const { t } = useTranslation()

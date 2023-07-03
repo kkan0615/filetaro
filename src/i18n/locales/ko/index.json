@@ -19,6 +19,7 @@
     "delete": "삭제",
     "deleting": "삭제 중...",
     "extension": "확장자",
+    "help": "도움",
     "included": "포함",
     "keepOriginal": "원본 나두기",
     "language": "언어",
@@ -73,7 +74,8 @@
     "selectDirectory": "폴더 선택하기",
     "sponsors": "도와주셔서 감사합니다.",
     "next": "다음",
-    "prev": "이전"
+    "prev": "이전",
+    "help": "도움말"
   },
   "tours": {
     "addFilesButton": "이것을 선택하여 파일을 추가할 수 있습니다.",
@@ -82,6 +84,7 @@
     "selectTargetDirectory": "폴더 선택 혹은 입력하세요."
   },
   "texts": {
+    "differentDisk": "서로다른 디스크로 옮기는 것이 시스템상 허락되지 않습니다.",
     "prompts": {
       "duplicateName": "동일 파일명이 존재합니다.",
       "duplicatedNameAt": "동일파일명이 {{ at }} 에 존재합니다. 새로 입력해주세요.",
